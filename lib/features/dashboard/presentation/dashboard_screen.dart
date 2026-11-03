@@ -1,0 +1,513 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_dimensions.dart';
+import '../../../core/constants/app_typography.dart';
+import '../../../core/widgets/glass_card.dart';
+import '../../../core/widgets/primary_button.dart';
+import '../../../shared/widgets/section_header.dart';
+import '../../../shared/widgets/status_badge.dart';
+import '../../health_timeline/models/timeline_entry.dart';
+import '../../profile/providers/profile_provider.dart';
+import 'widgets/ai_insight_card.dart';
+import 'widgets/metric_card.dart';
+import 'widgets/quick_action_button.dart';
+import 'widgets/recent_updates_section.dart';
+
+class DashboardScreen extends ConsumerWidget {
+  const DashboardScreen({super.key});
+
+  void _showGenerateSummarySheet(BuildContext context, String userName) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.all(24),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(AppDimensions.radiusXL)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  width: 44,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: AppColors.border,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Clinical Health Summary',
+                    style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.w800),
+                  ),
+                  const StatusBadge(label: 'FHIR Standard', type: BadgeType.success),
+                ],
+              ),
+              const SizedBox(height: 6),
+              Text(
+                'Synthesized for patient $userName over the last 30-day window.',
+                style: AppTypography.bodySmall,
+              ),
+              const SizedBox(height: 18),
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: AppColors.background,
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                  border: Border.all(color: AppColors.border),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Executive Vitals & Biomarker Analysis',
+                      style: AppTypography.labelLarge.copyWith(fontWeight: FontWeight.w700),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      '• Mean Resting Heart Rate: 61 bpm (Cardiovascular fitness: High)\n'
+                      '• Glycemic Stability: Normal (HbA1c 5.4%, Fasting 92 mg/dL)\n'
+                      '• Sleep Efficiency: 89% (Optimal deep sleep distribution: 1h 48m)\n'
+                      '• Active Medication: Albuterol 90mcg (PRN, 0 rescue actuations this week)',
+                      style: AppTypography.bodyMedium.copyWith(height: 1.5),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              PrimaryButton(
+                label: 'Export PDF Clinical Report',
+                icon: Icons.picture_as_pdf_rounded,
+                onPressed: () {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Clinical summary exported successfully to Secure Storage.'),
+                      backgroundColor: AppColors.secondary,
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 10),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showUploadMockDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppDimensions.radiusL)),
+        title: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: AppColors.secondaryContainer,
+                borderRadius: BorderRadius.circular(AppDimensions.radiusS),
+              ),
+              child: const Icon(Icons.upload_file_rounded, color: AppColors.secondaryDark),
+            ),
+            const SizedBox(width: 12),
+            const Text('Upload Report'),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Select health documentation format to parse with OCR and MediVision AI:',
+              style: AppTypography.bodyMedium,
+            ),
+            const SizedBox(height: 16),
+            ListTile(
+              leading: const Icon(Icons.picture_as_pdf_rounded, color: AppColors.error),
+              title: const Text('PDF Lab Document'),
+              subtitle: const Text('Blood panels, metabolic reports'),
+              onTap: () {
+                Navigator.pop(context);
+                context.go('/medical-records');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.camera_alt_rounded, color: AppColors.secondary),
+              title: const Text('Scan Camera / Prescription'),
+              subtitle: const Text('Medication labels, doctor notes'),
+              onTap: () {
+                Navigator.pop(context);
+                context.go('/medical-records');
+              },
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final profile = ref.watch(profileProvider);
+    final recentEntries = TimelineEntry.getSampleEntries();
+
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Top Bar: Greeting + Avatar + Notifications
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Good morning,',
+                        style: AppTypography.bodyMedium.copyWith(color: AppColors.textTertiary),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        profile.fullName,
+                        style: AppTypography.displaySmall.copyWith(
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      // Notification Button
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: AppColors.border),
+                        ),
+                        child: IconButton(
+                          icon: const Stack(
+                            children: [
+                              Icon(Icons.notifications_outlined, color: AppColors.textPrimary),
+                              Positioned(
+                                right: 0,
+                                top: 0,
+                                child: CircleAvatar(
+                                  radius: 4,
+                                  backgroundColor: AppColors.error,
+                                ),
+                              ),
+                            ],
+                          ),
+                          onPressed: () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('All system notifications are up to date.')),
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      // Avatar
+                      InkWell(
+                        onTap: () => context.go('/profile'),
+                        borderRadius: BorderRadius.circular(22),
+                        child: CircleAvatar(
+                          radius: 22,
+                          backgroundColor: AppColors.primary,
+                          child: Text(
+                            profile.fullName.isNotEmpty ? profile.fullName[0].toUpperCase() : 'A',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 14),
+
+              // Realistic Demo Data Notice Banner
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: AppColors.secondaryContainer.withOpacity(0.5),
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                  border: Border.all(color: AppColors.secondary.withOpacity(0.3)),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.science_outlined, size: 16, color: AppColors.secondaryDark),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'Demo Mode: Showing realistic biometric & laboratory telemetry.',
+                        style: AppTypography.labelSmall.copyWith(
+                          color: AppColors.secondaryDark,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 18),
+
+              // Today's Health Overview
+              GlassCard(
+                padding: const EdgeInsets.all(20),
+                gradient: const LinearGradient(
+                  colors: [Colors.white, Color(0xFFF9FBFC)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Today's Health Overview",
+                          style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w700),
+                        ),
+                        const StatusBadge(
+                          label: 'Vitals Stable',
+                          type: BadgeType.success,
+                          icon: Icons.check_circle_rounded,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 14),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Overall Health Score',
+                                style: AppTypography.bodySmall,
+                              ),
+                              const SizedBox(height: 4),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.baseline,
+                                textBaseline: TextBaseline.alphabetic,
+                                children: [
+                                  Text(
+                                    '94',
+                                    style: AppTypography.displayMedium.copyWith(
+                                      color: AppColors.secondary,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                  Text(
+                                    ' / 100',
+                                    style: AppTypography.titleSmall.copyWith(
+                                      color: AppColors.textTertiary,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                '+3.2% vs previous 14-day average',
+                                style: AppTypography.bodySmall.copyWith(
+                                  color: AppColors.accentEmerald,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 11,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          width: 80,
+                          height: 80,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColors.secondaryContainer.withOpacity(0.4),
+                          ),
+                          child: const Center(
+                            child: Icon(
+                              Icons.favorite_rounded,
+                              size: 40,
+                              color: AppColors.secondary,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 18),
+
+              // Quick Actions Row
+              const SectionHeader(title: 'Quick Actions'),
+              SizedBox(
+                height: 104,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    QuickActionButton(
+                      label: 'Ask AI',
+                      icon: Icons.auto_awesome_rounded,
+                      color: AppColors.accentIndigo,
+                      onTap: () => context.go('/ai-companion'),
+                    ),
+                    QuickActionButton(
+                      label: 'Upload Report',
+                      icon: Icons.upload_file_rounded,
+                      color: AppColors.secondary,
+                      onTap: () => _showUploadMockDialog(context),
+                    ),
+                    QuickActionButton(
+                      label: 'Timeline',
+                      icon: Icons.timeline_rounded,
+                      color: AppColors.primary,
+                      onTap: () => context.go('/timeline'),
+                    ),
+                    QuickActionButton(
+                      label: 'Clinical Summary',
+                      icon: Icons.description_rounded,
+                      color: AppColors.accentEmerald,
+                      onTap: () => _showGenerateSummarySheet(context, profile.fullName),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 18),
+
+              // AI Health Insight Card
+              AiInsightCard(
+                title: 'Deep Sleep Optimization Signal',
+                insight:
+                    'Your deep sleep increased by +18% on days when device screen time was curtailed 45 minutes prior to sleep. Consistent wind-down times have stabilized your resting pulse.',
+                actionLabel: 'Discuss with AI',
+                onActionTap: () => context.go('/ai-companion'),
+              ),
+              const SizedBox(height: 22),
+
+              // Biometric & Daily Lifestyle Cards
+              const SectionHeader(title: 'Biometric & Lifestyle telemetry'),
+              Row(
+                children: [
+                  // Sleep Card
+                  Expanded(
+                    child: MetricCard(
+                      title: 'Sleep Duration',
+                      value: '7h 42m',
+                      subtitle: '1h 48m Deep sleep (Optimal)',
+                      icon: Icons.bedtime_rounded,
+                      iconColor: AppColors.accentIndigo,
+                      progress: 0.88,
+                      progressColor: AppColors.accentIndigo,
+                      badgeText: '89% Quality',
+                      badgeColor: AppColors.accentIndigo,
+                      onTap: () => context.go('/timeline'),
+                    ),
+                  ),
+                  const SizedBox(width: 14),
+                  // Activity & Steps Card
+                  Expanded(
+                    child: MetricCard(
+                      title: 'Daily Steps',
+                      value: '8,420',
+                      subtitle: 'Goal: 10,000 steps (84%)',
+                      icon: Icons.directions_run_rounded,
+                      iconColor: AppColors.secondary,
+                      progress: 0.84,
+                      progressColor: AppColors.secondary,
+                      badgeText: '482 kcal',
+                      badgeColor: AppColors.secondary,
+                      onTap: () => context.go('/timeline'),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 14),
+
+              Row(
+                children: [
+                  // Screen-time Summary Card
+                  Expanded(
+                    child: MetricCard(
+                      title: 'Screen Time',
+                      value: '3h 15m',
+                      subtitle: '45m before bed alert active',
+                      icon: Icons.phone_android_rounded,
+                      iconColor: AppColors.accentAmber,
+                      progress: 0.55,
+                      progressColor: AppColors.accentAmber,
+                      badgeText: '-32m vs avg',
+                      badgeColor: AppColors.accentEmerald,
+                      onTap: () => context.go('/timeline'),
+                    ),
+                  ),
+                  const SizedBox(width: 14),
+                  // Resting Heart Rate Card
+                  Expanded(
+                    child: MetricCard(
+                      title: 'Resting Pulse',
+                      value: '61 bpm',
+                      subtitle: 'Healthy athletic baseline',
+                      icon: Icons.monitor_heart_rounded,
+                      iconColor: AppColors.accentRose,
+                      progress: 0.65,
+                      progressColor: AppColors.accentRose,
+                      badgeText: 'Optimal',
+                      badgeColor: AppColors.accentEmerald,
+                      onTap: () => context.go('/timeline'),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+
+              // Recent Health Updates Section
+              RecentUpdatesSection(
+                entries: recentEntries,
+                onSeeAllTap: () => context.go('/timeline'),
+                onEntryTap: (entry) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('${entry.title}: ${entry.description}')),
+                  );
+                },
+              ),
+              const SizedBox(height: 24),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
