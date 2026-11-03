@@ -14,6 +14,7 @@ import '../features/profile/presentation/user_profile_setup_screen.dart';
 import '../features/settings/presentation/settings_screen.dart';
 import '../features/splash/presentation/splash_screen.dart';
 import '../features/storage_selection/presentation/storage_selection_screen.dart';
+import '../features/womens_health/presentation/womens_health_screen.dart';
 import '../shared/widgets/main_shell_scaffold.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
@@ -58,6 +59,12 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/permissions',
       builder: (context, state) => const PermissionsScreen(),
+    ),
+
+    // Women's Health Dedicated Route (Enabled for Females)
+    GoRoute(
+      path: '/womens-health',
+      builder: (context, state) => const WomensHealthScreen(),
     ),
 
     // Main App Shell with 5 Persistent Bottom Navigation Tabs

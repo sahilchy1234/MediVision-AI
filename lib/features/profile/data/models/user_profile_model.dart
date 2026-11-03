@@ -6,6 +6,7 @@ class UserProfileModel {
   final double? weightKg;
   final List<String> allergies;
   final List<String> medicalConditions;
+  final bool enableWomensHealth;
 
   const UserProfileModel({
     required this.fullName,
@@ -15,7 +16,11 @@ class UserProfileModel {
     this.weightKg,
     this.allergies = const [],
     this.medicalConditions = const [],
+    this.enableWomensHealth = true,
   });
+
+  bool get isFemale =>
+      (gender?.toLowerCase() == 'female') || (enableWomensHealth && (gender == null || gender?.toLowerCase() == 'female'));
 
   UserProfileModel copyWith({
     String? fullName,
@@ -25,6 +30,7 @@ class UserProfileModel {
     double? weightKg,
     List<String>? allergies,
     List<String>? medicalConditions,
+    bool? enableWomensHealth,
   }) {
     return UserProfileModel(
       fullName: fullName ?? this.fullName,
@@ -34,16 +40,17 @@ class UserProfileModel {
       weightKg: weightKg ?? this.weightKg,
       allergies: allergies ?? this.allergies,
       medicalConditions: medicalConditions ?? this.medicalConditions,
+      enableWomensHealth: enableWomensHealth ?? this.enableWomensHealth,
     );
   }
 
   static const defaultMock = UserProfileModel(
-    fullName: 'Alex Morgan',
-    gender: 'Non-binary',
-    heightCm: 175,
-    weightKg: 68.5,
-    allergies: ['Penicillin', 'Peanuts'],
-    medicalConditions: ['Mild Asthma'],
+    fullName: 'Elena Rostova',
+    gender: 'Female',
+    heightCm: 168,
+    weightKg: 58.0,
+    allergies: ['Penicillin'],
+    medicalConditions: ['Mild Dysmenorrhea'],
+    enableWomensHealth: true,
   );
 }
-

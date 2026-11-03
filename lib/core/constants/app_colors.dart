@@ -11,11 +11,16 @@ class AppColors {
   static const Color primaryLight = Color(0xFF1E3A8A);
   static const Color primaryContainer = Color(0xFFE0E7FF);
 
-  // Secondary Palette - Healthcare Teal
+  // Secondary Palette - Healthcare Teal / Green
   static const Color secondary = Color(0xFF0D9488);
   static const Color secondaryLight = Color(0xFF14B8A6);
   static const Color secondaryDark = Color(0xFF0F766E);
   static const Color secondaryContainer = Color(0xFFCCFBF1);
+
+  // Convenience Aliases for Medical/Green palette
+  static const Color primaryGreen = Color(0xFF0D9488);
+  static const Color forestGreen = Color(0xFF0F766E);
+  static const Color mintAccent = Color(0xFF14B8A6);
 
   // Accent Colors
   static const Color accentIndigo = Color(0xFF6366F1);
@@ -26,6 +31,7 @@ class AppColors {
 
   // Background & Surfaces
   static const Color background = Color(0xFFF6F8FC);
+  static const Color mainBackground = Color(0xFFF6F8FC);
   static const Color surface = Color(0xFFFFFFFF);
   static const Color surfaceElevated = Color(0xFFFFFFFF);
   static const Color surfaceSubtle = Color(0xFFF1F5F9);
@@ -37,7 +43,9 @@ class AppColors {
 
   // Text Colors
   static const Color textPrimary = Color(0xFF0F172A);
+  static const Color primaryText = Color(0xFF0F172A);
   static const Color textSecondary = Color(0xFF475569);
+  static const Color secondaryText = Color(0xFF475569);
   static const Color textTertiary = Color(0xFF94A3B8);
   static const Color textOnPrimary = Color(0xFFFFFFFF);
 
@@ -55,4 +63,3 @@ class AppColors {
   static const Color shadow = Color(0x0C0B1B3D);
   static const Color shadowMedium = Color(0x180B1B3D);
 }
-

@@ -5,14 +5,14 @@ import 'package:medivision_app/features/splash/presentation/splash_screen.dart';
 
 void main() {
   testWidgets('MediVision AI app smoke test', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      const ProviderScope(
-        child: MediVisionApp(),
-      ),
-    );
+    await tester.pumpWidget(const ProviderScope(child: MediVisionApp()));
 
-    // Initial frame renders splash screen and tagline
+    // Initial frame renders splash screen and brand title
     expect(find.byType(SplashScreen), findsOneWidget);
-    expect(find.text('Your Health. Your Data. Your AI.'), findsOneWidget);
+    expect(find.text('MediVision AI'), findsOneWidget);
+    expect(
+      find.text('Intelligent Medical History & Clinical Companion'),
+      findsOneWidget,
+    );
   });
 }

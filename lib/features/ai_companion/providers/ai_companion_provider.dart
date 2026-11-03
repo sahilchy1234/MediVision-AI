@@ -31,14 +31,18 @@ class AiCompanionNotifier extends StateNotifier<AiChatState> {
   AiCompanionNotifier(this._service)
       : super(AiChatState(messages: _service.getInitialMessages()));
 
-  Future<void> sendMessage(String text) async {
-    if (text.trim().isEmpty) return;
+  Future<void> sendMessage(String text, {ChatAttachment? attachment}) async {
+    final trimmedText = text.trim();
+    if (trimmedText.isEmpty && attachment == null) return;
 
     final userMessage = ChatMessage(
       id: 'msg_${DateTime.now().millisecondsSinceEpoch}',
-      text: text.trim(),
+      text: trimmedText.isEmpty && attachment != null
+          ? 'Uploaded: ${attachment.fileName}'
+          : trimmedText,
       isUser: true,
       timestamp: DateTime.now(),
+      attachment: attachment,
     );
 
     state = state.copyWith(
@@ -47,7 +51,10 @@ class AiCompanionNotifier extends StateNotifier<AiChatState> {
     );
 
     try {
-      final aiReply = await _service.getAiResponse(text);
+      final aiReply = await _service.getAiResponse(
+        trimmedText,
+        attachment: attachment,
+      );
       state = state.copyWith(
         messages: [...state.messages, aiReply],
         isThinking: false,
@@ -67,4 +74,3 @@ final aiCompanionProvider =
   final service = ref.watch(aiChatServiceProvider);
   return AiCompanionNotifier(service);
 });
-

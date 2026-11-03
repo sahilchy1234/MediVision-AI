@@ -10,6 +10,7 @@ import '../../../shared/widgets/section_header.dart';
 import '../../../shared/widgets/status_badge.dart';
 import '../../health_timeline/models/timeline_entry.dart';
 import '../../profile/providers/profile_provider.dart';
+import '../../womens_health/providers/womens_health_provider.dart';
 import 'widgets/ai_insight_card.dart';
 import 'widgets/metric_card.dart';
 import 'widgets/quick_action_button.dart';
@@ -371,6 +372,14 @@ class DashboardScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 18),
 
+              // Women's Health Companion Card (Enabled only for Females)
+              if (profile.isFemale) ...[
+                _WomensHealthDashboardCard(
+                  onTap: () => context.push('/womens-health'),
+                ),
+                const SizedBox(height: 18),
+              ],
+
               // Quick Actions Row
               const SectionHeader(title: 'Quick Actions'),
               SizedBox(
@@ -507,6 +516,148 @@ class DashboardScreen extends ConsumerWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _WomensHealthDashboardCard extends ConsumerWidget {
+  final VoidCallback onTap;
+
+  const _WomensHealthDashboardCard({required this.onTap});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final womensHealth = ref.watch(womensHealthProvider);
+    final cycle = womensHealth.cycleData;
+    final phase = cycle.currentPhase;
+
+    return GlassCard(
+      onTap: onTap,
+      padding: const EdgeInsets.all(18),
+      gradient: LinearGradient(
+        colors: [
+          Colors.white,
+          AppColors.accentRose.withOpacity(0.06),
+        ],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: AppColors.accentRose.withOpacity(0.12),
+                      borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                    ),
+                    child: const Icon(
+                      Icons.spa_rounded,
+                      color: AppColors.accentRose,
+                      size: 20,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Women's Health & Cycle",
+                        style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w800),
+                      ),
+                      Text(
+                        'Private Reproductive Intelligence',
+                        style: AppTypography.bodySmall.copyWith(fontSize: 10.5),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: phase.color.withOpacity(0.12),
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
+                  border: Border.all(color: phase.color.withOpacity(0.3)),
+                ),
+                child: Text(
+                  'Day ${cycle.currentDayOfCycle} • ${phase.label}',
+                  style: AppTypography.labelSmall.copyWith(
+                    color: phase.color,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 10,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      cycle.isFertileWindow ? 'Fertile Ovulatory Window Open' : 'Luteal Phase Active',
+                      style: AppTypography.labelLarge.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      'Next period estimated in ${cycle.daysUntilNextPeriod} days • Cycle variance ±${cycle.cycleVariationDays}d',
+                      style: AppTypography.bodySmall,
+                    ),
+                  ],
+                ),
+              ),
+              const Icon(Icons.arrow_forward_ios_rounded, size: 14, color: AppColors.textTertiary),
+            ],
+          ),
+          const SizedBox(height: 12),
+
+          // PCOS & Endometriosis quick indicator strip
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            decoration: BoxDecoration(
+              color: AppColors.surfaceSubtle,
+              borderRadius: BorderRadius.circular(AppDimensions.radiusS),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.biotech_rounded, size: 14, color: AppColors.secondaryDark),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    'PCOS/Endo Screener: Rotterdam criteria verified • 1 active signal',
+                    style: AppTypography.labelSmall.copyWith(
+                      color: AppColors.secondaryDark,
+                      fontSize: 10.5,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                Text(
+                  'Details',
+                  style: AppTypography.labelSmall.copyWith(
+                    color: AppColors.secondary,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 10.5,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

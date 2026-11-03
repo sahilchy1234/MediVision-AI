@@ -16,7 +16,7 @@ class StatusBadge extends StatelessWidget {
     required this.label,
     this.type = BadgeType.info,
     this.icon,
-    this.isPill = true,
+    this.isPill = false,
   });
 
   @override
@@ -45,31 +45,31 @@ class StatusBadge extends StatelessWidget {
         case BadgeType.error:
           return AppColors.error;
         case BadgeType.info:
-          return AppColors.secondary;
+          return AppColors.info;
         case BadgeType.neutral:
-          return AppColors.textSecondary;
+          return AppColors.secondaryText;
       }
     }
 
     final textColor = getTextColor();
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
         color: getBackgroundColor(),
         borderRadius: BorderRadius.circular(
           isPill ? AppDimensions.radiusFull : AppDimensions.radiusS,
         ),
         border: Border.all(
-          color: textColor.withOpacity(0.2),
-          width: 1,
+          color: textColor.withValues(alpha: 0.25),
+          width: 0.8,
         ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           if (icon != null) ...[
-            Icon(icon, size: 12, color: textColor),
+            Icon(icon, size: 11, color: textColor),
             const SizedBox(width: 4),
           ],
           Text(
@@ -77,6 +77,7 @@ class StatusBadge extends StatelessWidget {
             style: AppTypography.labelSmall.copyWith(
               color: textColor,
               fontWeight: FontWeight.w600,
+              fontSize: 11,
             ),
           ),
         ],
@@ -84,4 +85,3 @@ class StatusBadge extends StatelessWidget {
     );
   }
 }
-

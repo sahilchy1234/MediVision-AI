@@ -220,6 +220,16 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     trailing: const Icon(Icons.chevron_right_rounded),
                     onTap: () => context.push('/permissions'),
                   ),
+                  if (profile.isFemale) ...[
+                    const Divider(height: 1),
+                    ListTile(
+                      leading: const Icon(Icons.spa_rounded, color: AppColors.accentRose),
+                      title: const Text("Women's Health Companion", style: TextStyle(fontWeight: FontWeight.w600)),
+                      subtitle: const Text('Cycle intelligence, PCOS/Endo screening & reproductive vault'),
+                      trailing: const Icon(Icons.chevron_right_rounded),
+                      onTap: () => context.push('/womens-health'),
+                    ),
+                  ],
                   const Divider(height: 1),
                   ListTile(
                     leading: const Icon(Icons.watch_rounded, color: AppColors.secondary),
