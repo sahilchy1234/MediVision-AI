@@ -8,6 +8,22 @@ class PermissionsService {
   static const _storage = FlutterSecureStorage();
   static const _permissionsStorageKey = 'medivision_permissions_map';
   static const _tokenKey = 'medivision_access_token';
+  static const _mockModeKey = 'medivision_mock_mode_active';
+
+  static Future<bool> isMockModeEnabled() async {
+    try {
+      final val = await _storage.read(key: _mockModeKey);
+      return val != 'false';
+    } catch (_) {
+      return true;
+    }
+  }
+
+  static Future<void> setMockModeEnabled(bool enabled) async {
+    try {
+      await _storage.write(key: _mockModeKey, value: enabled ? 'true' : 'false');
+    } catch (_) {}
+  }
 
   static const Map<String, bool> defaultPermissions = {
     'sleep_health': true,
@@ -104,3 +120,4 @@ class PermissionsService {
     }
   }
 }
+

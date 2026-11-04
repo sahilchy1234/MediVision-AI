@@ -130,7 +130,82 @@ class PermissionsScreen extends ConsumerWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 14),
+
+              // Clinical Testing Mock Data Sources Banner with Button
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                decoration: BoxDecoration(
+                  color: AppColors.secondaryContainer.withOpacity(0.45),
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                  border: Border.all(color: AppColors.secondary.withOpacity(0.25)),
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: AppColors.secondary.withOpacity(0.12),
+                        borderRadius: BorderRadius.circular(AppDimensions.radiusS),
+                      ),
+                      child: const Icon(
+                        Icons.science_rounded,
+                        color: AppColors.secondaryDark,
+                        size: 20,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Testing & Clinical Demo',
+                            style: AppTypography.labelMedium.copyWith(
+                              fontWeight: FontWeight.w800,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            'Simulate Apple Health & sensor feeds with 1 tap.',
+                            style: AppTypography.bodySmall.copyWith(fontSize: 11),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.secondary,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
+                        ),
+                      ),
+                      icon: const Icon(Icons.auto_fix_high_rounded, size: 14),
+                      label: const Text(
+                        'Use Mock Data',
+                        style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700),
+                      ),
+                      onPressed: () {
+                        ref.read(permissionsProvider.notifier).useMockDataSources();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Loaded realistic clinical mock data sources & permissions!',
+                            ),
+                            backgroundColor: AppColors.secondary,
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 14),
 
               Expanded(
                 child: ListView.separated(

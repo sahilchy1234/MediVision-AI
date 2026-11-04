@@ -287,6 +287,42 @@ class DashboardScreen extends ConsumerWidget {
                         ),
                       ),
                     ),
+                    const SizedBox(width: 8),
+                    InkWell(
+                      onTap: () {
+                        ref.read(permissionsProvider.notifier).useMockDataSources();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Connected to simulated clinical mock data sources!'),
+                            backgroundColor: AppColors.secondary,
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
+                      },
+                      borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(
+                          color: AppColors.secondary,
+                          borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.auto_fix_high_rounded, size: 12, color: Colors.white),
+                            const SizedBox(width: 4),
+                            Text(
+                              'Use Mock Data',
+                              style: AppTypography.labelSmall.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 10,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),

@@ -112,6 +112,15 @@ class PermissionsNotifier extends StateNotifier<List<HealthPermissionItem>> {
     PermissionsService.savePermissions(_toMap());
   }
 
+  void useMockDataSources() {
+    state = [
+      for (final item in state)
+        item.copyWith(status: PermissionStatus.granted)
+    ];
+    PermissionsService.savePermissions(_toMap());
+    PermissionsService.setMockModeEnabled(true);
+  }
+
   void revokeAll() {
     state = [
       for (final item in state)
