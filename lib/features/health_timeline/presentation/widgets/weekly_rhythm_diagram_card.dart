@@ -78,7 +78,7 @@ class _WeeklyRhythmDiagramCardState extends State<WeeklyRhythmDiagramCard> {
     final selectedDay = _days[_selectedDayIndex];
 
     return GlassCard(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -86,20 +86,23 @@ class _WeeklyRhythmDiagramCardState extends State<WeeklyRhythmDiagramCard> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '7-Day Energy & Rest Flow',
-                    style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.w800),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    'Tap any day to see how you recovered',
-                    style: AppTypography.bodySmall,
-                  ),
-                ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '7-Day Energy & Rest Flow',
+                      style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.w800),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      'Tap any day to see how you recovered',
+                      style: AppTypography.bodySmall,
+                    ),
+                  ],
+                ),
               ),
+              const SizedBox(width: 8),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
@@ -116,7 +119,7 @@ class _WeeklyRhythmDiagramCardState extends State<WeeklyRhythmDiagramCard> {
               ),
             ],
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 18),
 
           // Visual Diagram Columns (7 days)
           Row(
@@ -127,88 +130,91 @@ class _WeeklyRhythmDiagramCardState extends State<WeeklyRhythmDiagramCard> {
               final isSelected = index == _selectedDayIndex;
               final double heightRatio = day.score / 100.0;
 
-              return InkWell(
-                onTap: () => setState(() => _selectedDayIndex = index),
-                borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      '${day.score}',
-                      style: AppTypography.labelSmall.copyWith(
-                        color: isSelected ? AppColors.secondary : AppColors.textTertiary,
-                        fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
-                        fontSize: 10.5,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    // Bar Diagram Column
-                    Stack(
-                      alignment: Alignment.bottomCenter,
+              return Expanded(
+                child: InkWell(
+                  onTap: () => setState(() => _selectedDayIndex = index),
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Container(
-                          width: 32,
-                          height: 90,
-                          decoration: BoxDecoration(
-                            color: AppColors.surfaceSubtle,
-                            borderRadius: BorderRadius.circular(16),
+                        Text(
+                          '${day.score}',
+                          style: AppTypography.labelSmall.copyWith(
+                            color: isSelected ? AppColors.secondary : AppColors.textTertiary,
+                            fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
+                            fontSize: 10.5,
                           ),
                         ),
-                        AnimatedContainer(
-                          duration: const Duration(milliseconds: 300),
-                          width: 32,
-                          height: 90 * heightRatio,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: isSelected
-                                  ? [AppColors.secondary, AppColors.secondaryDark]
-                                  : [
-                                      AppColors.secondary.withOpacity(0.4),
-                                      AppColors.secondary.withOpacity(0.65)
-                                    ],
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
+                        const SizedBox(height: 6),
+                        // Bar Diagram Column
+                        Stack(
+                          alignment: Alignment.bottomCenter,
+                          children: [
+                            Container(
+                              height: 85,
+                              decoration: BoxDecoration(
+                                color: AppColors.surfaceSubtle,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
                             ),
-                            borderRadius: BorderRadius.circular(16),
-                            boxShadow: isSelected
-                                ? [
-                                    BoxShadow(
-                                      color: AppColors.secondary.withOpacity(0.3),
-                                      blurRadius: 8,
-                                      offset: const Offset(0, 3),
-                                    ),
-                                  ]
-                                : null,
+                            AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              height: 85 * heightRatio,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: isSelected
+                                      ? [AppColors.secondary, AppColors.secondaryDark]
+                                      : [
+                                          AppColors.secondary.withOpacity(0.35),
+                                          AppColors.secondary.withOpacity(0.6)
+                                        ],
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                ),
+                                borderRadius: BorderRadius.circular(12),
+                                boxShadow: isSelected
+                                    ? [
+                                        BoxShadow(
+                                          color: AppColors.secondary.withOpacity(0.3),
+                                          blurRadius: 8,
+                                          offset: const Offset(0, 3),
+                                        ),
+                                      ]
+                                    : null,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          day.dayLabel,
+                          style: AppTypography.labelSmall.copyWith(
+                            color: isSelected ? AppColors.textPrimary : AppColors.textSecondary,
+                            fontWeight: isSelected ? FontWeight.w800 : FontWeight.w500,
+                          ),
+                        ),
+                        Text(
+                          day.dateNum,
+                          style: AppTypography.labelSmall.copyWith(
+                            fontSize: 9.5,
+                            color: isSelected ? AppColors.secondary : AppColors.textTertiary,
+                            fontWeight: isSelected ? FontWeight.w700 : FontWeight.w400,
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      day.dayLabel,
-                      style: AppTypography.labelSmall.copyWith(
-                        color: isSelected ? AppColors.textPrimary : AppColors.textSecondary,
-                        fontWeight: isSelected ? FontWeight.w800 : FontWeight.w500,
-                      ),
-                    ),
-                    Text(
-                      day.dateNum,
-                      style: AppTypography.labelSmall.copyWith(
-                        fontSize: 10,
-                        color: isSelected ? AppColors.secondary : AppColors.textTertiary,
-                        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w400,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               );
             }),
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 16),
 
           // Non-technical Daily Takeaway
           Container(
-            padding: const EdgeInsets.all(14),
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: AppColors.surfaceSubtle,
               borderRadius: BorderRadius.circular(AppDimensions.radiusM),
@@ -233,10 +239,15 @@ class _WeeklyRhythmDiagramCardState extends State<WeeklyRhythmDiagramCard> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            '${selectedDay.dayLabel}, Nov ${selectedDay.dateNum} • ${selectedDay.sleepTime} Sleep',
-                            style: AppTypography.labelMedium.copyWith(fontWeight: FontWeight.w700),
+                          Expanded(
+                            child: Text(
+                              '${selectedDay.dayLabel}, Nov ${selectedDay.dateNum} • ${selectedDay.sleepTime} Sleep',
+                              style: AppTypography.labelMedium.copyWith(fontWeight: FontWeight.w700),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
+                          const SizedBox(width: 6),
                           Text(
                             '${selectedDay.steps} steps',
                             style: AppTypography.labelSmall.copyWith(

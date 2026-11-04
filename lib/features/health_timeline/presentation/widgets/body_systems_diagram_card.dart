@@ -338,3 +338,4 @@ class _DiagramNodeItem extends StatelessWidget {
     );
   }
 }
+

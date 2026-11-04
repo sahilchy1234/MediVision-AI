@@ -7,6 +7,7 @@ import '../../../core/widgets/glass_card.dart';
 import '../../../shared/widgets/status_badge.dart';
 import '../models/timeline_entry.dart';
 import 'widgets/body_systems_diagram_card.dart';
+import 'widgets/interactive_human_body_diagram.dart';
 import 'widgets/weekly_rhythm_diagram_card.dart';
 
 class HealthTimelineScreen extends StatefulWidget {
@@ -33,99 +34,103 @@ class _HealthTimelineScreenState extends State<HealthTimelineScreen> {
             color: Colors.white,
             borderRadius: BorderRadius.vertical(top: Radius.circular(AppDimensions.radiusXL)),
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Container(
-                  width: 44,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: AppColors.border,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 18),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  StatusBadge(
-                    label: entry.simplePillTag,
-                    type: BadgeType.success,
-                  ),
-                  Text(
-                    DateFormatter.formatDate(entry.timestamp),
-                    style: AppTypography.bodySmall,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Text(
-                entry.title,
-                style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.w800),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                entry.description,
-                style: AppTypography.bodyMedium,
-              ),
-              const SizedBox(height: 16),
-              // Non-technical Plain-English Box
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: AppColors.secondaryContainer.withOpacity(0.4),
-                  borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-                  border: Border.all(color: AppColors.secondary.withOpacity(0.2)),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.lightbulb_outline_rounded,
-                            size: 18, color: AppColors.secondaryDark),
-                        const SizedBox(width: 8),
-                        Text(
-                          'What this means for you (Simple takeaway)',
-                          style: AppTypography.labelMedium.copyWith(
-                            color: AppColors.secondaryDark,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ],
+          child: SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Container(
+                    width: 44,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: AppColors.border,
+                      borderRadius: BorderRadius.circular(2),
                     ),
-                    const SizedBox(height: 8),
+                  ),
+                ),
+                const SizedBox(height: 18),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    StatusBadge(
+                      label: entry.simplePillTag,
+                      type: BadgeType.success,
+                    ),
                     Text(
-                      entry.plainEnglishInsight,
-                      style: AppTypography.bodyMedium.copyWith(
-                        color: AppColors.textPrimary,
-                        height: 1.45,
-                      ),
+                      DateFormatter.formatDate(entry.timestamp),
+                      style: AppTypography.bodySmall,
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-                    ),
-                  ),
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('Got It', style: TextStyle(fontWeight: FontWeight.w700)),
+                const SizedBox(height: 12),
+                Text(
+                  entry.title,
+                  style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.w800),
                 ),
-              ),
-              const SizedBox(height: 8),
-            ],
+                const SizedBox(height: 6),
+                Text(
+                  entry.description,
+                  style: AppTypography.bodyMedium,
+                ),
+                const SizedBox(height: 16),
+                // Non-technical Plain-English Box
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: AppColors.secondaryContainer.withOpacity(0.4),
+                    borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                    border: Border.all(color: AppColors.secondary.withOpacity(0.2)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(Icons.lightbulb_outline_rounded,
+                              size: 18, color: AppColors.secondaryDark),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              'What this means for you (Simple takeaway)',
+                              style: AppTypography.labelMedium.copyWith(
+                                color: AppColors.secondaryDark,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        entry.plainEnglishInsight,
+                        style: AppTypography.bodyMedium.copyWith(
+                          color: AppColors.textPrimary,
+                          height: 1.45,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                      ),
+                    ),
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text('Got It', style: TextStyle(fontWeight: FontWeight.w700)),
+                  ),
+                ),
+                const SizedBox(height: 8),
+              ],
+            ),
           ),
         );
       },
@@ -170,7 +175,7 @@ class _HealthTimelineScreenState extends State<HealthTimelineScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // Ergonomic Diagram vs Journey View Switcher
+            // Ergonomic View Switcher (Body Balance vs Milestone Journey)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
               child: Container(
@@ -184,8 +189,8 @@ class _HealthTimelineScreenState extends State<HealthTimelineScreen> {
                   children: [
                     Expanded(
                       child: _ErgonomicViewTab(
-                        label: 'Body Balance Diagram',
-                        icon: Icons.hub_rounded,
+                        label: 'Body Anatomy & Diagrams',
+                        icon: Icons.accessibility_new_rounded,
                         isSelected: _viewMode == 0,
                         onTap: () => setState(() => _viewMode = 0),
                       ),
@@ -307,11 +312,15 @@ class _HealthTimelineScreenState extends State<HealthTimelineScreen> {
             ],
           ),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 18),
+
+        // Interactive Human Body Anatomy Diagram (Atlas + Heatmap + Regional Zones)
+        const InteractiveHumanBodyDiagram(),
+        const SizedBox(height: 18),
 
         // Interactive Body Systems Balance Diagram
         const BodySystemsDiagramCard(),
-        const SizedBox(height: 20),
+        const SizedBox(height: 18),
 
         // 7-Day Rhythm Diagram
         const WeeklyRhythmDiagramCard(),
@@ -546,7 +555,7 @@ class _ErgonomicViewTab extends StatelessWidget {
       borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(vertical: 10),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
         decoration: BoxDecoration(
           color: isSelected ? Colors.white : Colors.transparent,
           borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
@@ -565,16 +574,20 @@ class _ErgonomicViewTab extends StatelessWidget {
           children: [
             Icon(
               icon,
-              size: 16,
+              size: 15,
               color: isSelected ? AppColors.primary : AppColors.textTertiary,
             ),
-            const SizedBox(width: 6),
-            Text(
-              label,
-              style: AppTypography.labelSmall.copyWith(
-                color: isSelected ? AppColors.primary : AppColors.textSecondary,
-                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                fontSize: 12,
+            const SizedBox(width: 5),
+            Flexible(
+              child: Text(
+                label,
+                style: AppTypography.labelSmall.copyWith(
+                  color: isSelected ? AppColors.primary : AppColors.textSecondary,
+                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                  fontSize: 11.5,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ],
