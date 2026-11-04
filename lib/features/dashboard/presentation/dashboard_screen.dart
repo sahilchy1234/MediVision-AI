@@ -385,31 +385,38 @@ class DashboardScreen extends ConsumerWidget {
               SizedBox(
                 height: 104,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    QuickActionButton(
-                      label: 'Ask AI',
-                      icon: Icons.auto_awesome_rounded,
-                      color: AppColors.accentIndigo,
-                      onTap: () => context.go('/ai-companion'),
+                    Expanded(
+                      child: QuickActionButton(
+                        label: 'Ask AI',
+                        icon: Icons.auto_awesome_rounded,
+                        color: AppColors.accentIndigo,
+                        onTap: () => context.go('/ai-companion'),
+                      ),
                     ),
-                    QuickActionButton(
-                      label: 'Upload Report',
-                      icon: Icons.upload_file_rounded,
-                      color: AppColors.secondary,
-                      onTap: () => _showUploadMockDialog(context),
+                    Expanded(
+                      child: QuickActionButton(
+                        label: 'Upload Report',
+                        icon: Icons.upload_file_rounded,
+                        color: AppColors.secondary,
+                        onTap: () => _showUploadMockDialog(context),
+                      ),
                     ),
-                    QuickActionButton(
-                      label: 'Timeline',
-                      icon: Icons.timeline_rounded,
-                      color: AppColors.primary,
-                      onTap: () => context.go('/timeline'),
+                    Expanded(
+                      child: QuickActionButton(
+                        label: 'Timeline',
+                        icon: Icons.timeline_rounded,
+                        color: AppColors.primary,
+                        onTap: () => context.go('/timeline'),
+                      ),
                     ),
-                    QuickActionButton(
-                      label: 'Clinical Summary',
-                      icon: Icons.description_rounded,
-                      color: AppColors.accentEmerald,
-                      onTap: () => _showGenerateSummarySheet(context, profile.fullName),
+                    Expanded(
+                      child: QuickActionButton(
+                        label: 'Clinical Summary',
+                        icon: Icons.description_rounded,
+                        color: AppColors.accentEmerald,
+                        onTap: () => _showGenerateSummarySheet(context, profile.fullName),
+                      ),
                     ),
                   ],
                 ),
@@ -547,38 +554,41 @@ class _WomensHealthDashboardCard extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: AppColors.accentRose.withOpacity(0.12),
-                      borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-                    ),
-                    child: const Icon(
-                      Icons.spa_rounded,
-                      color: AppColors.accentRose,
-                      size: 20,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Women's Health & Cycle",
-                        style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w800),
-                      ),
-                      Text(
-                        'Private Reproductive Intelligence',
-                        style: AppTypography.bodySmall.copyWith(fontSize: 10.5),
-                      ),
-                    ],
-                  ),
-                ],
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: AppColors.accentRose.withOpacity(0.12),
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                ),
+                child: const Icon(
+                  Icons.spa_rounded,
+                  color: AppColors.accentRose,
+                  size: 20,
+                ),
               ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Women's Health & Cycle",
+                      style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w800),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      'Private Reproductive Intelligence',
+                      style: AppTypography.bodySmall.copyWith(fontSize: 10.5),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(

@@ -23,8 +23,7 @@ class QuickActionButton extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(AppDimensions.radiusM),
       child: Container(
-        width: 78,
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 2),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
