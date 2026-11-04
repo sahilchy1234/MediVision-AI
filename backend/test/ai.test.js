@@ -47,19 +47,17 @@ describe('MediVision AI - Groq AI Companion API Tests', () => {
     assert.ok(data.message.includes('required'));
   });
 
-  test('3. POST /api/ai/chat reports NO_GROQ_KEY when no key is provided', async () => {
-    delete process.env.GROQ_API_KEY;
+  test('3. POST /api/ai/chat succeeds with default Groq key without manual header', async () => {
     const res = await fetch(`${baseUrl}/api/ai/chat`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-groq-api-key': '' },
-      body: JSON.stringify({ prompt: 'Hello MediVision' })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: 'Brief greeting for health app' })
     });
     const data = await res.json();
 
-    assert.strictEqual(res.status, 401);
-    assert.strictEqual(data.success, false);
-    assert.strictEqual(data.code, 'NO_GROQ_KEY');
-    process.env.GROQ_API_KEY = savedKey;
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(data.success, true);
+    assert.ok(data.data.text.length > 0);
   });
 
   test('4. POST /api/ai/chat handles invalid Groq key gracefully', async () => {

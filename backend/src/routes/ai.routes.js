@@ -9,3 +9,4 @@ router.post('/chat', handleChat);
 router.get('/status', getAiStatus);
 
 module.exports = router;
+

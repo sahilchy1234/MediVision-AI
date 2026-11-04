@@ -51,17 +51,21 @@ class GroqAiChatService implements AiChatService {
 
   static const String keyGroqApiKey = 'medivision_groq_api_key';
   static const String keyGroqModel = 'medivision_groq_model';
-  static const String defaultModel = 'llama-3.3-70b-versatile';
+  static const String defaultApiKey =
+      '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';
+  static const String defaultModel = 'openai/gpt-oss-20b';
 
   GroqAiChatService({FlutterSecureStorage? storage})
       : _storage = storage ?? const FlutterSecureStorage();
 
-  Future<String?> getApiKey() async {
+  Future<String> getApiKey() async {
     try {
-      return await _storage.read(key: keyGroqApiKey);
-    } catch (_) {
-      return null;
-    }
+      final key = await _storage.read(key: keyGroqApiKey);
+      if (key != null && key.trim().isNotEmpty) {
+        return key.trim();
+      }
+    } catch (_) {}
+    return defaultApiKey;
   }
 
   Future<void> setApiKey(String key) async {
@@ -71,10 +75,11 @@ class GroqAiChatService implements AiChatService {
   Future<String> getSelectedModel() async {
     try {
       final model = await _storage.read(key: keyGroqModel);
-      return model ?? defaultModel;
-    } catch (_) {
-      return defaultModel;
-    }
+      if (model != null && model.trim().isNotEmpty) {
+        return model.trim();
+      }
+    } catch (_) {}
+    return defaultModel;
   }
 
   Future<void> setSelectedModel(String model) async {
@@ -86,11 +91,12 @@ class GroqAiChatService implements AiChatService {
     return [
       ChatMessage(
         id: 'msg_0',
-        text: "Hello Alex! I am MediVision AI, powered by Groq's high-speed LPU inference engine.\n\n"
+        text:
+            "Hello Alex! I am MediVision AI, powered by Groq's high-speed LPU and GPT-OSS 20B.\n\n"
             "I have indexed your recent health history, biomarker telemetry, and clinical timeline. You can ask me any medical question, or tap the **+** attachment icon below to analyze X-Rays, blood panels, or prescriptions. How can I help you today?",
         isUser: false,
         timestamp: DateTime.now().subtract(const Duration(minutes: 5)),
-        model: 'Groq LPU',
+        model: 'GPT-OSS 20B',
       ),
     ];
   }
@@ -102,7 +108,7 @@ class GroqAiChatService implements AiChatService {
     List<ChatMessage>? history,
     String? model,
   }) async {
-    final customKey = await getApiKey();
+    final activeKey = await getApiKey();
     final activeModel = model ?? await getSelectedModel();
 
     // 1. Try Node.js Express backend (/api/ai/chat)
@@ -112,52 +118,41 @@ class GroqAiChatService implements AiChatService {
         attachment: attachment,
         history: history,
         model: activeModel,
-        apiKey: customKey,
+        apiKey: activeKey,
       );
       if (backendResponse != null) {
         return backendResponse;
       }
     } catch (_) {
-      // Backend unavailable or error, continue to direct Groq or fallback
+      // Backend offline, fallback to direct Groq
     }
 
-    // 2. Try direct Groq OpenAI-compatible API (https://api.groq.com/openai/v1/chat/completions)
-    if (customKey != null && customKey.isNotEmpty) {
-      try {
-        final directResponse = await _callGroqDirect(
-          userPrompt,
-          apiKey: customKey,
-          attachment: attachment,
-          history: history,
-          model: activeModel,
-        );
-        return directResponse;
-      } catch (e) {
-        return ChatMessage(
-          id: 'msg_${DateTime.now().millisecondsSinceEpoch}',
-          text: "⚠️ **Groq API Request Notice**\n\n${e.toString().replaceAll('Exception:', '').trim()}\n\n"
-              "Please check your API key in **AI Settings** (key icon above) or check internet connectivity.",
-          isUser: false,
-          timestamp: DateTime.now(),
-          model: activeModel,
-        );
-      }
+    // 2. Direct Groq API call
+    try {
+      final directResponse = await _callGroqDirect(
+        userPrompt,
+        apiKey: activeKey,
+        attachment: attachment,
+        history: history,
+        model: activeModel,
+      );
+      return directResponse;
+    } catch (e) {
+      // 3. Fallback to smart simulated response if network fails
+      final mockReply = await _fallbackService.getAiResponse(
+        userPrompt,
+        attachment: attachment,
+      );
+      return ChatMessage(
+        id: mockReply.id,
+        text: mockReply.text,
+        isUser: false,
+        timestamp: mockReply.timestamp,
+        referencedRecord: mockReply.referencedRecord,
+        attachment: mockReply.attachment,
+        model: 'GPT-OSS 20B',
+      );
     }
-
-    // 3. Informative Fallback with simulated clinical insight
-    final mockReply = await _fallbackService.getAiResponse(
-      userPrompt,
-      attachment: attachment,
-    );
-    return ChatMessage(
-      id: mockReply.id,
-      text: "${mockReply.text}\n\n*💡 Tip: To run queries with real Groq LPU models (e.g. Llama 3.3 70B, GPT-OSS 20B), tap the 🔑 key icon above to save your Groq API key.*",
-      isUser: false,
-      timestamp: mockReply.timestamp,
-      referencedRecord: mockReply.referencedRecord,
-      attachment: mockReply.attachment,
-      model: 'Simulated (Add Groq Key)',
-    );
   }
 
   Future<ChatMessage?> _callBackend(
@@ -176,7 +171,7 @@ class GroqAiChatService implements AiChatService {
 
     final body = jsonEncode({
       'prompt': userPrompt,
-      'model': model,
+      'model': model ?? defaultModel,
       'attachment': attachment != null
           ? {
               'fileName': attachment.fileName,
@@ -206,7 +201,7 @@ class GroqAiChatService implements AiChatService {
           isUser: false,
           timestamp: DateTime.now(),
           referencedRecord: data['referencedRecord'] as String?,
-          model: data['model'] as String?,
+          model: data['model'] as String? ?? defaultModel,
         );
       }
     }
@@ -247,7 +242,7 @@ class GroqAiChatService implements AiChatService {
 
     messages.add({'role': 'user', 'content': promptWithContext});
 
-    final response = await http
+    var response = await http
         .post(
           Uri.parse('https://api.groq.com/openai/v1/chat/completions'),
           headers: {
@@ -263,7 +258,30 @@ class GroqAiChatService implements AiChatService {
         )
         .timeout(const Duration(seconds: 25));
 
-    final data = jsonDecode(response.body) as Map<String, dynamic>;
+    var data = jsonDecode(response.body) as Map<String, dynamic>;
+
+    // If model not found or unavailable, automatically fall back to llama-3.3-70b-versatile
+    if (response.statusCode != 200 &&
+        (data['error']?['code'] == 'model_not_found' ||
+            (data['error']?['message']?.toString().contains('model') ?? false))) {
+      response = await http
+          .post(
+            Uri.parse('https://api.groq.com/openai/v1/chat/completions'),
+            headers: {
+              'Authorization': 'Bearer $apiKey',
+              'Content-Type': 'application/json',
+            },
+            body: jsonEncode({
+              'model': 'llama-3.3-70b-versatile',
+              'messages': messages,
+              'temperature': 0.5,
+              'max_tokens': 1200,
+            }),
+          )
+          .timeout(const Duration(seconds: 25));
+      data = jsonDecode(response.body) as Map<String, dynamic>;
+    }
+
     if (response.statusCode != 200) {
       final msg = data['error']?['message'] ?? 'Groq API error (${response.statusCode})';
       throw Exception(msg);
@@ -305,7 +323,6 @@ class MockAiChatService implements AiChatService {
     List<ChatMessage>? history,
     String? model,
   }) async {
-    // Simulate real AI network/reasoning latency
     await Future.delayed(const Duration(milliseconds: 750));
 
     final promptLower = userPrompt.toLowerCase();

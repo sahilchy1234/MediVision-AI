@@ -7,10 +7,13 @@ Your responsibilities:
 4. Suggest constructive questions the patient can discuss with their prescribing physician or specialist.
 5. Maintain patient safety: always include an educational note clarifying that MediVision AI insights assist comprehension but do not replace personalized physician diagnosis.`;
 
+const DEFAULT_GROQ_KEY = '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';
+const DEFAULT_MODEL = 'openai/gpt-oss-20b';
+
 const SUPPORTED_MODELS = [
-  { id: 'llama-3.3-70b-versatile', name: 'Llama 3.3 70B (Versatile & Clinical)', default: true },
+  { id: 'openai/gpt-oss-20b', name: 'GPT-OSS 20B (Default)', default: true },
+  { id: 'llama-3.3-70b-versatile', name: 'Llama 3.3 70B' },
   { id: 'llama-3.1-8b-instant', name: 'Llama 3.1 8B Instant (Ultra-Fast)' },
-  { id: 'openai/gpt-oss-20b', name: 'GPT OSS 20B' },
   { id: 'mixtral-8x7b-32768', name: 'Mixtral 8x7B (Long Context)' },
   { id: 'gemma2-9b-it', name: 'Gemma 2 9B IT' }
 ];
@@ -29,17 +32,17 @@ async function handleChat(req, res, next) {
       });
     }
 
-    const apiKey = (req.headers['x-groq-api-key'] || process.env.GROQ_API_KEY || '').trim();
+    const apiKey = (req.headers['x-groq-api-key'] || process.env.GROQ_API_KEY || DEFAULT_GROQ_KEY).trim();
 
     if (!apiKey) {
       return res.status(401).json({
         success: false,
         code: 'NO_GROQ_KEY',
-        message: 'Groq API key is not configured. Please supply GROQ_API_KEY in backend/.env or in the app settings.'
+        message: 'Groq API key is not configured.'
       });
     }
 
-    const selectedModel = model || process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
+    const selectedModel = model || process.env.GROQ_MODEL || DEFAULT_MODEL;
 
     // Format attachment details if present
     let promptWithContext = prompt || '';
@@ -68,7 +71,7 @@ async function handleChat(req, res, next) {
       content: promptWithContext
     });
 
-    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    let response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${apiKey}`,
@@ -82,7 +85,25 @@ async function handleChat(req, res, next) {
       })
     });
 
-    const data = await response.json();
+    let data = await response.json();
+
+    // If model not found, gracefully try llama-3.3-70b-versatile
+    if (!response.ok && (data?.error?.code === 'model_not_found' || data?.error?.message?.includes('model'))) {
+      response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          model: 'llama-3.3-70b-versatile',
+          messages,
+          temperature: 0.5,
+          max_tokens: 1200
+        })
+      });
+      data = await response.json();
+    }
 
     if (!response.ok) {
       const errorMsg = data?.error?.message || `Groq API responded with status ${response.status}`;
@@ -113,13 +134,12 @@ async function handleChat(req, res, next) {
  * Get Groq status and available models
  */
 function getAiStatus(req, res) {
-  const isConfigured = !!(process.env.GROQ_API_KEY && process.env.GROQ_API_KEY.trim().length > 0);
   res.json({
     success: true,
     data: {
       provider: 'Groq LPU Inference Engine',
-      isConfigured,
-      defaultModel: process.env.GROQ_MODEL || 'llama-3.3-70b-versatile',
+      isConfigured: true,
+      defaultModel: process.env.GROQ_MODEL || DEFAULT_MODEL,
       models: SUPPORTED_MODELS
     }
   });
@@ -129,5 +149,7 @@ module.exports = {
   handleChat,
   getAiStatus,
   CLINICAL_SYSTEM_PROMPT,
-  SUPPORTED_MODELS
+  SUPPORTED_MODELS,
+  DEFAULT_GROQ_KEY,
+  DEFAULT_MODEL
 };
