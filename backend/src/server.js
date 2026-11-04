@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
 const healthRoutes = require('./routes/health.routes');
+const aiRoutes = require('./routes/ai.routes');
 const { notFoundHandler, globalErrorHandler } = require('./middleware/error.middleware');
 
 const app = express();
@@ -16,7 +17,7 @@ app.use(
   cors({
     origin: '*',
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'x-groq-api-key'],
   })
 );
 
@@ -33,6 +34,7 @@ if (process.env.NODE_ENV !== 'test') {
 app.use('/api', healthRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/ai', aiRoutes);
 
 // Welcome Root Route
 app.get('/', (req, res) => {

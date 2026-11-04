@@ -202,9 +202,240 @@ class _AiCompanionScreenState extends ConsumerState<AiCompanionScreen> {
     );
   }
 
+  void _showGroqConfigModal() {
+    final groqConfig = ref.read(groqConfigProvider);
+    final keyController = TextEditingController(text: groqConfig.apiKey ?? '');
+    String selectedModel = groqConfig.selectedModel;
+    bool obscure = true;
+
+    final models = [
+      {'id': 'llama-3.3-70b-versatile', 'name': 'Llama 3.3 70B (Recommended)'},
+      {'id': 'openai/gpt-oss-20b', 'name': 'GPT-OSS 20B (OpenAI OSS)'},
+      {'id': 'llama-3.1-8b-instant', 'name': 'Llama 3.1 8B (Instant Speed)'},
+      {'id': 'mixtral-8x7b-32768', 'name': 'Mixtral 8x7B (Long Context)'},
+      {'id': 'gemma2-9b-it', 'name': 'Gemma 2 9B IT'},
+    ];
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: Container(
+                padding: const EdgeInsets.all(24),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(AppDimensions.radiusXL),
+                  ),
+                ),
+                child: SafeArea(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: Container(
+                          width: 44,
+                          height: 4,
+                          decoration: BoxDecoration(
+                            color: AppColors.border,
+                            borderRadius: BorderRadius.circular(2),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 18),
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: AppColors.secondaryContainer,
+                              borderRadius:
+                                  BorderRadius.circular(AppDimensions.radiusM),
+                            ),
+                            child: const Icon(
+                              Icons.bolt_rounded,
+                              color: AppColors.secondaryDark,
+                              size: 22,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Groq LPU AI Engine',
+                                  style: AppTypography.titleMedium.copyWith(
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                                Text(
+                                  'Sub-second clinical reasoning & document parsing',
+                                  style: AppTypography.bodySmall.copyWith(
+                                    fontSize: 11,
+                                    color: AppColors.textSecondary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      Text(
+                        'Groq API Key',
+                        style: AppTypography.labelMedium.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      TextField(
+                        controller: keyController,
+                        obscureText: obscure,
+                        decoration: InputDecoration(
+                          hintText: 'gsk_...',
+                          prefixIcon: const Icon(Icons.key_rounded, size: 20),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              obscure
+                                  ? Icons.visibility_outlined
+                                  : Icons.visibility_off_outlined,
+                              size: 20,
+                            ),
+                            onPressed: () =>
+                                setModalState(() => obscure = !obscure),
+                          ),
+                          filled: true,
+                          fillColor: AppColors.surfaceSubtle,
+                          border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.circular(AppDimensions.radiusM),
+                            borderSide:
+                                const BorderSide(color: AppColors.border),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 12,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        'Free keys are available at console.groq.com/keys. Keys are stored with on-device hardware encryption.',
+                        style: AppTypography.labelSmall.copyWith(
+                          fontSize: 10.5,
+                          color: AppColors.textTertiary,
+                        ),
+                      ),
+                      const SizedBox(height: 18),
+                      Text(
+                        'Model Selection',
+                        style: AppTypography.labelMedium.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        decoration: BoxDecoration(
+                          color: AppColors.surfaceSubtle,
+                          borderRadius:
+                              BorderRadius.circular(AppDimensions.radiusM),
+                          border: Border.all(color: AppColors.border),
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            value: selectedModel,
+                            isExpanded: true,
+                            items: models.map((m) {
+                              return DropdownMenuItem<String>(
+                                value: m['id'],
+                                child: Text(
+                                  m['name']!,
+                                  style: AppTypography.bodySmall.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (val) {
+                              if (val != null) {
+                                setModalState(() => selectedModel = val);
+                              }
+                            },
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 22),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.secondary,
+                                foregroundColor: Colors.white,
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 14),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                    AppDimensions.radiusM,
+                                  ),
+                                ),
+                              ),
+                              icon: const Icon(Icons.check_circle_rounded,
+                                  size: 18),
+                              label: const Text(
+                                'Save Configuration',
+                                style: TextStyle(fontWeight: FontWeight.w700),
+                              ),
+                              onPressed: () {
+                                final key = keyController.text.trim();
+                                ref
+                                    .read(groqConfigProvider.notifier)
+                                    .setApiKey(key);
+                                ref
+                                    .read(groqConfigProvider.notifier)
+                                    .setModel(selectedModel);
+                                Navigator.pop(ctx);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      key.isNotEmpty
+                                          ? 'Groq configuration active ($selectedModel)'
+                                          : 'Groq API Key cleared. Using demo simulator.',
+                                    ),
+                                    backgroundColor: AppColors.secondary,
+                                    behavior: SnackBarBehavior.floating,
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final chatState = ref.watch(aiCompanionProvider);
+    final groqConfig = ref.watch(groqConfigProvider);
 
     ref.listen(aiCompanionProvider, (previous, next) {
       if (next.messages.length != previous?.messages.length ||
@@ -254,6 +485,52 @@ class _AiCompanionScreenState extends ConsumerState<AiCompanionScreen> {
           ],
         ),
         actions: [
+          // Groq LPU Status Chip & Config Button
+          GestureDetector(
+            onTap: _showGroqConfigModal,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: groqConfig.isConfigured
+                    ? AppColors.secondaryContainer
+                    : AppColors.surfaceSubtle,
+                borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
+                border: Border.all(
+                  color: groqConfig.isConfigured
+                      ? AppColors.secondary
+                      : AppColors.border,
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.bolt_rounded,
+                    size: 14,
+                    color: groqConfig.isConfigured
+                        ? AppColors.secondaryDark
+                        : AppColors.textTertiary,
+                  ),
+                  const SizedBox(width: 3),
+                  Text(
+                    groqConfig.isConfigured ? 'Groq LPU' : 'Setup Groq',
+                    style: AppTypography.labelSmall.copyWith(
+                      color: groqConfig.isConfigured
+                          ? AppColors.secondaryDark
+                          : AppColors.textSecondary,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 10.5,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.key_rounded, size: 20),
+            tooltip: 'Groq API Settings',
+            onPressed: _showGroqConfigModal,
+          ),
           IconButton(
             icon: const Icon(Icons.refresh_rounded, size: 20),
             tooltip: 'Clear Conversation',
@@ -261,7 +538,7 @@ class _AiCompanionScreenState extends ConsumerState<AiCompanionScreen> {
               ref.read(aiCompanionProvider.notifier).clearChat();
             },
           ),
-          const SizedBox(width: 6),
+          const SizedBox(width: 4),
         ],
       ),
       body: SafeArea(
@@ -283,6 +560,43 @@ class _AiCompanionScreenState extends ConsumerState<AiCompanionScreen> {
                 ),
               ),
             ),
+
+            // Groq LPU Banner if not configured
+            if (!groqConfig.isConfigured)
+              InkWell(
+                onTap: _showGroqConfigModal,
+                child: Container(
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: AppColors.secondaryContainer.withOpacity(0.6),
+                    borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                    border:
+                        Border.all(color: AppColors.secondary.withOpacity(0.3)),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.bolt_rounded,
+                          color: AppColors.secondaryDark, size: 18),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'Powered by Groq LPU. Tap here to enter your Groq API Key for live ultra-fast inference.',
+                          style: AppTypography.labelSmall.copyWith(
+                            color: AppColors.secondaryDark,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 11,
+                          ),
+                        ),
+                      ),
+                      const Icon(Icons.chevron_right_rounded,
+                          size: 16, color: AppColors.secondaryDark),
+                    ],
+                  ),
+                ),
+              ),
 
             // Chat Messages History
             Expanded(
@@ -349,20 +663,34 @@ class _AiCompanionScreenState extends ConsumerState<AiCompanionScreen> {
                                           vertical: 2,
                                         ),
                                         decoration: BoxDecoration(
-                                          color: AppColors.mintAccent,
+                                          color: AppColors.secondaryContainer,
                                           borderRadius: BorderRadius.circular(
                                             4,
                                           ),
                                         ),
-                                        child: Text(
-                                          'AI CLINICAL ANALYSIS',
-                                          style: AppTypography.labelSmall
-                                              .copyWith(
-                                                color: AppColors.forestGreen,
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 9.5,
-                                                letterSpacing: 0.3,
-                                              ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            const Icon(
+                                              Icons.bolt_rounded,
+                                              size: 11,
+                                              color: AppColors.secondaryDark,
+                                            ),
+                                            const SizedBox(width: 3),
+                                            Text(
+                                              message.model != null
+                                                  ? 'GROQ LPU • ${message.model}'
+                                                  : 'AI CLINICAL ANALYSIS',
+                                              style: AppTypography.labelSmall
+                                                  .copyWith(
+                                                    color:
+                                                        AppColors.secondaryDark,
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: 9.5,
+                                                    letterSpacing: 0.3,
+                                                  ),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ],

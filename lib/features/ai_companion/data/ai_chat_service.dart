@@ -1,3 +1,8 @@
+import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
+import '../../../core/constants/api_constants.dart';
+
 class ChatAttachment {
   final String fileName;
   final String fileType; // 'xray', 'bloodReport', 'prescription', 'document'
@@ -17,6 +22,7 @@ class ChatMessage {
   final DateTime timestamp;
   final String? referencedRecord;
   final ChatAttachment? attachment;
+  final String? model;
 
   const ChatMessage({
     required this.id,
@@ -25,12 +31,257 @@ class ChatMessage {
     required this.timestamp,
     this.referencedRecord,
     this.attachment,
+    this.model,
   });
 }
 
 abstract class AiChatService {
-  Future<ChatMessage> getAiResponse(String userPrompt, {ChatAttachment? attachment});
+  Future<ChatMessage> getAiResponse(
+    String userPrompt, {
+    ChatAttachment? attachment,
+    List<ChatMessage>? history,
+    String? model,
+  });
   List<ChatMessage> getInitialMessages();
+}
+
+class GroqAiChatService implements AiChatService {
+  final FlutterSecureStorage _storage;
+  final MockAiChatService _fallbackService = MockAiChatService();
+
+  static const String keyGroqApiKey = 'medivision_groq_api_key';
+  static const String keyGroqModel = 'medivision_groq_model';
+  static const String defaultModel = 'llama-3.3-70b-versatile';
+
+  GroqAiChatService({FlutterSecureStorage? storage})
+      : _storage = storage ?? const FlutterSecureStorage();
+
+  Future<String?> getApiKey() async {
+    try {
+      return await _storage.read(key: keyGroqApiKey);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<void> setApiKey(String key) async {
+    await _storage.write(key: keyGroqApiKey, value: key.trim());
+  }
+
+  Future<String> getSelectedModel() async {
+    try {
+      final model = await _storage.read(key: keyGroqModel);
+      return model ?? defaultModel;
+    } catch (_) {
+      return defaultModel;
+    }
+  }
+
+  Future<void> setSelectedModel(String model) async {
+    await _storage.write(key: keyGroqModel, value: model.trim());
+  }
+
+  @override
+  List<ChatMessage> getInitialMessages() {
+    return [
+      ChatMessage(
+        id: 'msg_0',
+        text: "Hello Alex! I am MediVision AI, powered by Groq's high-speed LPU inference engine.\n\n"
+            "I have indexed your recent health history, biomarker telemetry, and clinical timeline. You can ask me any medical question, or tap the **+** attachment icon below to analyze X-Rays, blood panels, or prescriptions. How can I help you today?",
+        isUser: false,
+        timestamp: DateTime.now().subtract(const Duration(minutes: 5)),
+        model: 'Groq LPU',
+      ),
+    ];
+  }
+
+  @override
+  Future<ChatMessage> getAiResponse(
+    String userPrompt, {
+    ChatAttachment? attachment,
+    List<ChatMessage>? history,
+    String? model,
+  }) async {
+    final customKey = await getApiKey();
+    final activeModel = model ?? await getSelectedModel();
+
+    // 1. Try Node.js Express backend (/api/ai/chat)
+    try {
+      final backendResponse = await _callBackend(
+        userPrompt,
+        attachment: attachment,
+        history: history,
+        model: activeModel,
+        apiKey: customKey,
+      );
+      if (backendResponse != null) {
+        return backendResponse;
+      }
+    } catch (_) {
+      // Backend unavailable or error, continue to direct Groq or fallback
+    }
+
+    // 2. Try direct Groq OpenAI-compatible API (https://api.groq.com/openai/v1/chat/completions)
+    if (customKey != null && customKey.isNotEmpty) {
+      try {
+        final directResponse = await _callGroqDirect(
+          userPrompt,
+          apiKey: customKey,
+          attachment: attachment,
+          history: history,
+          model: activeModel,
+        );
+        return directResponse;
+      } catch (e) {
+        return ChatMessage(
+          id: 'msg_${DateTime.now().millisecondsSinceEpoch}',
+          text: "⚠️ **Groq API Request Notice**\n\n${e.toString().replaceAll('Exception:', '').trim()}\n\n"
+              "Please check your API key in **AI Settings** (key icon above) or check internet connectivity.",
+          isUser: false,
+          timestamp: DateTime.now(),
+          model: activeModel,
+        );
+      }
+    }
+
+    // 3. Informative Fallback with simulated clinical insight
+    final mockReply = await _fallbackService.getAiResponse(
+      userPrompt,
+      attachment: attachment,
+    );
+    return ChatMessage(
+      id: mockReply.id,
+      text: "${mockReply.text}\n\n*💡 Tip: To run queries with real Groq LPU models (e.g. Llama 3.3 70B, GPT-OSS 20B), tap the 🔑 key icon above to save your Groq API key.*",
+      isUser: false,
+      timestamp: mockReply.timestamp,
+      referencedRecord: mockReply.referencedRecord,
+      attachment: mockReply.attachment,
+      model: 'Simulated (Add Groq Key)',
+    );
+  }
+
+  Future<ChatMessage?> _callBackend(
+    String userPrompt, {
+    ChatAttachment? attachment,
+    List<ChatMessage>? history,
+    String? model,
+    String? apiKey,
+  }) async {
+    final headers = <String, String>{
+      'Content-Type': 'application/json',
+    };
+    if (apiKey != null && apiKey.isNotEmpty) {
+      headers['x-groq-api-key'] = apiKey;
+    }
+
+    final body = jsonEncode({
+      'prompt': userPrompt,
+      'model': model,
+      'attachment': attachment != null
+          ? {
+              'fileName': attachment.fileName,
+              'fileType': attachment.fileType,
+              'fileSize': attachment.fileSize,
+            }
+          : null,
+      'history': history
+          ?.map((m) => {
+                'role': m.isUser ? 'user' : 'assistant',
+                'content': m.text,
+              })
+          .toList(),
+    });
+
+    final res = await http
+        .post(Uri.parse(ApiConstants.aiChat), headers: headers, body: body)
+        .timeout(const Duration(seconds: 15));
+
+    if (res.statusCode == 200) {
+      final json = jsonDecode(res.body) as Map<String, dynamic>;
+      if (json['success'] == true && json['data'] != null) {
+        final data = json['data'] as Map<String, dynamic>;
+        return ChatMessage(
+          id: 'msg_${DateTime.now().millisecondsSinceEpoch}',
+          text: data['text'] as String,
+          isUser: false,
+          timestamp: DateTime.now(),
+          referencedRecord: data['referencedRecord'] as String?,
+          model: data['model'] as String?,
+        );
+      }
+    }
+    return null;
+  }
+
+  Future<ChatMessage> _callGroqDirect(
+    String userPrompt, {
+    required String apiKey,
+    ChatAttachment? attachment,
+    List<ChatMessage>? history,
+    required String model,
+  }) async {
+    const systemPrompt =
+        "You are MediVision AI, an empathetic, highly intelligent clinical AI companion. "
+        "Provide accurate, medically structured explanations using clear Markdown (headings, bullet points, bold metrics). "
+        "If medical files/scans are attached, analyze them thoroughly. Conclude with a brief educational disclaimer.";
+
+    String promptWithContext = userPrompt;
+    if (attachment != null) {
+      promptWithContext =
+          "[Attached Medical File: ${attachment.fileName} (${attachment.fileType}, ${attachment.fileSize})]\n\n"
+          "${userPrompt.isEmpty ? 'Please analyze this medical record.' : userPrompt}";
+    }
+
+    final messages = <Map<String, String>>[
+      {'role': 'system', 'content': systemPrompt},
+    ];
+
+    if (history != null) {
+      for (final m in history.take(6)) {
+        messages.add({
+          'role': m.isUser ? 'user' : 'assistant',
+          'content': m.text,
+        });
+      }
+    }
+
+    messages.add({'role': 'user', 'content': promptWithContext});
+
+    final response = await http
+        .post(
+          Uri.parse('https://api.groq.com/openai/v1/chat/completions'),
+          headers: {
+            'Authorization': 'Bearer $apiKey',
+            'Content-Type': 'application/json',
+          },
+          body: jsonEncode({
+            'model': model,
+            'messages': messages,
+            'temperature': 0.5,
+            'max_tokens': 1200,
+          }),
+        )
+        .timeout(const Duration(seconds: 25));
+
+    final data = jsonDecode(response.body) as Map<String, dynamic>;
+    if (response.statusCode != 200) {
+      final msg = data['error']?['message'] ?? 'Groq API error (${response.statusCode})';
+      throw Exception(msg);
+    }
+
+    final choices = data['choices'] as List<dynamic>?;
+    final text = choices?.firstOrNull?['message']?['content'] as String? ??
+        'No response generated by Groq.';
+
+    return ChatMessage(
+      id: 'msg_${DateTime.now().millisecondsSinceEpoch}',
+      text: text,
+      isUser: false,
+      timestamp: DateTime.now(),
+      referencedRecord: attachment?.fileName,
+      model: data['model'] as String? ?? model,
+    );
+  }
 }
 
 class MockAiChatService implements AiChatService {
@@ -48,7 +299,12 @@ class MockAiChatService implements AiChatService {
   }
 
   @override
-  Future<ChatMessage> getAiResponse(String userPrompt, {ChatAttachment? attachment}) async {
+  Future<ChatMessage> getAiResponse(
+    String userPrompt, {
+    ChatAttachment? attachment,
+    List<ChatMessage>? history,
+    String? model,
+  }) async {
     // Simulate real AI network/reasoning latency
     await Future.delayed(const Duration(milliseconds: 750));
 
