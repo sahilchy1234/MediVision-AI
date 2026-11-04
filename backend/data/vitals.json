@@ -4,8 +4,8 @@
     "snapshot": {
       "steps": 11400,
       "stepGoal": 10000,
-      "activeMinutes": 382,
-      "activeCalories": 2862,
+      "activeMinutes": 422,
+      "activeCalories": 3142,
       "restingHeartRate": 64,
       "bloodPressureSystolic": 119,
       "bloodPressureDiastolic": 79,
@@ -16,9 +16,31 @@
       "sleepQualityScore": 89,
       "screenTimeMinutes": 195,
       "screenPickups": 48,
-      "lastUpdated": "2026-11-04T17:53:13.956Z"
+      "lastUpdated": "2026-11-04T19:05:14.616Z"
     },
     "activities": [
+      {
+        "id": "act_1793819114616_aye9",
+        "type": "Running",
+        "startTime": "2026-11-04T19:05:14.616Z",
+        "durationMinutes": 20,
+        "steps": 2200,
+        "calories": 140,
+        "distanceKm": 2.1,
+        "avgHeartRate": 0,
+        "notes": ""
+      },
+      {
+        "id": "act_1793818135535_lozp",
+        "type": "Running",
+        "startTime": "2026-11-04T18:48:55.535Z",
+        "durationMinutes": 20,
+        "steps": 2200,
+        "calories": 140,
+        "distanceKm": 2.1,
+        "avgHeartRate": 0,
+        "notes": ""
+      },
       {
         "id": "act_1793814793955_c1ue",
         "type": "Running",
@@ -219,6 +241,42 @@
       }
     ],
     "logs": [
+      {
+        "id": "log_1793819114616_fi09",
+        "category": "activity",
+        "label": "Running Session",
+        "value": "2200 steps",
+        "unit": "steps",
+        "timestamp": "2026-11-04T19:05:14.616Z",
+        "notes": "20m duration • 140 kcal burned • 2.1 km"
+      },
+      {
+        "id": "log_1793819114581_arqd",
+        "category": "pulse",
+        "label": "Heart Rate Measured",
+        "value": "64 bpm",
+        "unit": "bpm",
+        "timestamp": "2026-11-04T19:05:14.582Z",
+        "notes": ""
+      },
+      {
+        "id": "log_1793818135535_qx8m",
+        "category": "activity",
+        "label": "Running Session",
+        "value": "2200 steps",
+        "unit": "steps",
+        "timestamp": "2026-11-04T18:48:55.535Z",
+        "notes": "20m duration • 140 kcal burned • 2.1 km"
+      },
+      {
+        "id": "log_1793818135503_ykka",
+        "category": "pulse",
+        "label": "Heart Rate Measured",
+        "value": "64 bpm",
+        "unit": "bpm",
+        "timestamp": "2026-11-04T18:48:55.503Z",
+        "notes": ""
+      },
       {
         "id": "log_1793814793956_2jj9",
         "category": "activity",
@@ -562,6 +620,6 @@
         "notes": "84% of daily goal reached."
       }
     ],
-    "updatedAt": "2026-11-04T17:53:13.956Z"
+    "updatedAt": "2026-11-04T19:05:14.616Z"
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:medivision_app/features/health_timeline/data/timeline_repository.dart';
 import 'package:medivision_app/features/health_timeline/models/timeline_entry.dart';
 import 'package:medivision_app/features/health_timeline/presentation/health_timeline_screen.dart';
 import 'package:medivision_app/features/health_timeline/providers/timeline_provider.dart';
@@ -48,6 +49,22 @@ void main() {
       expect(samples.isEmpty, true, reason: 'Health Timeline must only display real patient records');
     });
 
+    test('TimelineRepository.generateValidClinicalEvents generates clinically calibrated valid entries', () {
+      final events = TimelineRepository.generateValidClinicalEvents();
+      expect(events.length, 5);
+      expect(events.any((e) => e.category == TimelineCategory.symptoms), true);
+      expect(events.any((e) => e.category == TimelineCategory.activity), true);
+      expect(events.any((e) => e.category == TimelineCategory.sleep), true);
+      expect(events.any((e) => e.category == TimelineCategory.reports), true);
+      expect(events.any((e) => e.category == TimelineCategory.medications), true);
+      for (final event in events) {
+        expect(event.id.isNotEmpty, true);
+        expect(event.title.isNotEmpty, true);
+        expect(event.metricValue.isNotEmpty, true);
+        expect(event.plainEnglishInsight.isNotEmpty, true);
+      }
+    });
+
     test('timelineProvider allows adding and deleting real user health events', () async {
       final container = ProviderContainer();
       addTearDown(container.dispose);
@@ -77,6 +94,20 @@ void main() {
       await notifier.deleteEntry(newEntry.id);
       final entriesAfterDelete = container.read(timelineProvider);
       expect(entriesAfterDelete.any((e) => e.id == newEntry.id), false);
+    });
+
+    test('autoLogValidHealthEvents populates timeline with calibrated clinical events', () async {
+      final container = ProviderContainer();
+      addTearDown(container.dispose);
+
+      final notifier = container.read(timelineProvider.notifier);
+      await notifier.autoLogValidHealthEvents();
+
+      final entries = container.read(timelineProvider);
+      expect(entries.length >= 5, true);
+      expect(entries.any((e) => e.title.contains('Cardiovascular') || e.title.contains('Telemetry')), true);
+      expect(entries.any((e) => e.title.contains('Walk')), true);
+      expect(entries.any((e) => e.title.contains('Sleep')), true);
     });
 
     testWidgets('HealthTimelineScreen renders smoothly without mock data', (tester) async {

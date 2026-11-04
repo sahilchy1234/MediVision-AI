@@ -72,6 +72,21 @@ class TimelineNotifier extends StateNotifier<List<TimelineEntry>> {
     return newEntry;
   }
 
+  /// Automatically log a fresh suite of valid clinical events to both storage and backend
+  Future<void> autoLogValidHealthEvents() async {
+    _isLoading = true;
+    try {
+      final updated = await _repository.autoLogValidEvents();
+      if (mounted) {
+        state = updated;
+      }
+    } catch (e) {
+      debugPrint('Error auto-logging valid health events: $e');
+    } finally {
+      _isLoading = false;
+    }
+  }
+
   /// Delete a timeline entry
   Future<void> deleteEntry(String id) async {
     final updated = state.where((e) => e.id != id).toList();

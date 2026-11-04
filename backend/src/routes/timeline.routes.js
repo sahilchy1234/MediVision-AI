@@ -41,6 +41,7 @@ router.use(flexibleAuth);
 
 router.get('/', timelineController.getTimeline);
 router.post('/', timelineController.createTimelineEntry);
+router.post('/auto-log', timelineController.autoLogEvents);
 router.delete('/:id', timelineController.deleteTimelineEntry);
 
 module.exports = router;

@@ -24,8 +24,12 @@ const timelineController = {
       const userId = req.user?.id || 'usr_demo_alex_morgan';
       const { category, search, includeAggregated = 'true' } = req.query;
 
-      // 1. Fetch custom saved timeline events
-      const directEntries = await timelineDb.findByUserId(userId, { category, search });
+      // 1. Fetch custom saved timeline events, ensuring valid clinical events exist
+      let directEntries = await timelineDb.findByUserId(userId, { category, search });
+      if (directEntries.length === 0 && (!category || category === 'all') && !search) {
+        await timelineDb.seedValidEventsIfEmpty(userId);
+        directEntries = await timelineDb.findByUserId(userId, { category, search });
+      }
 
       if (includeAggregated !== 'true') {
         return res.status(200).json({
@@ -66,7 +70,7 @@ const timelineController = {
             statusColor: record.statusColor || 4279286145, // Emerald/Teal
             icon,
             plainEnglishInsight:
-              record.summary && record.summary.trim().isNotEmpty
+              record.summary && record.summary.trim().length > 0
                 ? record.summary
                 : `Verified clinical documentation uploaded to your secure records vault.`,
             simplePillTag: record.status || 'Report',
@@ -199,6 +203,7 @@ const timelineController = {
         icon,
         plainEnglishInsight,
         simplePillTag,
+        source,
       } = req.body;
 
       if (!title || !title.trim()) {
@@ -221,12 +226,57 @@ const timelineController = {
         plainEnglishInsight:
           plainEnglishInsight?.trim() || 'Recorded in your personal health record.',
         simplePillTag: simplePillTag?.trim() || 'Logged',
+        source: source || 'user_log',
       });
 
       return res.status(201).json({
         success: true,
         message: 'Timeline event created successfully',
         data: newEntry,
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  // POST /api/timeline/auto-log
+  async autoLogEvents(req, res, next) {
+    try {
+      const userId = req.user?.id || 'usr_demo_alex_morgan';
+      const customEvents = req.body?.events;
+
+      if (Array.isArray(customEvents) && customEvents.length > 0) {
+        const createdList = [];
+        for (const item of customEvents) {
+          const created = await timelineDb.create({
+            ...item,
+            userId,
+          });
+          createdList.push(created);
+        }
+        return res.status(201).json({
+          success: true,
+          message: `${createdList.length} valid health events automatically logged`,
+          data: createdList,
+        });
+      }
+
+      // Generate calibrated clinical events
+      const validSeeds = timelineDb.getValidSeedEvents(userId);
+      const createdList = [];
+      for (const item of validSeeds) {
+        const created = await timelineDb.create({
+          ...item,
+          id: `timeline_auto_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+          userId,
+        });
+        createdList.push(created);
+      }
+
+      return res.status(201).json({
+        success: true,
+        message: 'Valid clinical health events automatically logged to timeline',
+        data: createdList,
       });
     } catch (err) {
       next(err);

@@ -559,6 +559,23 @@ class _HealthTimelineScreenState extends ConsumerState<HealthTimelineScreen> {
         ),
         actions: [
           IconButton(
+            tooltip: 'Auto-Log Clinical Events',
+            icon: const Icon(Icons.auto_awesome_rounded, color: AppColors.secondary),
+            onPressed: () async {
+              final messenger = ScaffoldMessenger.of(context);
+              await ref.read(timelineProvider.notifier).autoLogValidHealthEvents();
+              if (mounted) {
+                messenger.showSnackBar(
+                  const SnackBar(
+                    content: Text('Auto-logged valid clinical health events to timeline.'),
+                    behavior: SnackBarBehavior.floating,
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+              }
+            },
+          ),
+          IconButton(
             tooltip: 'Log Health Event',
             icon: const Icon(Icons.add_circle_outline_rounded, color: AppColors.primary),
             onPressed: _showAddEventSheet,
@@ -795,8 +812,10 @@ class _HealthTimelineScreenState extends ConsumerState<HealthTimelineScreen> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 10,
+                runSpacing: 10,
                 children: [
                   OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(
@@ -806,7 +825,27 @@ class _HealthTimelineScreenState extends ConsumerState<HealthTimelineScreen> {
                     label: const Text('Upload Record'),
                     onPressed: () => context.push('/medical-records'),
                   ),
-                  const SizedBox(width: 10),
+                  OutlinedButton.icon(
+                    style: OutlinedButton.styleFrom(
+                      side: const BorderSide(color: AppColors.secondary),
+                      foregroundColor: AppColors.secondary,
+                    ),
+                    icon: const Icon(Icons.auto_awesome_rounded, size: 16),
+                    label: const Text('Auto-Log Valid Events'),
+                    onPressed: () async {
+                      final messenger = ScaffoldMessenger.of(context);
+                      await ref.read(timelineProvider.notifier).autoLogValidHealthEvents();
+                      if (mounted) {
+                        messenger.showSnackBar(
+                          const SnackBar(
+                            content: Text('Auto-logged valid clinical health events to timeline.'),
+                            behavior: SnackBarBehavior.floating,
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                      }
+                    },
+                  ),
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,

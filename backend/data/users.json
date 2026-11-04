@@ -15,8 +15,8 @@
       "Asthma (Mild intermittent)"
     ],
     "createdAt": "2026-11-04T05:48:45.588Z",
-    "updatedAt": "2026-11-04T17:53:13.466Z",
-    "lastLoginAt": "2026-11-04T17:53:13.464Z",
+    "updatedAt": "2026-11-04T19:05:13.970Z",
+    "lastLoginAt": "2026-11-04T19:05:13.968Z",
     "heightCm": 170.5,
     "weightKg": 59.2,
     "medicalConditions": [
@@ -1084,5 +1084,55 @@
     "createdAt": "2026-11-04T17:53:12.834Z",
     "updatedAt": "2026-11-04T17:53:12.834Z",
     "lastLoginAt": "2026-11-04T17:53:12.834Z"
+  },
+  {
+    "id": "usr_1793818133621_85xzl",
+    "fullName": "Dr. Sarah Connor",
+    "email": "patient_1793818133498@medivision.health",
+    "passwordHash": "$2a$10$NMfi5IZYCUSmQMLzj1KBNuISSeOkQpGE5Zpu1FiDo62e4WUTv9n4y",
+    "gender": "female",
+    "dateOfBirth": "1990-08-15",
+    "heightCm": 168,
+    "weightKg": 58,
+    "role": "patient",
+    "allergies": [],
+    "medicalConditions": [],
+    "enableWomensHealth": true,
+    "permissions": {
+      "sleep_health": true,
+      "physical_activity": true,
+      "screen_time": true,
+      "device_sensors": true,
+      "medical_documents": true,
+      "notifications": true
+    },
+    "createdAt": "2026-11-04T18:48:53.621Z",
+    "updatedAt": "2026-11-04T18:48:53.621Z",
+    "lastLoginAt": "2026-11-04T18:48:53.621Z"
+  },
+  {
+    "id": "usr_1793819113177_xkkt4",
+    "fullName": "Dr. Sarah Connor",
+    "email": "patient_1793819113062@medivision.health",
+    "passwordHash": "$2a$10$4qGueUBDyXpJfE21RtyJ8uM7zJhx9MiXHh7b7N07KYA/Gizb5WN7C",
+    "gender": "female",
+    "dateOfBirth": "1990-08-15",
+    "heightCm": 168,
+    "weightKg": 58,
+    "role": "patient",
+    "allergies": [],
+    "medicalConditions": [],
+    "enableWomensHealth": true,
+    "permissions": {
+      "sleep_health": true,
+      "physical_activity": true,
+      "screen_time": true,
+      "device_sensors": true,
+      "medical_documents": true,
+      "notifications": true
+    },
+    "createdAt": "2026-11-04T19:05:13.177Z",
+    "updatedAt": "2026-11-04T19:05:13.177Z",
+    "lastLoginAt": "2026-11-04T19:05:13.177Z"
   }
 ]

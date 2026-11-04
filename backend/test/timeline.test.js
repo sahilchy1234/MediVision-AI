@@ -74,4 +74,17 @@ describe('MediVision AI - Real Clinical Timeline API Tests', () => {
     assert.equal(res.status, 200);
     assert.equal(body.success, true);
   });
+
+  test('4. POST /api/timeline/auto-log automatically logs calibrated clinical health events', async () => {
+    const res = await fetch(`${baseUrl}/api/timeline/auto-log`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({}),
+    });
+    const body = await res.json();
+    assert.equal(res.status, 201);
+    assert.equal(body.success, true);
+    assert.ok(Array.isArray(body.data));
+    assert.ok(body.data.length >= 5);
+  });
 });
