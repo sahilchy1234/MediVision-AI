@@ -15,8 +15,8 @@
       "Asthma (Mild intermittent)"
     ],
     "createdAt": "2026-11-04T05:48:45.588Z",
-    "updatedAt": "2026-11-04T08:41:23.193Z",
-    "lastLoginAt": "2026-11-04T08:41:23.192Z",
+    "updatedAt": "2026-11-04T09:03:46.462Z",
+    "lastLoginAt": "2026-11-04T09:03:46.461Z",
     "heightCm": 170.5,
     "weightKg": 59.2,
     "medicalConditions": [
@@ -139,8 +139,8 @@
     "medicalConditions": [],
     "enableWomensHealth": false,
     "createdAt": "2026-11-04T06:11:58.320Z",
-    "updatedAt": "2026-11-04T08:30:33.008Z",
-    "lastLoginAt": "2026-11-04T08:30:33.007Z",
+    "updatedAt": "2026-11-04T08:49:32.875Z",
+    "lastLoginAt": "2026-11-04T08:49:32.873Z",
     "permissions": {
       "sleep_health": true,
       "physical_activity": true,
@@ -399,5 +399,30 @@
     "createdAt": "2026-11-04T08:41:22.659Z",
     "updatedAt": "2026-11-04T08:41:22.659Z",
     "lastLoginAt": "2026-11-04T08:41:22.659Z"
+  },
+  {
+    "id": "usr_1793783025624_zkzh9",
+    "fullName": "Dr. Sarah Connor",
+    "email": "patient_1793783025505@medivision.health",
+    "passwordHash": "$2a$10$R1cksLEYU86zVfrRo.HeOO1TU0SChSZtqwc3KV4I28RqKyXnXfoaS",
+    "gender": "female",
+    "dateOfBirth": "1990-08-15",
+    "heightCm": 168,
+    "weightKg": 58,
+    "role": "patient",
+    "allergies": [],
+    "medicalConditions": [],
+    "enableWomensHealth": true,
+    "permissions": {
+      "sleep_health": false,
+      "physical_activity": false,
+      "screen_time": false,
+      "device_sensors": false,
+      "medical_documents": false,
+      "notifications": false
+    },
+    "createdAt": "2026-11-04T09:03:45.624Z",
+    "updatedAt": "2026-11-04T09:03:45.624Z",
+    "lastLoginAt": "2026-11-04T09:03:45.624Z"
   }
 ]

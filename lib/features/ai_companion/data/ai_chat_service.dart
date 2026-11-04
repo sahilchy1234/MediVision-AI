@@ -92,11 +92,16 @@ class GroqAiChatService implements AiChatService {
       ChatMessage(
         id: 'msg_0',
         text:
-            "Hello Alex! I am MediVision AI, powered by Groq's high-speed LPU and GPT-OSS 20B.\n\n"
-            "I have indexed your recent health history, biomarker telemetry, and clinical timeline. You can ask me any medical question, or tap the **+** attachment icon below to analyze X-Rays, blood panels, or prescriptions. How can I help you today?",
+            "### Clinical Health Assistant Active\n\n"
+            "Hello Alex! I have indexed your recent health history, biomarker telemetry, and clinical timeline.\n\n"
+            "**How I can assist you:**\n"
+            "* **Biomarker Interpretation:** Explain lab test values against standard clinical reference ranges.\n"
+            "* **Diagnostic Image Review:** Tap the **+** icon to analyze Chest X-Rays, DICOM scans, or medical documents.\n"
+            "* **Medication & Interactions:** Review prescriptions, dosages, and contraindications.\n"
+            "* **Doctor Consultation Prep:** Formulate questions to discuss with your physician.\n\n"
+            "> *All clinical insights are for educational guidance and to empower productive doctor consultations.*",
         isUser: false,
         timestamp: DateTime.now().subtract(const Duration(minutes: 5)),
-        model: 'GPT-OSS 20B',
       ),
     ];
   }
@@ -216,9 +221,14 @@ class GroqAiChatService implements AiChatService {
     required String model,
   }) async {
     const systemPrompt =
-        "You are MediVision AI, an empathetic, highly intelligent clinical AI companion. "
-        "Provide accurate, medically structured explanations using clear Markdown (headings, bullet points, bold metrics). "
-        "If medical files/scans are attached, analyze them thoroughly. Conclude with a brief educational disclaimer.";
+        "You are MediVision AI, an empathetic, highly intelligent, evidence-based clinical health companion.\n\n"
+        "Formatting instructions:\n"
+        "1. Structure your response using clean Markdown with distinct section headings (e.g. ### 1. Clinical Assessment, ### 2. Key Observations & Biomarkers, ### 3. Recommended Actions).\n"
+        "2. Bold all clinical metrics, biomarker values, units, and reference ranges (e.g. **Fasting Blood Sugar**: 95 mg/dL).\n"
+        "3. Use structured bullet points for findings and sequential numbered lists for doctor consultation prep.\n"
+        "4. If comparative lab data is discussed, feel free to use a clean Markdown table.\n"
+        "5. Conclude with a brief blockquote educational note (> *Consult your physician before altering medical treatments*).\n"
+        "6. Never mention internal system vendor names, API keys, or LPU hardware.";
 
     String promptWithContext = userPrompt;
     if (attachment != null) {

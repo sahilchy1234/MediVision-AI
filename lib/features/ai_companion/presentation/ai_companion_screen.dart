@@ -6,6 +6,7 @@ import '../../../core/constants/app_typography.dart';
 import '../../../core/utils/date_formatter.dart';
 import '../data/ai_chat_service.dart';
 import '../providers/ai_companion_provider.dart';
+import 'widgets/formatted_ai_response.dart';
 
 class AiCompanionScreen extends ConsumerStatefulWidget {
   const AiCompanionScreen({super.key});
@@ -254,29 +255,33 @@ class _AiCompanionScreenState extends ConsumerState<AiCompanionScreen> {
           ],
         ),
         actions: [
-          // Active Groq LPU + GPT-OSS 20B Engine Badge
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(
-              color: AppColors.secondaryContainer,
+              color: AppColors.primaryGreen.withOpacity(0.08),
               borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
-              border: Border.all(color: AppColors.secondary.withOpacity(0.5)),
+              border: Border.all(
+                color: AppColors.primaryGreen.withOpacity(0.2),
+              ),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(
-                  Icons.bolt_rounded,
-                  size: 14,
-                  color: AppColors.secondaryDark,
+                Container(
+                  width: 6,
+                  height: 6,
+                  decoration: const BoxDecoration(
+                    color: AppColors.primaryGreen,
+                    shape: BoxShape.circle,
+                  ),
                 ),
-                const SizedBox(width: 4),
+                const SizedBox(width: 5),
                 Text(
-                  'Groq LPU • GPT-OSS 20B',
+                  'Online',
                   style: AppTypography.labelSmall.copyWith(
-                    color: AppColors.secondaryDark,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 10.5,
+                    color: AppColors.primaryGreen,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 11,
                   ),
                 ),
               ],
@@ -374,32 +379,34 @@ class _AiCompanionScreenState extends ConsumerState<AiCompanionScreen> {
                                     children: [
                                       Container(
                                         padding: const EdgeInsets.symmetric(
-                                          horizontal: 6,
-                                          vertical: 2,
+                                          horizontal: 8,
+                                          vertical: 3,
                                         ),
                                         decoration: BoxDecoration(
-                                          color: AppColors.secondaryContainer,
+                                          color: AppColors.primaryGreen.withOpacity(0.08),
                                           borderRadius: BorderRadius.circular(
-                                            4,
+                                            AppDimensions.radiusFull,
+                                          ),
+                                          border: Border.all(
+                                            color: AppColors.primaryGreen.withOpacity(0.2),
+                                            width: 0.8,
                                           ),
                                         ),
                                         child: Row(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
                                             const Icon(
-                                              Icons.bolt_rounded,
+                                              Icons.auto_awesome,
                                               size: 11,
-                                              color: AppColors.secondaryDark,
+                                              color: AppColors.primaryGreen,
                                             ),
-                                            const SizedBox(width: 3),
+                                            const SizedBox(width: 4),
                                             Text(
-                                              message.model != null
-                                                  ? 'GROQ LPU • ${message.model}'
-                                                  : 'AI CLINICAL ANALYSIS',
+                                              'CLINICAL INTELLIGENCE',
                                               style: AppTypography.labelSmall
                                                   .copyWith(
                                                     color:
-                                                        AppColors.secondaryDark,
+                                                        AppColors.primaryGreen,
                                                     fontWeight: FontWeight.w700,
                                                     fontSize: 9.5,
                                                     letterSpacing: 0.3,
@@ -422,56 +429,20 @@ class _AiCompanionScreenState extends ConsumerState<AiCompanionScreen> {
                                   const SizedBox(height: 8),
                                 ],
 
-                                // Message Text
-                                Text(
-                                  message.text,
-                                  style: AppTypography.bodyMedium.copyWith(
-                                    color: isUser
-                                        ? Colors.white
-                                        : AppColors.primaryText,
-                                    height: 1.5,
+                                // Message Text (Rendered cleanly as Markdown for AI)
+                                if (isUser)
+                                  Text(
+                                    message.text,
+                                    style: AppTypography.bodyMedium.copyWith(
+                                      color: Colors.white,
+                                      height: 1.5,
+                                    ),
+                                  )
+                                else
+                                  FormattedAiResponse(
+                                    rawResponse: message.text,
+                                    referencedRecord: message.referencedRecord,
                                   ),
-                                ),
-
-                                // Source references for medical info
-                                if (message.referencedRecord != null &&
-                                    !isUser) ...[
-                                  const SizedBox(height: 10),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 4,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.surfaceSubtle,
-                                      borderRadius: BorderRadius.circular(4),
-                                      border: Border.all(
-                                        color: AppColors.border,
-                                        width: 0.8,
-                                      ),
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        const Icon(
-                                          Icons.source_outlined,
-                                          size: 12,
-                                          color: AppColors.secondaryText,
-                                        ),
-                                        const SizedBox(width: 5),
-                                        Text(
-                                          'Clinical Source: ${message.referencedRecord}',
-                                          style: AppTypography.labelSmall
-                                              .copyWith(
-                                                color: AppColors.secondaryText,
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 10,
-                                              ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
                               ],
                             ),
                           ),
