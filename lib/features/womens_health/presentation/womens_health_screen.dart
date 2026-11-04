@@ -7,7 +7,6 @@ import '../../../core/constants/app_typography.dart';
 import '../../../core/widgets/glass_card.dart';
 import '../../../shared/widgets/section_header.dart';
 import '../../../shared/widgets/status_badge.dart';
-import '../../ai_companion/providers/ai_companion_provider.dart';
 import '../models/condition_assessment_model.dart';
 import '../providers/womens_health_provider.dart';
 import 'condition_screening_screen.dart';
@@ -35,11 +34,6 @@ class WomensHealthScreen extends ConsumerWidget {
     );
   }
 
-  void _askAi(BuildContext context, WidgetRef ref, String prompt) {
-    ref.read(aiCompanionProvider.notifier).sendMessage(prompt);
-    context.go('/ai-companion');
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(womensHealthProvider);
@@ -49,32 +43,30 @@ class WomensHealthScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text("Women's Health Companion"),
+        title: Text(
+          "Women's Health",
+          style: AppTypography.titleMedium.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
+        ),
         actions: [
           IconButton(
             icon: Icon(
               state.isPrivateVaultLocked ? Icons.lock_rounded : Icons.lock_open_rounded,
+              size: 20,
               color: state.isPrivateVaultLocked ? AppColors.accentRose : AppColors.secondary,
             ),
-            tooltip: 'Reproductive Vault Privacy',
+            tooltip: 'Private Vault Lock',
             onPressed: () {
               ref.read(womensHealthProvider.notifier).togglePrivateVaultLock();
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.isPrivateVaultLocked
-                      ? 'Private Reproductive Vault unlocked.'
-                      : 'Private Reproductive Vault locked & encrypted on-device.'),
-                  backgroundColor: AppColors.secondary,
-                ),
-              );
             },
           ),
           IconButton(
-            icon: const Icon(Icons.assignment_outlined),
-            tooltip: 'Gynecologist Summary',
+            icon: const Icon(Icons.description_outlined, size: 20),
+            tooltip: 'Gynecology Summary',
             onPressed: () => _openConsultationSheet(context),
           ),
-          const SizedBox(width: 6),
+          const SizedBox(width: 8),
         ],
       ),
       body: SafeArea(
@@ -84,64 +76,43 @@ class WomensHealthScreen extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Private Vault Badge
+              // Private Vault Status Strip
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                 decoration: BoxDecoration(
-                  color: AppColors.surface,
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(AppDimensions.radiusM),
                   border: Border.all(color: AppColors.border),
-                  boxShadow: AppDimensions.cardShadow,
                 ),
                 child: Row(
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: AppColors.secondaryContainer,
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: const Icon(Icons.shield_rounded, size: 16, color: AppColors.secondaryDark),
+                    Icon(
+                      Icons.shield_outlined,
+                      size: 16,
+                      color: state.isPrivateVaultLocked ? AppColors.accentRose : AppColors.secondary,
                     ),
                     const SizedBox(width: 10),
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Private Reproductive Health Vault',
-                            style: AppTypography.labelSmall.copyWith(
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.textPrimary,
-                            ),
-                          ),
-                          Text(
-                            'Zero-Knowledge On-Device Storage • Never Shared',
-                            style: AppTypography.bodySmall.copyWith(fontSize: 10.5),
-                          ),
-                        ],
+                      child: Text(
+                        'On-Device Encrypted Reproductive Vault',
+                        style: AppTypography.labelSmall.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                     StatusBadge(
-                      label: state.isPrivateVaultLocked ? 'Locked' : 'Secured',
+                      label: state.isPrivateVaultLocked ? 'Locked' : 'Active',
                       type: state.isPrivateVaultLocked ? BadgeType.warning : BadgeType.success,
+                      isPill: true,
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 18),
+              const SizedBox(height: 14),
 
-              // Interactive Cycle Dial Card
+              // Cycle Dial Card
               GlassCard(
-                padding: const EdgeInsets.all(22),
-                gradient: LinearGradient(
-                  colors: [
-                    Colors.white,
-                    phase.color.withOpacity(0.06),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+                padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
                     Row(
@@ -154,45 +125,35 @@ class WomensHealthScreen extends ConsumerWidget {
                               phase.label,
                               style: AppTypography.titleLarge.copyWith(
                                 color: phase.color,
-                                fontWeight: FontWeight.w800,
+                                fontWeight: FontWeight.w700,
                               ),
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              cycle.isFertileWindow ? 'High Conception Probability' : 'Low Conception Window',
+                              cycle.isFertileWindow ? 'Fertile Window Active' : 'Low Conception Probability',
                               style: AppTypography.bodySmall,
                             ),
                           ],
                         ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-                          decoration: BoxDecoration(
-                            color: phase.color.withOpacity(0.12),
-                            borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
-                            border: Border.all(color: phase.color.withOpacity(0.4)),
-                          ),
-                          child: Text(
-                            'Day ${cycle.currentDayOfCycle} of ${cycle.averageCycleLength}',
-                            style: AppTypography.labelSmall.copyWith(
-                              color: phase.color,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
+                        StatusBadge(
+                          label: 'Day ${cycle.currentDayOfCycle} of ${cycle.averageCycleLength}',
+                          type: BadgeType.neutral,
+                          isPill: true,
                         ),
                       ],
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 20),
 
-                    // Central Visual Cycle Progress Ring
+                    // Clean Cycle Progress Ring
                     Stack(
                       alignment: Alignment.center,
                       children: [
                         SizedBox(
-                          width: 170,
-                          height: 170,
+                          width: 140,
+                          height: 140,
                           child: CircularProgressIndicator(
                             value: (cycle.currentDayOfCycle / cycle.averageCycleLength).clamp(0.0, 1.0),
-                            strokeWidth: 14,
+                            strokeWidth: 10,
                             backgroundColor: AppColors.surfaceSubtle,
                             valueColor: AlwaysStoppedAnimation<Color>(phase.color),
                           ),
@@ -204,97 +165,80 @@ class WomensHealthScreen extends ConsumerWidget {
                               'Day ${cycle.currentDayOfCycle}',
                               style: AppTypography.displayMedium.copyWith(
                                 fontWeight: FontWeight.w800,
-                                letterSpacing: -0.8,
                               ),
                             ),
                             Text(
-                              '${cycle.daysUntilNextPeriod} days to period',
+                              '${cycle.daysUntilNextPeriod}d to period',
                               style: AppTypography.bodySmall.copyWith(
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.textSecondary,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: cycle.isFertileWindow ? AppColors.secondaryContainer : AppColors.surfaceSubtle,
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              child: Text(
-                                cycle.isFertileWindow ? 'FERTILE WINDOW' : 'LUTEAL REST',
-                                style: AppTypography.labelSmall.copyWith(
-                                  fontSize: 9,
-                                  fontWeight: FontWeight.w700,
-                                  color: cycle.isFertileWindow ? AppColors.secondaryDark : AppColors.textTertiary,
-                                ),
+                                color: AppColors.textTertiary,
+                                fontSize: 11,
                               ),
                             ),
                           ],
                         ),
                       ],
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 20),
 
-                    // Metrics Strip: Cycle variance & period length
+                    // Metrics Strip
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         _CycleMetricSnippet(
-                          label: 'Cycle Variance',
+                          label: 'Variance',
                           value: '±${cycle.cycleVariationDays}d',
-                          caption: 'Regular (Rotterdam OK)',
+                          caption: 'Regular',
                         ),
-                        Container(width: 1, height: 28, color: AppColors.border),
+                        Container(width: 1, height: 24, color: AppColors.border),
                         _CycleMetricSnippet(
-                          label: 'Avg Period',
-                          value: '${cycle.averagePeriodDuration} days',
-                          caption: 'Medium Flow',
+                          label: 'Avg Duration',
+                          value: '${cycle.averagePeriodDuration}d',
+                          caption: 'Typical',
                         ),
-                        Container(width: 1, height: 28, color: AppColors.border),
+                        Container(width: 1, height: 24, color: AppColors.border),
                         const _CycleMetricSnippet(
                           label: 'Basal Temp',
                           value: '36.7 °C',
-                          caption: 'Post-Ovulatory',
+                          caption: 'Optimal',
                         ),
                       ],
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 18),
+              const SizedBox(height: 14),
 
-              // Primary Action Buttons
+              // Action Buttons
               Row(
                 children: [
                   Expanded(
                     child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.accentRose,
+                        backgroundColor: AppColors.primary,
                         foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                          borderRadius: BorderRadius.circular(AppDimensions.radiusS),
                         ),
                       ),
-                      icon: const Icon(Icons.add_circle_outline_rounded, size: 20),
-                      label: const Text('Log Today', style: TextStyle(fontWeight: FontWeight.w700)),
+                      icon: const Icon(Icons.add_circle_outline_rounded, size: 18),
+                      label: const Text('Log Today', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
                       onPressed: () => _openLogSheet(context),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: OutlinedButton.icon(
                       style: OutlinedButton.styleFrom(
                         foregroundColor: AppColors.primary,
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        side: const BorderSide(color: AppColors.border, width: 1.4),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        side: const BorderSide(color: AppColors.border, width: 1.0),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                          borderRadius: BorderRadius.circular(AppDimensions.radiusS),
                         ),
                       ),
-                      icon: const Icon(Icons.biotech_outlined, size: 20),
-                      label: const Text('Screen Conditions', style: TextStyle(fontWeight: FontWeight.w700)),
+                      icon: const Icon(Icons.assessment_outlined, size: 18),
+                      label: const Text('Assess Patterns', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -305,81 +249,12 @@ class WomensHealthScreen extends ConsumerWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 22),
+              const SizedBox(height: 14),
 
-              // Phase Insights & Lifestyle recommendations
-              const SectionHeader(
-                title: 'Hormonal & Lifestyle Guidance',
-                subtitle: 'Adaptive insights tailored to your current phase',
-              ),
-              GlassCard(
-                padding: const EdgeInsets.all(18),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: phase.color.withOpacity(0.12),
-                            borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-                          ),
-                          child: Icon(Icons.auto_awesome, color: phase.color, size: 20),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Biological Rhythm: ${phase.label}',
-                                style: AppTypography.titleSmall.copyWith(fontWeight: FontWeight.w700),
-                              ),
-                              Text(
-                                'Estrogen peaks • Luteinizing Hormone (LH) surge underway',
-                                style: AppTypography.bodySmall.copyWith(fontSize: 11),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      phase.description,
-                      style: AppTypography.bodyMedium.copyWith(height: 1.45),
-                    ),
-                    const SizedBox(height: 12),
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: AppColors.surfaceSubtle,
-                        borderRadius: BorderRadius.circular(AppDimensions.radiusS),
-                      ),
-                      child: Row(
-                        children: [
-                          const Icon(Icons.restaurant_rounded, size: 16, color: AppColors.secondary),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              'Nutrition pacing: Prioritize leafy greens, magnesium, and hydration to support estrogen metabolism.',
-                              style: AppTypography.bodySmall.copyWith(fontSize: 11.5),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 22),
-
-              // Condition Screening Highlights
+              // Condition Screenings List
               SectionHeader(
-                title: 'Condition Pattern Assessment',
-                subtitle: 'Evaluates PCOS, Endometriosis & Fertility markers',
-                actionText: 'View All (5)',
+                title: 'Screening Patterns',
+                actionText: 'View All',
                 onActionTap: () {
                   Navigator.push(
                     context,
@@ -390,9 +265,9 @@ class WomensHealthScreen extends ConsumerWidget {
               ...state.assessments.take(2).map((assessment) {
                 final risk = assessment.riskLevel;
                 return Padding(
-                  padding: const EdgeInsets.only(bottom: 10.0),
+                  padding: const EdgeInsets.only(bottom: 8.0),
                   child: GlassCard(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(14),
                     onTap: () {
                       Navigator.push(
                         context,
@@ -402,22 +277,22 @@ class WomensHealthScreen extends ConsumerWidget {
                     child: Row(
                       children: [
                         Container(
-                          width: 44,
-                          height: 44,
+                          width: 36,
+                          height: 36,
                           decoration: BoxDecoration(
-                            color: risk.color.withOpacity(0.12),
-                            borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                            color: risk.color.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(8),
                           ),
-                          child: Icon(Icons.health_and_safety_rounded, color: risk.color, size: 22),
+                          child: Icon(Icons.health_and_safety_outlined, color: risk.color, size: 18),
                         ),
-                        const SizedBox(width: 14),
+                        const SizedBox(width: 12),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 assessment.conditionName,
-                                style: AppTypography.titleSmall.copyWith(fontWeight: FontWeight.w700),
+                                style: AppTypography.titleSmall.copyWith(fontWeight: FontWeight.w600),
                               ),
                               const SizedBox(height: 2),
                               Text(
@@ -439,89 +314,72 @@ class WomensHealthScreen extends ConsumerWidget {
                               : risk == AssessmentRiskLevel.moderateRisk
                                   ? BadgeType.warning
                                   : BadgeType.error,
+                          isPill: true,
                         ),
                       ],
                     ),
                   ),
                 );
               }),
-              const SizedBox(height: 18),
+              const SizedBox(height: 10),
 
-              // Reproductive Health Medical Records
+              // Specialized Medical Records
               SectionHeader(
-                title: 'Reproductive Records & Ultrasounds',
-                subtitle: 'Specialized imaging and hormone panels',
+                title: 'Reproductive Imaging & Panels',
                 actionText: 'Manage',
                 onActionTap: () => context.go('/medical-records'),
               ),
               GlassCard(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                 child: Column(
                   children: [
                     ListTile(
                       contentPadding: EdgeInsets.zero,
                       leading: Container(
-                        padding: const EdgeInsets.all(10),
+                        width: 36,
+                        height: 36,
                         decoration: BoxDecoration(
-                          color: AppColors.secondaryContainer,
-                          borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                          color: AppColors.surfaceSubtle,
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                        child: const Icon(Icons.document_scanner_rounded, color: AppColors.secondaryDark),
+                        child: const Icon(Icons.document_scanner_outlined, color: AppColors.secondary, size: 18),
                       ),
-                      title: const Text('Pelvic Ultrasound (Transvaginal)', style: TextStyle(fontWeight: FontWeight.w700)),
-                      subtitle: const Text('Clear bilateral ovaries. Antral follicle count: 8 (Normal). Endometrium: 8.2mm'),
-                      trailing: const StatusBadge(label: 'Verified', type: BadgeType.success),
+                      title: const Text(
+                        'Pelvic Ultrasound (Transvaginal)',
+                        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13.5),
+                      ),
+                      subtitle: const Text(
+                        'Normal bilateral ovaries • Endometrium: 8.2mm',
+                        style: TextStyle(fontSize: 11.5),
+                      ),
+                      trailing: const StatusBadge(label: 'Normal', type: BadgeType.success, isPill: true),
                     ),
-                    const Divider(height: 16),
+                    const Divider(height: 1),
                     ListTile(
                       contentPadding: EdgeInsets.zero,
                       leading: Container(
-                        padding: const EdgeInsets.all(10),
+                        width: 36,
+                        height: 36,
                         decoration: BoxDecoration(
-                          color: AppColors.primaryContainer,
-                          borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                          color: AppColors.surfaceSubtle,
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                        child: const Icon(Icons.water_drop_rounded, color: AppColors.primary),
+                        child: const Icon(Icons.water_drop_outlined, color: AppColors.secondary, size: 18),
                       ),
-                      title: const Text('Day 3 Hormone & Ovarian Reserve Panel', style: TextStyle(fontWeight: FontWeight.w700)),
-                      subtitle: const Text('AMH: 2.8 ng/mL • LH: 4.2 IU/L • FSH: 5.1 IU/L (LH/FSH ratio < 1.0)'),
-                      trailing: const StatusBadge(label: 'Optimal', type: BadgeType.success),
+                      title: const Text(
+                        'Hormone & Ovarian Reserve Panel',
+                        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13.5),
+                      ),
+                      subtitle: const Text(
+                        'AMH: 2.8 ng/mL • LH/FSH ratio < 1.0',
+                        style: TextStyle(fontSize: 11.5),
+                      ),
+                      trailing: const StatusBadge(label: 'Optimal', type: BadgeType.success, isPill: true),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 22),
-
-              // AI Reproductive Companion Prompts
-              const SectionHeader(
-                title: 'Ask MediVision AI Companion',
-                subtitle: 'Explore clinical explanations for your patterns',
-              ),
-              SizedBox(
-                height: 48,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    _AiPromptChip(
-                      label: 'Are my cycle variations indicative of PCOS?',
-                      onTap: () => _askAi(context, ref, 'Are my cycle variations indicative of PCOS?'),
-                    ),
-                    _AiPromptChip(
-                      label: 'Explain my pelvic ultrasound report.',
-                      onTap: () => _askAi(context, ref, 'Explain my pelvic ultrasound report and antral follicle count.'),
-                    ),
-                    _AiPromptChip(
-                      label: 'What should I ask my gynecologist about cramps?',
-                      onTap: () => _askAi(context, ref, 'What should I ask my gynecologist about severe Day 1 cramps?'),
-                    ),
-                    _AiPromptChip(
-                      label: 'How does the luteal phase impact sleep & anxiety?',
-                      onTap: () => _askAi(context, ref, 'How does the luteal phase impact sleep and mood?'),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 28),
+              const SizedBox(height: 24),
             ],
           ),
         ),
@@ -547,40 +405,16 @@ class _CycleMetricSnippet extends StatelessWidget {
       children: [
         Text(label, style: AppTypography.bodySmall.copyWith(fontSize: 11)),
         const SizedBox(height: 2),
-        Text(value, style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w800)),
+        Text(value, style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w700)),
         const SizedBox(height: 1),
         Text(
           caption,
           style: AppTypography.labelSmall.copyWith(
-            color: AppColors.secondary,
+            color: AppColors.textTertiary,
             fontSize: 10,
           ),
         ),
       ],
-    );
-  }
-}
-
-class _AiPromptChip extends StatelessWidget {
-  final String label;
-  final VoidCallback onTap;
-
-  const _AiPromptChip({
-    required this.label,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 8.0),
-      child: ActionChip(
-        avatar: const Icon(Icons.auto_awesome, size: 14, color: AppColors.accentIndigo),
-        backgroundColor: Colors.white,
-        side: const BorderSide(color: AppColors.border),
-        label: Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
-        onPressed: onTap,
-      ),
     );
   }
 }

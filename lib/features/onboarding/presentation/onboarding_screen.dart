@@ -18,27 +18,24 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   final List<_OnboardingData> _pages = const [
     _OnboardingData(
-      badge: 'UNIFIED HEALTH RECORD',
-      title: 'Your Health,\nConnected',
+      title: 'Your Health Timeline',
       description:
-          'MediVision seamlessly organizes your authorized health metrics, lab results, and lifestyle data into one unified, intelligent clinical timeline.',
-      icon: Icons.hub_rounded,
+          'Organize all lab reports, biometric feeds, and clinical visits into a unified, chronological history.',
+      icon: Icons.timeline_rounded,
       accentColor: AppColors.secondary,
     ),
     _OnboardingData(
-      badge: 'INTELLIGENT MEDICAL ASSISTANT',
-      title: 'Your Personal\nAI Companion',
+      title: 'Clinical Consultation',
       description:
-          'Transform complex medical jargon and diagnostic reports into crystal-clear insights. Understand your body with clinical context and actionable guidance.',
-      icon: Icons.psychology_rounded,
-      accentColor: AppColors.accentIndigo,
+          'Clarify diagnostic findings and prepare structured questions for your next doctor appointment.',
+      icon: Icons.forum_outlined,
+      accentColor: AppColors.primary,
     ),
     _OnboardingData(
-      badge: 'ZERO-KNOWLEDGE PRIVACY',
-      title: 'Your Data,\nYour Control',
+      title: 'Private by Design',
       description:
-          'Choose strictly local storage, zero-knowledge cloud sync, or hybrid rules. You hold the cryptographic keys to all health permissions and logs.',
-      icon: Icons.shield_rounded,
+          'Client-side zero-knowledge encryption ensures your health records remain completely under your control.',
+      icon: Icons.shield_outlined,
       accentColor: AppColors.accentEmerald,
     ),
   ];
@@ -46,7 +43,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void _onNext() {
     if (_currentIndex < _pages.length - 1) {
       _pageController.nextPage(
-        duration: const Duration(milliseconds: 350),
+        duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOutCubic,
       );
     } else {
@@ -78,147 +75,110 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               onPressed: _onSkip,
               child: Text(
                 'Skip',
-                style: AppTypography.labelLarge.copyWith(
-                  color: AppColors.textSecondary,
+                style: AppTypography.labelSmall.copyWith(
+                  color: AppColors.textTertiary,
                   fontWeight: FontWeight.w600,
                 ),
               ),
             ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 8),
         ],
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: PageView.builder(
-                controller: _pageController,
-                itemCount: _pages.length,
-                onPageChanged: (index) {
-                  setState(() => _currentIndex = index);
-                },
-                itemBuilder: (context, index) {
-                  final page = _pages[index];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 28.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Illustration Card with subtle glow
-                        Container(
-                          width: 220,
-                          height: 220,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(36),
-                            border: Border.all(color: AppColors.border, width: 1.5),
-                            boxShadow: [
-                              BoxShadow(
-                                color: page.accentColor.withOpacity(0.16),
-                                blurRadius: 40,
-                                offset: const Offset(0, 14),
-                              ),
-                            ],
-                          ),
-                          child: Center(
-                            child: Container(
-                              width: 110,
-                              height: 110,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 480),
+            child: Column(
+              children: [
+                Expanded(
+                  child: PageView.builder(
+                    controller: _pageController,
+                    itemCount: _pages.length,
+                    onPageChanged: (index) {
+                      setState(() => _currentIndex = index);
+                    },
+                    itemBuilder: (context, index) {
+                      final page = _pages[index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 80,
+                              height: 80,
                               decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: page.accentColor.withOpacity(0.12),
+                                color: page.accentColor.withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(20),
                               ),
                               child: Icon(
                                 page.icon,
-                                size: 56,
+                                size: 36,
                                 color: page.accentColor,
                               ),
                             ),
-                          ),
-                        ),
-                        const SizedBox(height: 48),
+                            const SizedBox(height: 32),
 
-                        // Pill Badge
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: page.accentColor.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
-                          ),
-                          child: Text(
-                            page.badge,
-                            style: AppTypography.labelSmall.copyWith(
-                              color: page.accentColor,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 0.8,
+                            Text(
+                              page.title,
+                              textAlign: TextAlign.center,
+                              style: AppTypography.displayMedium.copyWith(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 22,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+
+                            Text(
+                              page.description,
+                              textAlign: TextAlign.center,
+                              style: AppTypography.bodyMedium.copyWith(
+                                color: AppColors.textSecondary,
+                                height: 1.5,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+
+                // Indicators & Next Button
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(
+                          _pages.length,
+                          (index) => AnimatedContainer(
+                            duration: const Duration(milliseconds: 240),
+                            margin: const EdgeInsets.symmetric(horizontal: 3),
+                            width: _currentIndex == index ? 20 : 6,
+                            height: 6,
+                            decoration: BoxDecoration(
+                              color: _currentIndex == index
+                                  ? AppColors.primary
+                                  : AppColors.border,
+                              borderRadius: BorderRadius.circular(3),
                             ),
                           ),
                         ),
-                        const SizedBox(height: 16),
-
-                        // Title
-                        Text(
-                          page.title,
-                          textAlign: TextAlign.center,
-                          style: AppTypography.displayMedium.copyWith(
-                            color: AppColors.textPrimary,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-
-                        // Description
-                        Text(
-                          page.description,
-                          textAlign: TextAlign.center,
-                          style: AppTypography.bodyLarge.copyWith(
-                            color: AppColors.textSecondary,
-                            height: 1.55,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-
-            // Bottom Navigation Area
-            Padding(
-              padding: const EdgeInsets.fromLTRB(28, 12, 28, 28),
-              child: Column(
-                children: [
-                  // Smooth page indicators
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      _pages.length,
-                      (index) => AnimatedContainer(
-                        duration: const Duration(milliseconds: 280),
-                        margin: const EdgeInsets.symmetric(horizontal: 4),
-                        width: _currentIndex == index ? 28 : 8,
-                        height: 8,
-                        decoration: BoxDecoration(
-                          color: _currentIndex == index
-                              ? AppColors.primary
-                              : AppColors.border,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: 28),
+                      const SizedBox(height: 20),
 
-                  // Button
-                  PrimaryButton(
-                    label: isLastPage ? 'Get Started' : 'Continue',
-                    icon: isLastPage ? Icons.arrow_forward_rounded : null,
-                    onPressed: _onNext,
+                      PrimaryButton(
+                        label: isLastPage ? 'Get Started' : 'Continue',
+                        onPressed: _onNext,
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -226,18 +186,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 }
 
 class _OnboardingData {
-  final String badge;
   final String title;
   final String description;
   final IconData icon;
   final Color accentColor;
 
   const _OnboardingData({
-    required this.badge,
     required this.title,
     required this.description,
     required this.icon,
     required this.accentColor,
   });
 }
-

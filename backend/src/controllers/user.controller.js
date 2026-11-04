@@ -105,16 +105,21 @@ const userController = {
         });
       }
 
+      const defaultPermissions = {
+        sleep_health: true,
+        physical_activity: true,
+        screen_time: true,
+        device_sensors: true,
+        medical_documents: true,
+        notifications: true,
+      };
+
       return res.status(200).json({
         success: true,
         data: {
-          permissions: user.permissions || {
-            sleep_health: false,
-            physical_activity: false,
-            screen_time: false,
-            device_sensors: false,
-            medical_documents: false,
-            notifications: false,
+          permissions: {
+            ...defaultPermissions,
+            ...(user.permissions || {}),
           },
         },
       });

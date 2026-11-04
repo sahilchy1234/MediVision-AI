@@ -74,12 +74,34 @@ class PermissionsNotifier extends StateNotifier<List<HealthPermissionItem>> {
       state = [
         for (final item in state)
           item.copyWith(
-            status: savedMap[item.id] == true
-                ? PermissionStatus.granted
-                : PermissionStatus.notGranted,
+            status: savedMap[item.id] == false
+                ? PermissionStatus.notGranted
+                : PermissionStatus.granted,
           ),
       ];
     } catch (_) {}
+  }
+
+  /// Sync permissions directly from logged in user payload
+  void syncFromMap(Map<String, dynamic>? remoteMap) {
+    if (remoteMap == null || remoteMap.isEmpty) {
+      grantAll();
+      return;
+    }
+    state = [
+      for (final item in state)
+        item.copyWith(
+          status: remoteMap[item.id] == false
+              ? PermissionStatus.notGranted
+              : PermissionStatus.granted,
+        ),
+    ];
+    PermissionsService.savePermissions(_toMap());
+  }
+
+  /// Re-sync permissions with backend after login/token change
+  Future<void> reloadAndSync() async {
+    await _initAndSync();
   }
 
   Map<String, bool> _toMap() {

@@ -11,11 +11,11 @@ class AppTheme {
     const colorScheme = ColorScheme(
       brightness: Brightness.light,
       primary: AppColors.primary,
-      onPrimary: AppColors.textOnPrimary,
+      onPrimary: Colors.white,
       primaryContainer: AppColors.primaryContainer,
       onPrimaryContainer: AppColors.primaryDark,
       secondary: AppColors.secondary,
-      onSecondary: AppColors.textOnPrimary,
+      onSecondary: Colors.white,
       secondaryContainer: AppColors.secondaryContainer,
       onSecondaryContainer: AppColors.secondaryDark,
       tertiary: AppColors.accentIndigo,
@@ -48,14 +48,14 @@ class AppTheme {
           statusBarBrightness: Brightness.light,
         ),
         titleTextStyle: AppTypography.titleLarge,
-        iconTheme: const IconThemeData(color: AppColors.primary),
+        iconTheme: const IconThemeData(color: AppColors.primary, size: 20),
       ),
       cardTheme: CardThemeData(
         color: AppColors.surface,
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppDimensions.radiusL),
-          side: const BorderSide(color: AppColors.borderSubtle, width: 1.2),
+          borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+          side: const BorderSide(color: AppColors.border, width: 1.0),
         ),
         margin: EdgeInsets.zero,
       ),
@@ -64,23 +64,22 @@ class AppTheme {
           backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,
           elevation: 0,
-          padding: AppDimensions.paddingButton,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+            borderRadius: BorderRadius.circular(AppDimensions.radiusS),
           ),
           textStyle: AppTypography.labelLarge.copyWith(
             fontWeight: FontWeight.w600,
-            letterSpacing: 0.2,
           ),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: AppColors.primary,
-          side: const BorderSide(color: AppColors.border, width: 1.4),
-          padding: AppDimensions.paddingButton,
+          side: const BorderSide(color: AppColors.border, width: 1.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+            borderRadius: BorderRadius.circular(AppDimensions.radiusS),
           ),
           textStyle: AppTypography.labelLarge.copyWith(fontWeight: FontWeight.w600),
         ),
@@ -88,51 +87,50 @@ class AppTheme {
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: AppColors.secondary,
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppDimensions.radiusS),
           ),
-          textStyle: AppTypography.labelLarge,
+          textStyle: AppTypography.labelMedium,
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: Colors.white,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         hintStyle: AppTypography.bodyMedium.copyWith(color: AppColors.textTertiary),
         labelStyle: AppTypography.bodyMedium.copyWith(color: AppColors.textSecondary),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-          borderSide: const BorderSide(color: AppColors.border, width: 1.2),
+          borderRadius: BorderRadius.circular(AppDimensions.radiusS),
+          borderSide: const BorderSide(color: AppColors.border, width: 1.0),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-          borderSide: const BorderSide(color: AppColors.secondary, width: 1.8),
+          borderRadius: BorderRadius.circular(AppDimensions.radiusS),
+          borderSide: const BorderSide(color: AppColors.secondary, width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-          borderSide: const BorderSide(color: AppColors.error, width: 1.2),
+          borderRadius: BorderRadius.circular(AppDimensions.radiusS),
+          borderSide: const BorderSide(color: AppColors.error, width: 1.0),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-          borderSide: const BorderSide(color: AppColors.error, width: 1.8),
+          borderRadius: BorderRadius.circular(AppDimensions.radiusS),
+          borderSide: const BorderSide(color: AppColors.error, width: 1.5),
         ),
       ),
       chipTheme: ChipThemeData(
         backgroundColor: AppColors.surfaceSubtle,
-        selectedColor: AppColors.primary,
-        secondarySelectedColor: AppColors.secondary,
-        labelStyle: AppTypography.bodySmall.copyWith(color: AppColors.textPrimary),
-        secondaryLabelStyle: AppTypography.bodySmall.copyWith(color: Colors.white),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        selectedColor: AppColors.secondaryContainer,
+        labelStyle: AppTypography.labelSmall.copyWith(color: AppColors.textPrimary),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
-          side: const BorderSide(color: Colors.transparent),
+          side: const BorderSide(color: AppColors.border, width: 0.8),
         ),
       ),
       dividerTheme: const DividerThemeData(
         color: AppColors.divider,
         thickness: 1,
-        space: 24,
+        space: 16,
       ),
     );
   }

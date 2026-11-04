@@ -19,44 +19,41 @@ class _BodySystemsDiagramCardState extends State<BodySystemsDiagramCard> {
   @override
   Widget build(BuildContext context) {
     return GlassCard(
-      padding: const EdgeInsets.all(20),
-      gradient: LinearGradient(
-        colors: [
-          Colors.white,
-          _getColorForSystem(_selectedSystem).withOpacity(0.04),
-        ],
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-      ),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Body Harmony Diagram',
-                    style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.w800),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    'Tap any system to see how your body is doing in plain words',
-                    style: AppTypography.bodySmall,
-                  ),
-                ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Physiological Systems',
+                      style: AppTypography.titleMedium.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      'Integrated balance across clinical markers',
+                      style: AppTypography.bodySmall,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
               ),
+              const SizedBox(width: 8),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 decoration: BoxDecoration(
                   color: AppColors.secondaryContainer,
                   borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
                 ),
                 child: Text(
-                  '94% In Balance',
+                  '94% Optimal',
                   style: AppTypography.labelSmall.copyWith(
                     color: AppColors.secondaryDark,
                     fontWeight: FontWeight.w700,
@@ -65,29 +62,29 @@ class _BodySystemsDiagramCardState extends State<BodySystemsDiagramCard> {
               ),
             ],
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 14),
 
           // 4-Node Interactive Diagram
           Row(
             children: [
               Expanded(
                 child: _DiagramNodeItem(
-                  icon: Icons.psychology_rounded,
-                  title: 'Sleep & Brain',
+                  icon: Icons.psychology_outlined,
+                  title: 'Sleep & Cognition',
                   score: '92%',
-                  status: 'Well Rested',
+                  status: 'Rested',
                   color: AppColors.accentIndigo,
                   isSelected: _selectedSystem == HealthSystemType.brainSleep,
                   onTap: () => setState(() => _selectedSystem = HealthSystemType.brainSleep),
                 ),
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               Expanded(
                 child: _DiagramNodeItem(
-                  icon: Icons.favorite_rounded,
-                  title: 'Heart & Pulse',
+                  icon: Icons.monitor_heart_outlined,
+                  title: 'Cardiovascular',
                   score: '96%',
-                  status: 'Calm & Steady',
+                  status: 'Steady',
                   color: AppColors.accentRose,
                   isSelected: _selectedSystem == HealthSystemType.heartPulse,
                   onTap: () => setState(() => _selectedSystem = HealthSystemType.heartPulse),
@@ -95,27 +92,27 @@ class _BodySystemsDiagramCardState extends State<BodySystemsDiagramCard> {
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 8),
           Row(
             children: [
               Expanded(
                 child: _DiagramNodeItem(
                   icon: Icons.directions_walk_rounded,
-                  title: 'Daily Stamina',
+                  title: 'Physical Activity',
                   score: '88%',
-                  status: 'Active Goal Met',
+                  status: 'Goal Met',
                   color: AppColors.secondary,
                   isSelected: _selectedSystem == HealthSystemType.staminaMovement,
                   onTap: () => setState(() => _selectedSystem = HealthSystemType.staminaMovement),
                 ),
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               Expanded(
                 child: _DiagramNodeItem(
-                  icon: Icons.shield_rounded,
-                  title: 'Blood & Labs',
+                  icon: Icons.shield_outlined,
+                  title: 'Hematology & Labs',
                   score: '95%',
-                  status: 'All Safe & Clear',
+                  status: 'Normal',
                   color: AppColors.accentEmerald,
                   isSelected: _selectedSystem == HealthSystemType.bloodDefenses,
                   onTap: () => setState(() => _selectedSystem = HealthSystemType.bloodDefenses),
@@ -123,7 +120,7 @@ class _BodySystemsDiagramCardState extends State<BodySystemsDiagramCard> {
               ),
             ],
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 14),
 
           // Non-technical Plain-English Breakdown for selected system
           _buildSystemPlainExplanation(_selectedSystem),
@@ -132,108 +129,78 @@ class _BodySystemsDiagramCardState extends State<BodySystemsDiagramCard> {
     );
   }
 
-  Color _getColorForSystem(HealthSystemType type) {
-    switch (type) {
-      case HealthSystemType.brainSleep:
-        return AppColors.accentIndigo;
-      case HealthSystemType.heartPulse:
-        return AppColors.accentRose;
-      case HealthSystemType.staminaMovement:
-        return AppColors.secondary;
-      case HealthSystemType.bloodDefenses:
-        return AppColors.accentEmerald;
-    }
-  }
-
   Widget _buildSystemPlainExplanation(HealthSystemType type) {
     String headline;
     String plainText;
     List<String> keyPills;
-    IconData icon;
-    Color color = _getColorForSystem(type);
 
     switch (type) {
       case HealthSystemType.brainSleep:
-        headline = 'Sleep & Mental Energy: Restored';
+        headline = 'Sleep Efficiency: Restored';
         plainText =
-            'You slept 7 hours and 42 minutes. Most importantly, you had nearly 2 hours of deep sleep. Deep sleep is when your brain flushes out mental tiredness and repairs your body. You will feel focused and clear today.';
-        keyPills = ['7h 42m Asleep', '1h 48m Deep Recovery', 'Zero Sleep Wakeups'];
-        icon = Icons.bedtime_rounded;
+            '7 hours 42 minutes total sleep recorded with 1h 48m in restorative deep sleep. Autonomic recovery metrics indicate low physiological strain.';
+        keyPills = ['7h 42m Total', '1h 48m Deep', '89% Efficiency'];
         break;
       case HealthSystemType.heartPulse:
-        headline = 'Heart & Blood Flow: Very Calm';
+        headline = 'Cardiovascular: Normal Baseline';
         plainText =
-            'Your resting heart beats around 61 times per minute. That means your heart muscle is relaxed and efficient. When you walked today, your heart responded smoothly and calmed back down quickly.';
-        keyPills = ['61 bpm Resting', 'Peak 128 bpm', 'Quick Recovery'];
-        icon = Icons.monitor_heart_rounded;
+            'Resting heart rate averaged 61 bpm with normal diurnal variability. Recovery rate post-exercise was within optimal parameters.';
+        keyPills = ['61 bpm Resting', '128 bpm Peak', 'Optimal HRV'];
         break;
       case HealthSystemType.staminaMovement:
-        headline = 'Physical Energy: Great Movement Streak';
+        headline = 'Daily Activity: Active Target Met';
         plainText =
-            'You logged 8,420 steps and burned 482 active calories without over-exhausting your joints. You spent 42 minutes at an active pace, which keeps your blood pressure naturally healthy.';
-        keyPills = ['8,420 Steps Walked', '482 kcal Burned', '42 Active Minutes'];
-        icon = Icons.directions_run_rounded;
+            '8,420 steps walked with 482 active calories burned. Sustained 42 minutes of moderate intensity cardiovascular stimulus.';
+        keyPills = ['8,420 Steps', '482 kcal', '42 Active Min'];
         break;
       case HealthSystemType.bloodDefenses:
-        headline = 'Internal Blood Health: 100% In the Green';
+        headline = 'Laboratory Chemistry: In Range';
         plainText =
-            'All 18 checkup markers from your blood tests are safe. Your blood sugar is balanced, your iron levels give your body plenty of oxygen, and your kidneys are filtering with high efficiency.';
-        keyPills = ['Fasting Sugar: Ideal', 'Iron & Energy: Normal', 'Lungs: Completely Clear'];
-        icon = Icons.health_and_safety_rounded;
+            'All primary metabolic and hematological values from recent lab uploads are within reference intervals with zero acute biomarker flags.';
+        keyPills = ['HbA1c 5.4%', 'Fasting 92 mg/dL', 'eGFR > 90'];
         break;
     }
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.08),
+        color: AppColors.surfaceSubtle,
         borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-        border: Border.all(color: color.withOpacity(0.2)),
+        border: Border.all(color: AppColors.border, width: 0.8),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Icon(icon, size: 20, color: color),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  headline,
-                  style: AppTypography.titleSmall.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-              ),
-            ],
+          Text(
+            headline,
+            style: AppTypography.titleSmall.copyWith(
+              fontWeight: FontWeight.w600,
+            ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 4),
           Text(
             plainText,
             style: AppTypography.bodySmall.copyWith(
-              color: AppColors.textPrimary,
+              color: AppColors.textSecondary,
               height: 1.45,
-              fontSize: 12.5,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
           Wrap(
             spacing: 6,
-            runSpacing: 6,
+            runSpacing: 4,
             children: keyPills.map((pill) {
               return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
-                  border: Border.all(color: color.withOpacity(0.3)),
+                  borderRadius: BorderRadius.circular(4),
+                  border: Border.all(color: AppColors.border),
                 ),
                 child: Text(
                   pill,
                   style: AppTypography.labelSmall.copyWith(
-                    color: color,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     fontSize: 10.5,
                   ),
                 ),
@@ -270,67 +237,50 @@ class _DiagramNodeItem extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.all(12),
+      child: Container(
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: isSelected ? Colors.white : AppColors.surfaceSubtle,
           borderRadius: BorderRadius.circular(AppDimensions.radiusM),
           border: Border.all(
             color: isSelected ? color : AppColors.border,
-            width: isSelected ? 2 : 1,
+            width: isSelected ? 1.5 : 0.8,
           ),
-          boxShadow: isSelected
-              ? [
-                  BoxShadow(
-                    color: color.withOpacity(0.18),
-                    blurRadius: 10,
-                    offset: const Offset(0, 3),
-                  ),
-                ]
-              : null,
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Row(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: color.withOpacity(0.12),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Icon(icon, size: 18, color: color),
-                ),
-                Text(
-                  score,
-                  style: AppTypography.labelLarge.copyWith(
-                    fontWeight: FontWeight.w800,
-                    color: color,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              title,
-              style: AppTypography.labelMedium.copyWith(
-                fontWeight: FontWeight.w700,
-                color: AppColors.textPrimary,
+            Container(
+              width: 28,
+              height: 28,
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(6),
               ),
+              child: Icon(icon, color: color, size: 16),
             ),
-            const SizedBox(height: 2),
-            Text(
-              status,
-              style: AppTypography.bodySmall.copyWith(
-                fontSize: 10.5,
-                color: isSelected ? color : AppColors.textSecondary,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+            const SizedBox(width: 8),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTypography.labelSmall.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                  Text(
+                    score,
+                    style: AppTypography.labelSmall.copyWith(
+                      color: AppColors.textTertiary,
+                      fontSize: 10.5,
+                    ),
+                  ),
+                ],
               ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),
@@ -338,4 +288,3 @@ class _DiagramNodeItem extends StatelessWidget {
     );
   }
 }
-

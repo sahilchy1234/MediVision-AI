@@ -83,9 +83,9 @@ class _UserProfileSetupScreenState
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
-              primary: AppColors.primaryGreen,
+              primary: AppColors.secondary,
               onPrimary: Colors.white,
-              onSurface: AppColors.primaryText,
+              onSurface: AppColors.textPrimary,
             ),
           ),
           child: child!,
@@ -142,11 +142,19 @@ class _UserProfileSetupScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.mainBackground,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Clinical Baseline Setup'),
+        title: Text(
+          'Profile Setup',
+          style: AppTypography.titleMedium.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
+        ),
         actions: [
-          TextButton(onPressed: _skip, child: const Text('Skip')),
+          TextButton(
+            onPressed: _skip,
+            child: const Text('Skip'),
+          ),
           const SizedBox(width: 8),
         ],
       ),
@@ -158,14 +166,14 @@ class _UserProfileSetupScreenState
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Minimal 3-step progress indicator
+                // Clean step indicator
                 Row(
                   children: [
                     Expanded(
                       child: Container(
                         height: 3,
                         decoration: BoxDecoration(
-                          color: AppColors.primaryGreen,
+                          color: AppColors.secondary,
                           borderRadius: BorderRadius.circular(1.5),
                         ),
                       ),
@@ -195,15 +203,15 @@ class _UserProfileSetupScreenState
                 const SizedBox(height: 18),
 
                 Text(
-                  'Patient Demographics',
-                  style: AppTypography.displayMedium,
+                  'Patient Profile',
+                  style: AppTypography.displayMedium.copyWith(fontSize: 20),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Used to calculate physiological normal ranges and calibrate clinical reference intervals.',
-                  style: AppTypography.bodyMedium,
+                  'Calibrates physiological baseline intervals and medication safety.',
+                  style: AppTypography.bodySmall,
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 18),
 
                 CustomTextField(
                   label: 'Full Name *',
@@ -220,24 +228,22 @@ class _UserProfileSetupScreenState
 
                 Text(
                   'Date of Birth',
-                  style: AppTypography.labelLarge.copyWith(
+                  style: AppTypography.labelMedium.copyWith(
                     fontWeight: FontWeight.w500,
                   ),
                 ),
                 const SizedBox(height: 6),
                 InkWell(
                   onTap: _selectDob,
-                  borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusS),
                   child: Container(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 14,
+                      horizontal: 14,
+                      vertical: 12,
                     ),
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(
-                        AppDimensions.radiusM,
-                      ),
+                      borderRadius: BorderRadius.circular(AppDimensions.radiusS),
                       border: Border.all(color: AppColors.border, width: 1.0),
                     ),
                     child: Row(
@@ -249,24 +255,24 @@ class _UserProfileSetupScreenState
                               : 'Select date of birth',
                           style: AppTypography.bodyMedium.copyWith(
                             color: _selectedDob != null
-                                ? AppColors.primaryText
+                                ? AppColors.textPrimary
                                 : AppColors.textTertiary,
                           ),
                         ),
                         const Icon(
                           Icons.calendar_today_outlined,
                           size: 16,
-                          color: AppColors.secondaryText,
+                          color: AppColors.textTertiary,
                         ),
                       ],
                     ),
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 14),
 
                 Text(
-                  'Gender (Optional)',
-                  style: AppTypography.labelLarge.copyWith(
+                  'Gender',
+                  style: AppTypography.labelMedium.copyWith(
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -282,27 +288,23 @@ class _UserProfileSetupScreenState
                       onSelected: (selected) {
                         if (selected) setState(() => _selectedGender = gender);
                       },
-                      selectedColor: AppColors.mintAccent,
+                      selectedColor: AppColors.secondaryContainer,
                       backgroundColor: Colors.white,
                       labelStyle: TextStyle(
                         color: isSelected
-                            ? AppColors.forestGreen
-                            : AppColors.secondaryText,
-                        fontWeight: isSelected
-                            ? FontWeight.w600
-                            : FontWeight.w400,
+                            ? AppColors.secondary
+                            : AppColors.textSecondary,
+                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                         fontSize: 12,
                       ),
                       side: BorderSide(
-                        color: isSelected
-                            ? AppColors.primaryGreen
-                            : AppColors.border,
-                        width: 1.0,
+                        color: isSelected ? AppColors.secondary : AppColors.border,
+                        width: 0.8,
                       ),
                     );
                   }).toList(),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 14),
 
                 Row(
                   children: [
@@ -327,25 +329,24 @@ class _UserProfileSetupScreenState
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 14),
 
                 CustomTextField(
-                  label: 'Documented Allergies (Optional)',
-                  hintText: 'e.g. Penicillin, Peanuts, Sulfa (comma separated)',
+                  label: 'Allergies',
+                  hintText: 'e.g. Penicillin, Sulfa (comma separated)',
                   controller: _allergiesController,
                 ),
                 const SizedBox(height: 14),
 
                 CustomTextField(
-                  label: 'Active Clinical Conditions (Optional)',
-                  hintText: 'e.g. Mild Asthma, Hypertension, Diabetes Type 2',
+                  label: 'Medical Conditions',
+                  hintText: 'e.g. Asthma, Hypertension (comma separated)',
                   controller: _conditionsController,
-                  maxLines: 2,
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 20),
 
                 PrimaryButton(
-                  label: 'Continue to Storage Architecture',
+                  label: 'Save & Continue',
                   onPressed: _saveAndContinue,
                 ),
                 const SizedBox(height: 20),

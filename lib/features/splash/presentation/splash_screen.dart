@@ -15,7 +15,6 @@ class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
-  late Animation<double> _scaleAnimation;
   Timer? _timer;
 
   @override
@@ -23,27 +22,15 @@ class _SplashScreenState extends State<SplashScreen>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1400),
+      duration: const Duration(milliseconds: 900),
     );
 
-    _fadeAnimation = CurvedAnimation(
-      parent: _controller,
-      curve: const Interval(0.0, 0.7, curve: Curves.easeIn),
-    );
-
-    _scaleAnimation = Tween<double>(begin: 0.86, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: const Interval(0.0, 0.8, curve: Curves.easeOutCubic),
-      ),
-    );
-
+    _fadeAnimation = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
     _controller.forward();
 
-    // Auto-advance to onboarding after smooth splash delay
-    _timer = Timer(const Duration(milliseconds: 2800), () {
+    _timer = Timer(const Duration(milliseconds: 1800), () {
       if (mounted) {
-        context.go('/onboarding');
+        context.go('/home');
       }
     });
   }
@@ -57,157 +44,62 @@ class _SplashScreenState extends State<SplashScreen>
 
   void _skipSplash() {
     _timer?.cancel();
-    context.go('/onboarding');
+    context.go('/home');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.primaryDark,
+      backgroundColor: AppColors.primary,
       body: InkWell(
         onTap: _skipSplash,
-        child: Stack(
-          children: [
-            // Ambient background glow
-            Positioned(
-              top: -120,
-              right: -80,
-              child: Container(
-                width: 320,
-                height: 320,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.secondary.withOpacity(0.18),
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: -100,
-              left: -60,
-              child: Container(
-                width: 280,
-                height: 280,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.accentIndigo.withOpacity(0.15),
-                ),
-              ),
-            ),
-            Center(
-              child: ScaleTransition(
-                scale: _scaleAnimation,
-                child: FadeTransition(
-                  opacity: _fadeAnimation,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Logo Icon with subtle glowing ring
-                      Container(
-                        width: 104,
-                        height: 104,
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [AppColors.secondary, AppColors.secondaryDark],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          borderRadius: BorderRadius.circular(28),
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppColors.secondary.withOpacity(0.4),
-                              blurRadius: 32,
-                              spreadRadius: 4,
-                              offset: const Offset(0, 10),
-                            ),
-                          ],
-                        ),
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            const Icon(
-                              Icons.remove_red_eye_rounded,
-                              size: 46,
-                              color: Colors.white,
-                            ),
-                            Positioned(
-                              top: 24,
-                              right: 24,
-                              child: Container(
-                                width: 10,
-                                height: 10,
-                                decoration: const BoxDecoration(
-                                  color: AppColors.accentEmerald,
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+        child: SafeArea(
+          child: Center(
+            child: FadeTransition(
+              opacity: _fadeAnimation,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 56,
+                    height: 56,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.healing_rounded,
+                        size: 28,
+                        color: AppColors.primary,
                       ),
-                      const SizedBox(height: 28),
-                      // App Name
-                      RichText(
-                        text: TextSpan(
-                          text: 'MediVision ',
-                          style: TextStyle(
-                            fontFamily: AppTypography.displayMedium.fontFamily,
-                            fontSize: 32,
-                            fontWeight: FontWeight.w800,
-                            letterSpacing: -0.8,
-                            color: Colors.white,
-                          ),
-                          children: const [
-                            TextSpan(
-                              text: 'AI',
-                              style: TextStyle(
-                                color: AppColors.secondaryLight,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      // Tagline
-                      Text(
-                        'Your Health. Your Data. Your AI.',
-                        style: AppTypography.bodyMedium.copyWith(
-                          color: const Color(0xFF94A3B8),
-                          letterSpacing: 0.5,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 20),
+
+                  Text(
+                    'MediVision',
+                    style: AppTypography.displayMedium.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: -0.4,
+                      fontSize: 24,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+
+                  Text(
+                    'Intelligent Medical History & Clinical Companion',
+                    style: AppTypography.bodySmall.copyWith(
+                      color: AppColors.textTertiary,
+                      letterSpacing: 0.1,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
               ),
             ),
-            // Bottom security notice
-            Positioned(
-              bottom: 36,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(
-                      Icons.shield_outlined,
-                      size: 14,
-                      color: Color(0xFF64748B),
-                    ),
-                    const SizedBox(width: 6),
-                    Text(
-                      'Zero-Knowledge Encrypted • Private & Compliant',
-                      style: AppTypography.labelSmall.copyWith(
-                        color: const Color(0xFF64748B),
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

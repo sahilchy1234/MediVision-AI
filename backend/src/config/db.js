@@ -122,13 +122,14 @@ const db = {
         : [],
       enableWomensHealth:
         userData.enableWomensHealth !== undefined ? Boolean(userData.enableWomensHealth) : true,
-      permissions: userData.permissions || {
-        sleep_health: false,
-        physical_activity: false,
-        screen_time: false,
-        device_sensors: false,
-        medical_documents: false,
-        notifications: false,
+      permissions: {
+        sleep_health: true,
+        physical_activity: true,
+        screen_time: true,
+        device_sensors: true,
+        medical_documents: true,
+        notifications: true,
+        ...(userData.permissions || {}),
       },
       createdAt: now,
       updatedAt: now,

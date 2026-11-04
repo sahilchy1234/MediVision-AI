@@ -41,85 +41,86 @@ class _MedicalRecordsScreenState extends State<MedicalRecordsScreen> {
               top: Radius.circular(AppDimensions.radiusL),
             ),
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Container(
-                  width: 36,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: AppColors.border,
-                    borderRadius: BorderRadius.circular(2),
+          child: SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Container(
+                    width: 36,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: AppColors.border,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  StatusBadge(label: record.status, type: BadgeType.success),
-                  Text(record.fileSize, style: AppTypography.bodySmall),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Text(
-                record.title,
-                style: AppTypography.titleLarge.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 3),
-              Text(
-                'Issued by ${record.providerName} • ${DateFormatter.formatDate(record.date)}',
-                style: AppTypography.bodySmall,
-              ),
-              const SizedBox(height: 14),
-
-              Container(
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: AppColors.mainBackground,
-                  borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-                  border: Border.all(color: AppColors.border, width: 1.0),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'AI Clinical Extraction Summary',
-                      style: AppTypography.labelMedium.copyWith(
-                        color: AppColors.forestGreen,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      record.summary,
-                      style: AppTypography.bodyMedium.copyWith(height: 1.45),
-                    ),
+                    StatusBadge(label: record.status, type: BadgeType.success),
+                    Text(record.fileSize, style: AppTypography.bodySmall),
                   ],
                 ),
-              ),
-              const SizedBox(height: 18),
-              PrimaryButton(
-                label: 'View Encrypted Original Document',
-                icon: Icons.lock_outline_rounded,
-                onPressed: () {
-                  Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        'Viewing original document: ${record.title}',
+                const SizedBox(height: 10),
+                Text(
+                  record.title,
+                  style: AppTypography.titleLarge.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  '${record.providerName} • ${DateFormatter.formatDate(record.date)}',
+                  style: AppTypography.bodySmall,
+                ),
+                const SizedBox(height: 14),
+
+                Container(
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: AppColors.surfaceSubtle,
+                    borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                    border: Border.all(color: AppColors.border, width: 1.0),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Document Summary',
+                        style: AppTypography.labelMedium.copyWith(
+                          color: AppColors.secondary,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                      backgroundColor: AppColors.forestGreen,
-                    ),
-                  );
-                },
-              ),
-              const SizedBox(height: 8),
-            ],
+                      const SizedBox(height: 6),
+                      Text(
+                        record.summary,
+                        style: AppTypography.bodyMedium.copyWith(height: 1.45),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                PrimaryButton(
+                  label: 'View Original Document',
+                  icon: Icons.description_outlined,
+                  onPressed: () {
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Viewing document: ${record.title}'),
+                        backgroundColor: AppColors.secondary,
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 8),
+              ],
+            ),
           ),
         );
       },
@@ -140,124 +141,129 @@ class _MedicalRecordsScreenState extends State<MedicalRecordsScreen> {
               top: Radius.circular(AppDimensions.radiusL),
             ),
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Container(
-                  width: 36,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: AppColors.border,
-                    borderRadius: BorderRadius.circular(2),
+          child: SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Container(
+                    width: 36,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: AppColors.border,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'Add Clinical Record',
-                style: AppTypography.titleLarge.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                'Upload PDF reports, DICOM radiographs, or prescription scans for automated clinical indexing.',
-                style: AppTypography.bodySmall,
-              ),
-              const SizedBox(height: 16),
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: AppColors.surfaceSubtle,
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: const Icon(
-                    Icons.picture_as_pdf_outlined,
-                    color: AppColors.forestGreen,
+                const SizedBox(height: 16),
+                Text(
+                  'Add Record',
+                  style: AppTypography.titleLarge.copyWith(
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
-                title: const Text(
-                  'Upload PDF Diagnostic Report',
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                const SizedBox(height: 4),
+                Text(
+                  'Upload clinical files or prescriptions to index into your health timeline.',
+                  style: AppTypography.bodySmall,
                 ),
-                subtitle: const Text(
-                  'Blood panels, metabolic reports, discharge summaries',
-                  style: TextStyle(fontSize: 12),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  _simulateNewUpload(
-                    'Lipid Panel Nov 2026.pdf',
-                    RecordCategory.bloodReports,
-                  );
-                },
-              ),
-              const Divider(height: 1),
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: AppColors.surfaceSubtle,
-                    borderRadius: BorderRadius.circular(6),
+                const SizedBox(height: 16),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: AppColors.surfaceSubtle,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Icon(
+                      Icons.picture_as_pdf_outlined,
+                      color: AppColors.secondary,
+                      size: 20,
+                    ),
                   ),
-                  child: const Icon(
-                    Icons.document_scanner_outlined,
-                    color: AppColors.forestGreen,
+                  title: const Text(
+                    'PDF Diagnostic Report',
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13.5),
                   ),
-                ),
-                title: const Text(
-                  'Upload X-Ray / DICOM Scan',
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-                ),
-                subtitle: const Text(
-                  'Chest radiographs, MRI, or CT imaging',
-                  style: TextStyle(fontSize: 12),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  _simulateNewUpload(
-                    'Spine Radiograph DICOM.dcm',
-                    RecordCategory.xRays,
-                  );
-                },
-              ),
-              const Divider(height: 1),
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: AppColors.surfaceSubtle,
-                    borderRadius: BorderRadius.circular(6),
+                  subtitle: const Text(
+                    'Lab panels, metabolic tests, discharge notes',
+                    style: TextStyle(fontSize: 12),
                   ),
-                  child: const Icon(
-                    Icons.camera_alt_outlined,
-                    color: AppColors.forestGreen,
+                  onTap: () {
+                    Navigator.pop(context);
+                    _simulateNewUpload(
+                      'Lipid Panel Nov 2026.pdf',
+                      RecordCategory.bloodReports,
+                    );
+                  },
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: AppColors.surfaceSubtle,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Icon(
+                      Icons.document_scanner_outlined,
+                      color: AppColors.secondary,
+                      size: 20,
+                    ),
                   ),
+                  title: const Text(
+                    'X-Ray / DICOM Study',
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13.5),
+                  ),
+                  subtitle: const Text(
+                    'Chest radiographs, MRI, or CT imaging',
+                    style: TextStyle(fontSize: 12),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    _simulateNewUpload(
+                      'Spine Radiograph DICOM.dcm',
+                      RecordCategory.xRays,
+                    );
+                  },
                 ),
-                title: const Text(
-                  'Capture Prescription or Label',
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                const Divider(height: 1),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: AppColors.surfaceSubtle,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Icon(
+                      Icons.camera_alt_outlined,
+                      color: AppColors.secondary,
+                      size: 20,
+                    ),
+                  ),
+                  title: const Text(
+                    'Prescription or Doctor Order',
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13.5),
+                  ),
+                  subtitle: const Text(
+                    'Medication order or prescription photo',
+                    style: TextStyle(fontSize: 12),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    _simulateNewUpload(
+                      'Prescription Slip.jpg',
+                      RecordCategory.prescriptions,
+                    );
+                  },
                 ),
-                subtitle: const Text(
-                  'Medication order or doctor prescription slip',
-                  style: TextStyle(fontSize: 12),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  _simulateNewUpload(
-                    'Prescription Slip.jpg',
-                    RecordCategory.prescriptions,
-                  );
-                },
-              ),
-              const SizedBox(height: 16),
-            ],
+                const SizedBox(height: 12),
+              ],
+            ),
           ),
         );
       },
@@ -273,20 +279,20 @@ class _MedicalRecordsScreenState extends State<MedicalRecordsScreen> {
           title: name,
           category: category,
           date: DateTime.now(),
-          providerName: 'Imported Document',
+          providerName: 'Uploaded Document',
           fileSize: '1.4 MB',
-          status: 'AI Indexed',
-          statusColor: AppColors.primaryGreen,
-          summary:
-              'Newly uploaded clinical document indexed into MediVision clinical memory.',
+          status: 'Indexed',
+          statusColor: AppColors.secondary,
+          summary: 'Newly uploaded clinical document indexed into health timeline.',
         ),
       );
     });
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Document "$name" processed and indexed.'),
-        backgroundColor: AppColors.primaryGreen,
+        content: Text('Document "$name" saved to records.'),
+        backgroundColor: AppColors.secondary,
+        behavior: SnackBarBehavior.floating,
       ),
     );
   }
@@ -304,13 +310,18 @@ class _MedicalRecordsScreenState extends State<MedicalRecordsScreen> {
     }).toList();
 
     return Scaffold(
-      backgroundColor: AppColors.mainBackground,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Medical Records'),
+        title: Text(
+          'Medical Records',
+          style: AppTypography.titleMedium.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
+        ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.add_rounded, size: 24),
-            tooltip: 'Upload Document',
+            icon: const Icon(Icons.add_rounded, size: 22),
+            tooltip: 'Add Record',
             onPressed: _showUploadDialog,
           ),
           const SizedBox(width: 8),
@@ -323,7 +334,7 @@ class _MedicalRecordsScreenState extends State<MedicalRecordsScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Search Input Bar
-              const SizedBox(height: 8),
+              const SizedBox(height: 6),
               TextField(
                 controller: _searchController,
                 style: AppTypography.bodyMedium,
@@ -348,9 +359,9 @@ class _MedicalRecordsScreenState extends State<MedicalRecordsScreen> {
                 ),
                 onChanged: (val) => setState(() => _searchQuery = val.trim()),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 10),
 
-              // Categories Chips
+              // Categories Filter Chips
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -358,14 +369,13 @@ class _MedicalRecordsScreenState extends State<MedicalRecordsScreen> {
                     FilterChip(
                       label: const Text('All Documents'),
                       selected: _selectedCategory == null,
-                      onSelected: (_) =>
-                          setState(() => _selectedCategory = null),
-                      selectedColor: AppColors.mintAccent,
+                      onSelected: (_) => setState(() => _selectedCategory = null),
+                      selectedColor: AppColors.secondaryContainer,
                       backgroundColor: Colors.white,
                       labelStyle: TextStyle(
                         color: _selectedCategory == null
-                            ? AppColors.forestGreen
-                            : AppColors.secondaryText,
+                            ? AppColors.secondary
+                            : AppColors.textSecondary,
                         fontWeight: _selectedCategory == null
                             ? FontWeight.w600
                             : FontWeight.w500,
@@ -373,27 +383,26 @@ class _MedicalRecordsScreenState extends State<MedicalRecordsScreen> {
                       ),
                       side: BorderSide(
                         color: _selectedCategory == null
-                            ? AppColors.primaryGreen
+                            ? AppColors.secondary
                             : AppColors.border,
-                        width: 1.0,
+                        width: 0.8,
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 6),
                     ...RecordCategory.values.map((cat) {
                       final isSelected = _selectedCategory == cat;
                       return Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
+                        padding: const EdgeInsets.only(right: 6.0),
                         child: FilterChip(
                           label: Text(cat.label),
                           selected: isSelected,
-                          onSelected: (_) =>
-                              setState(() => _selectedCategory = cat),
-                          selectedColor: AppColors.mintAccent,
+                          onSelected: (_) => setState(() => _selectedCategory = cat),
+                          selectedColor: AppColors.secondaryContainer,
                           backgroundColor: Colors.white,
                           labelStyle: TextStyle(
                             color: isSelected
-                                ? AppColors.forestGreen
-                                : AppColors.secondaryText,
+                                ? AppColors.secondary
+                                : AppColors.textSecondary,
                             fontWeight: isSelected
                                 ? FontWeight.w600
                                 : FontWeight.w500,
@@ -401,9 +410,9 @@ class _MedicalRecordsScreenState extends State<MedicalRecordsScreen> {
                           ),
                           side: BorderSide(
                             color: isSelected
-                                ? AppColors.primaryGreen
+                                ? AppColors.secondary
                                 : AppColors.border,
-                            width: 1.0,
+                            width: 0.8,
                           ),
                         ),
                       );
@@ -411,7 +420,7 @@ class _MedicalRecordsScreenState extends State<MedicalRecordsScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: 12),
 
               // Documents List
               Expanded(
@@ -422,13 +431,13 @@ class _MedicalRecordsScreenState extends State<MedicalRecordsScreen> {
                           children: [
                             const Icon(
                               Icons.folder_open_outlined,
-                              size: 44,
+                              size: 40,
                               color: AppColors.textTertiary,
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              'No medical records found.',
-                              style: AppTypography.bodyMedium,
+                              'No medical records found',
+                              style: AppTypography.bodySmall,
                             ),
                           ],
                         ),
@@ -436,19 +445,18 @@ class _MedicalRecordsScreenState extends State<MedicalRecordsScreen> {
                     : ListView.separated(
                         physics: const BouncingScrollPhysics(),
                         itemCount: filtered.length,
-                        separatorBuilder: (_, index) =>
-                            const SizedBox(height: 8),
+                        separatorBuilder: (_, index) => const SizedBox(height: 8),
                         itemBuilder: (context, index) {
                           final item = filtered[index];
 
                           return GlassCard(
                             onTap: () => _showRecordDetails(item),
-                            padding: const EdgeInsets.all(14),
+                            padding: const EdgeInsets.all(12),
                             child: Row(
                               children: [
                                 Container(
-                                  width: 40,
-                                  height: 40,
+                                  width: 36,
+                                  height: 36,
                                   decoration: BoxDecoration(
                                     color: AppColors.surfaceSubtle,
                                     borderRadius: BorderRadius.circular(8),
@@ -459,22 +467,20 @@ class _MedicalRecordsScreenState extends State<MedicalRecordsScreen> {
                                   ),
                                   child: Icon(
                                     item.category.icon,
-                                    color: AppColors.forestGreen,
-                                    size: 20,
+                                    color: AppColors.secondary,
+                                    size: 18,
                                   ),
                                 ),
                                 const SizedBox(width: 12),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         item.title,
-                                        style: AppTypography.titleSmall
-                                            .copyWith(
-                                              fontWeight: FontWeight.w600,
-                                            ),
+                                        style: AppTypography.titleSmall.copyWith(
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                       ),
@@ -487,18 +493,21 @@ class _MedicalRecordsScreenState extends State<MedicalRecordsScreen> {
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                       ),
-                                      const SizedBox(height: 6),
+                                      const SizedBox(height: 4),
                                       Row(
                                         children: [
                                           StatusBadge(
                                             label: item.status,
-                                            type: BadgeType.success,
+                                            type: BadgeType.neutral,
+                                            isPill: true,
                                           ),
                                           const SizedBox(width: 8),
                                           Text(
                                             item.fileSize,
-                                            style: AppTypography.labelSmall
-                                                .copyWith(fontSize: 10),
+                                            style: AppTypography.labelSmall.copyWith(
+                                              fontSize: 10,
+                                              color: AppColors.textTertiary,
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -509,7 +518,7 @@ class _MedicalRecordsScreenState extends State<MedicalRecordsScreen> {
                                 const Icon(
                                   Icons.chevron_right_rounded,
                                   size: 18,
-                                  color: AppColors.secondaryText,
+                                  color: AppColors.textTertiary,
                                 ),
                               ],
                             ),

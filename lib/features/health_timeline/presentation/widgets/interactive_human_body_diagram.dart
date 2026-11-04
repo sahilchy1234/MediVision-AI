@@ -286,6 +286,11 @@ class _InteractiveHumanBodyDiagramState
 
   @override
   Widget build(BuildContext context) {
+    // Prevent unlaid-out background rendering when this tab is offstage in IndexedStack
+    if (!TickerMode.of(context)) {
+      return const SizedBox.shrink();
+    }
+
     return GlassCard(
       padding: const EdgeInsets.all(20),
       borderRadius: AppDimensions.radiusXL,
@@ -438,12 +443,16 @@ class _InteractiveHumanBodyDiagramState
               color: isSelected ? Colors.white : AppColors.textSecondary,
             ),
             const SizedBox(width: 4),
-            Text(
-              label,
-              style: AppTypography.labelSmall.copyWith(
-                color: isSelected ? Colors.white : AppColors.textSecondary,
-                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                fontSize: 11,
+            Flexible(
+              child: Text(
+                label,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: AppTypography.labelSmall.copyWith(
+                  color: isSelected ? Colors.white : AppColors.textSecondary,
+                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                  fontSize: 11,
+                ),
               ),
             ),
           ],
@@ -455,10 +464,14 @@ class _InteractiveHumanBodyDiagramState
   Widget _buildViewAngleControls() {
     if (_subMode == BodyDiagramSubMode.muscleAtlas) {
       final isFront = _atlasView == AtlasAsset.musclesFront;
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      return Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        alignment: WrapAlignment.spaceBetween,
+        crossAxisAlignment: WrapCrossAlignment.center,
         children: [
           Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
               _buildSmallPill(
                 label: 'Front View',
@@ -478,32 +491,33 @@ class _InteractiveHumanBodyDiagramState
             ],
           ),
           if (_selectedMuscle != null)
-            Flexible(
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                decoration: BoxDecoration(
-                  color: AppColors.secondaryContainer,
-                  borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
-                ),
-                child: Text(
-                  _selectedMuscle!.displayName,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTypography.labelSmall.copyWith(
-                    color: AppColors.secondaryDark,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 11,
-                  ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+              decoration: BoxDecoration(
+                color: AppColors.secondaryContainer,
+                borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
+              ),
+              child: Text(
+                _selectedMuscle!.displayName,
+                overflow: TextOverflow.ellipsis,
+                style: AppTypography.labelSmall.copyWith(
+                  color: AppColors.secondaryDark,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 11,
                 ),
               ),
             ),
         ],
       );
     } else if (_subMode == BodyDiagramSubMode.regionalZones) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      return Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        alignment: WrapAlignment.spaceBetween,
+        crossAxisAlignment: WrapCrossAlignment.center,
         children: [
-          Wrap(
-            spacing: 8,
+          Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
               _buildSmallPill(
                 label: 'Front',
@@ -511,12 +525,14 @@ class _InteractiveHumanBodyDiagramState
                 onTap: () =>
                     setState(() => _bodyViewType = BodyViewType.front),
               ),
+              const SizedBox(width: 6),
               _buildSmallPill(
                 label: 'Back',
                 isSelected: _bodyViewType == BodyViewType.back,
                 onTap: () =>
                     setState(() => _bodyViewType = BodyViewType.back),
               ),
+              const SizedBox(width: 6),
               _buildSmallPill(
                 label: 'Both',
                 isSelected: _bodyViewType == BodyViewType.both,
@@ -536,8 +552,11 @@ class _InteractiveHumanBodyDiagramState
       );
     } else {
       // Heatmap view
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      return Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        alignment: WrapAlignment.spaceBetween,
+        crossAxisAlignment: WrapCrossAlignment.center,
         children: [
           Text(
             'Live Strain & Recovery Gradient',
@@ -618,11 +637,13 @@ class _InteractiveHumanBodyDiagramState
         return SizedBox(
           width: 300,
           height: 330,
-          child: BodyAtlasView<MuscleInfo>(
-            view: _atlasView,
-            resolver: const MuscleResolver(),
-            colorMapping: colorMap,
-            onTapElement: _onAtlasTapped,
+          child: ExcludeSemantics(
+            child: BodyAtlasView<MuscleInfo>(
+              view: _atlasView,
+              resolver: const MuscleResolver(),
+              colorMapping: colorMap,
+              onTapElement: _onAtlasTapped,
+            ),
           ),
         );
 

@@ -15,8 +15,8 @@
       "Asthma (Mild intermittent)"
     ],
     "createdAt": "2026-11-04T05:48:45.588Z",
-    "updatedAt": "2026-11-04T06:57:14.002Z",
-    "lastLoginAt": "2026-11-04T06:57:14.001Z",
+    "updatedAt": "2026-11-04T11:02:57.977Z",
+    "lastLoginAt": "2026-11-04T11:02:57.976Z",
     "heightCm": 170.5,
     "weightKg": 59.2,
     "medicalConditions": [
@@ -40,11 +40,25 @@
     "gender": "female",
     "dateOfBirth": "1990-08-15",
     "role": "patient",
-    "allergies": [],
+    "allergies": [
+      "Penicillin"
+    ],
     "existingConditions": [],
     "createdAt": "2026-11-04T05:48:46.299Z",
     "updatedAt": "2026-11-04T05:48:46.299Z",
-    "lastLoginAt": "2026-11-04T05:48:46.299Z"
+    "lastLoginAt": "2026-11-04T05:48:46.299Z",
+    "permissions": {
+      "sleep_health": true,
+      "physical_activity": true,
+      "screen_time": true,
+      "device_sensors": true,
+      "medical_documents": true,
+      "notifications": true
+    },
+    "medicalConditions": [],
+    "heightCm": 168,
+    "weightKg": 58,
+    "enableWomensHealth": true
   },
   {
     "id": "usr_1793771415028_atm57",
@@ -54,11 +68,25 @@
     "gender": "female",
     "dateOfBirth": "1990-08-15",
     "role": "patient",
-    "allergies": [],
+    "allergies": [
+      "Penicillin"
+    ],
     "existingConditions": [],
     "createdAt": "2026-11-04T05:50:15.028Z",
     "updatedAt": "2026-11-04T05:50:15.028Z",
-    "lastLoginAt": "2026-11-04T05:50:15.028Z"
+    "lastLoginAt": "2026-11-04T05:50:15.028Z",
+    "permissions": {
+      "sleep_health": true,
+      "physical_activity": true,
+      "screen_time": true,
+      "device_sensors": true,
+      "medical_documents": true,
+      "notifications": true
+    },
+    "medicalConditions": [],
+    "heightCm": 168,
+    "weightKg": 58,
+    "enableWomensHealth": true
   },
   {
     "id": "usr_1793771480811_92gsu",
@@ -68,11 +96,25 @@
     "gender": "female",
     "dateOfBirth": "1990-08-15",
     "role": "patient",
-    "allergies": [],
+    "allergies": [
+      "Penicillin"
+    ],
     "existingConditions": [],
     "createdAt": "2026-11-04T05:51:20.811Z",
     "updatedAt": "2026-11-04T05:51:20.811Z",
-    "lastLoginAt": "2026-11-04T05:51:20.811Z"
+    "lastLoginAt": "2026-11-04T05:51:20.811Z",
+    "permissions": {
+      "sleep_health": true,
+      "physical_activity": true,
+      "screen_time": true,
+      "device_sensors": true,
+      "medical_documents": true,
+      "notifications": true
+    },
+    "medicalConditions": [],
+    "heightCm": 168,
+    "weightKg": 58,
+    "enableWomensHealth": true
   },
   {
     "id": "usr_1793772055130_qyle5",
@@ -84,12 +126,24 @@
     "heightCm": 168,
     "weightKg": 58,
     "role": "patient",
-    "allergies": [],
-    "medicalConditions": [],
+    "allergies": [
+      "Penicillin"
+    ],
+    "medicalConditions": [
+      "Asthma (Controlled)"
+    ],
     "enableWomensHealth": true,
     "createdAt": "2026-11-04T06:00:55.130Z",
     "updatedAt": "2026-11-04T06:00:55.130Z",
-    "lastLoginAt": "2026-11-04T06:00:55.130Z"
+    "lastLoginAt": "2026-11-04T06:00:55.130Z",
+    "permissions": {
+      "sleep_health": true,
+      "physical_activity": true,
+      "screen_time": true,
+      "device_sensors": true,
+      "medical_documents": true,
+      "notifications": true
+    }
   },
   {
     "id": "usr_1793772415863_cpaf7",
@@ -101,12 +155,24 @@
     "heightCm": 168,
     "weightKg": 58,
     "role": "patient",
-    "allergies": [],
-    "medicalConditions": [],
+    "allergies": [
+      "Penicillin"
+    ],
+    "medicalConditions": [
+      "Asthma (Controlled)"
+    ],
     "enableWomensHealth": true,
     "createdAt": "2026-11-04T06:06:55.863Z",
     "updatedAt": "2026-11-04T06:06:55.863Z",
-    "lastLoginAt": "2026-11-04T06:06:55.863Z"
+    "lastLoginAt": "2026-11-04T06:06:55.863Z",
+    "permissions": {
+      "sleep_health": true,
+      "physical_activity": true,
+      "screen_time": true,
+      "device_sensors": true,
+      "medical_documents": true,
+      "notifications": true
+    }
   },
   {
     "id": "usr_1793772460801_twk5h",
@@ -118,29 +184,45 @@
     "heightCm": 168,
     "weightKg": 58,
     "role": "patient",
-    "allergies": [],
-    "medicalConditions": [],
+    "allergies": [
+      "Penicillin"
+    ],
+    "medicalConditions": [
+      "Asthma (Controlled)"
+    ],
     "enableWomensHealth": true,
     "createdAt": "2026-11-04T06:07:40.801Z",
     "updatedAt": "2026-11-04T06:07:40.801Z",
-    "lastLoginAt": "2026-11-04T06:07:40.801Z"
+    "lastLoginAt": "2026-11-04T06:07:40.801Z",
+    "permissions": {
+      "sleep_health": true,
+      "physical_activity": true,
+      "screen_time": true,
+      "device_sensors": true,
+      "medical_documents": true,
+      "notifications": true
+    }
   },
   {
     "id": "usr_1793772718320_wttl0",
-    "fullName": "Sahil Alom Choudhury",
+    "fullName": "Elena Rostova",
     "email": "alosahil98@gmail.com",
     "passwordHash": "$2a$10$BEdm55V0IHOaKirVh.OA.Oe8ckXR5Roduza7vcHM03vGPuoJKmF6G",
-    "gender": "unspecified",
+    "gender": "Female",
     "dateOfBirth": "1994-06-18T00:00:00.000",
     "heightCm": 168,
     "weightKg": 58,
     "role": "patient",
-    "allergies": [],
-    "medicalConditions": [],
-    "enableWomensHealth": false,
+    "allergies": [
+      "Penicillin"
+    ],
+    "medicalConditions": [
+      "Mild Dysmenorrhea"
+    ],
+    "enableWomensHealth": true,
     "createdAt": "2026-11-04T06:11:58.320Z",
-    "updatedAt": "2026-11-04T06:51:39.536Z",
-    "lastLoginAt": "2026-11-04T06:51:39.534Z",
+    "updatedAt": "2026-11-04T10:58:29.374Z",
+    "lastLoginAt": "2026-11-04T10:58:29.276Z",
     "permissions": {
       "sleep_health": true,
       "physical_activity": true,
@@ -160,8 +242,12 @@
     "heightCm": 168,
     "weightKg": 58,
     "role": "patient",
-    "allergies": [],
-    "medicalConditions": [],
+    "allergies": [
+      "Penicillin"
+    ],
+    "medicalConditions": [
+      "Asthma (Controlled)"
+    ],
     "enableWomensHealth": true,
     "permissions": {
       "sleep_health": false,
@@ -185,8 +271,12 @@
     "heightCm": 168,
     "weightKg": 58,
     "role": "patient",
-    "allergies": [],
-    "medicalConditions": [],
+    "allergies": [
+      "Penicillin"
+    ],
+    "medicalConditions": [
+      "Asthma (Controlled)"
+    ],
     "enableWomensHealth": true,
     "permissions": {
       "sleep_health": false,
@@ -210,8 +300,12 @@
     "heightCm": 168,
     "weightKg": 58,
     "role": "patient",
-    "allergies": [],
-    "medicalConditions": [],
+    "allergies": [
+      "Penicillin"
+    ],
+    "medicalConditions": [
+      "Asthma (Controlled)"
+    ],
     "enableWomensHealth": true,
     "permissions": {
       "sleep_health": false,
@@ -235,8 +329,12 @@
     "heightCm": 168,
     "weightKg": 58,
     "role": "patient",
-    "allergies": [],
-    "medicalConditions": [],
+    "allergies": [
+      "Penicillin"
+    ],
+    "medicalConditions": [
+      "Asthma (Controlled)"
+    ],
     "enableWomensHealth": true,
     "permissions": {
       "sleep_health": false,
@@ -249,5 +347,292 @@
     "createdAt": "2026-11-04T06:57:13.300Z",
     "updatedAt": "2026-11-04T06:57:13.300Z",
     "lastLoginAt": "2026-11-04T06:57:13.300Z"
+  },
+  {
+    "id": "usr_1793780393633_exrte",
+    "fullName": "Dr. Sarah Connor",
+    "email": "patient_1793780393542@medivision.health",
+    "passwordHash": "$2a$10$HouUh1j.vn95Usjq3GAXeOfwmirlc/7VG3MJ.DTEzxUNdAaJNSqTy",
+    "gender": "female",
+    "dateOfBirth": "1990-08-15",
+    "heightCm": 168,
+    "weightKg": 58,
+    "role": "patient",
+    "allergies": [
+      "Penicillin"
+    ],
+    "medicalConditions": [
+      "Asthma (Controlled)"
+    ],
+    "enableWomensHealth": true,
+    "permissions": {
+      "sleep_health": false,
+      "physical_activity": false,
+      "screen_time": false,
+      "device_sensors": false,
+      "medical_documents": false,
+      "notifications": false
+    },
+    "createdAt": "2026-11-04T08:19:53.633Z",
+    "updatedAt": "2026-11-04T08:19:53.633Z",
+    "lastLoginAt": "2026-11-04T08:19:53.633Z"
+  },
+  {
+    "id": "usr_1793780443985_n80no",
+    "fullName": "Dr. Sarah Connor",
+    "email": "patient_1793780443898@medivision.health",
+    "passwordHash": "$2a$10$kCU2CBaGVzbwT9Hojsa4GO2jNX6npp.eGyQjUN7cPm4da0HWlfbjG",
+    "gender": "female",
+    "dateOfBirth": "1990-08-15",
+    "heightCm": 168,
+    "weightKg": 58,
+    "role": "patient",
+    "allergies": [
+      "Penicillin"
+    ],
+    "medicalConditions": [
+      "Asthma (Controlled)"
+    ],
+    "enableWomensHealth": true,
+    "permissions": {
+      "sleep_health": false,
+      "physical_activity": false,
+      "screen_time": false,
+      "device_sensors": false,
+      "medical_documents": false,
+      "notifications": false
+    },
+    "createdAt": "2026-11-04T08:20:43.985Z",
+    "updatedAt": "2026-11-04T08:20:43.985Z",
+    "lastLoginAt": "2026-11-04T08:20:43.985Z"
+  },
+  {
+    "id": "usr_1793780535334_znaee",
+    "fullName": "Dr. Sarah Connor",
+    "email": "patient_1793780534394@medivision.health",
+    "passwordHash": "$2a$10$vqFtDTLXhisb5FJcXIYp.O7za0hiS5cvkNAZ4jpLgA5xpNDcVtofW",
+    "gender": "female",
+    "dateOfBirth": "1990-08-15",
+    "heightCm": 168,
+    "weightKg": 58,
+    "role": "patient",
+    "allergies": [
+      "Penicillin"
+    ],
+    "medicalConditions": [
+      "Asthma (Controlled)"
+    ],
+    "enableWomensHealth": true,
+    "permissions": {
+      "sleep_health": false,
+      "physical_activity": false,
+      "screen_time": false,
+      "device_sensors": false,
+      "medical_documents": false,
+      "notifications": false
+    },
+    "createdAt": "2026-11-04T08:22:15.334Z",
+    "updatedAt": "2026-11-04T08:22:15.334Z",
+    "lastLoginAt": "2026-11-04T08:22:15.334Z"
+  },
+  {
+    "id": "usr_1793781623961_xuich",
+    "fullName": "Dr. Sarah Connor",
+    "email": "patient_1793781623875@medivision.health",
+    "passwordHash": "$2a$10$CnJvqlJ1KN5IX9Ga8iU9AO/6dOl28Vio8r4EJeOLOnK7wwq9WtqSm",
+    "gender": "female",
+    "dateOfBirth": "1990-08-15",
+    "heightCm": 168,
+    "weightKg": 58,
+    "role": "patient",
+    "allergies": [
+      "Penicillin"
+    ],
+    "medicalConditions": [
+      "Asthma (Controlled)"
+    ],
+    "enableWomensHealth": true,
+    "permissions": {
+      "sleep_health": false,
+      "physical_activity": false,
+      "screen_time": false,
+      "device_sensors": false,
+      "medical_documents": false,
+      "notifications": false
+    },
+    "createdAt": "2026-11-04T08:40:23.961Z",
+    "updatedAt": "2026-11-04T08:40:23.961Z",
+    "lastLoginAt": "2026-11-04T08:40:23.961Z"
+  },
+  {
+    "id": "usr_1793781652599_pl0lk",
+    "fullName": "Dr. Sarah Connor",
+    "email": "patient_1793781652514@medivision.health",
+    "passwordHash": "$2a$10$5dxwKMXhjKmTjrdBlfQWE.C.0Dks4e9mNptTxAbzPIsqdhSR1MEUW",
+    "gender": "female",
+    "dateOfBirth": "1990-08-15",
+    "heightCm": 168,
+    "weightKg": 58,
+    "role": "patient",
+    "allergies": [
+      "Penicillin"
+    ],
+    "medicalConditions": [
+      "Asthma (Controlled)"
+    ],
+    "enableWomensHealth": true,
+    "permissions": {
+      "sleep_health": false,
+      "physical_activity": false,
+      "screen_time": false,
+      "device_sensors": false,
+      "medical_documents": false,
+      "notifications": false
+    },
+    "createdAt": "2026-11-04T08:40:52.599Z",
+    "updatedAt": "2026-11-04T08:40:52.599Z",
+    "lastLoginAt": "2026-11-04T08:40:52.599Z"
+  },
+  {
+    "id": "usr_1793781682659_okdgq",
+    "fullName": "Dr. Sarah Connor",
+    "email": "patient_1793781682572@medivision.health",
+    "passwordHash": "$2a$10$77rHMNvhnXZdVZUC1DGcYu8/t4KqQcyGxjfr9CYvP6Urd9rAJDzUe",
+    "gender": "female",
+    "dateOfBirth": "1990-08-15",
+    "heightCm": 168,
+    "weightKg": 58,
+    "role": "patient",
+    "allergies": [
+      "Penicillin"
+    ],
+    "medicalConditions": [
+      "Asthma (Controlled)"
+    ],
+    "enableWomensHealth": true,
+    "permissions": {
+      "sleep_health": false,
+      "physical_activity": false,
+      "screen_time": false,
+      "device_sensors": false,
+      "medical_documents": false,
+      "notifications": false
+    },
+    "createdAt": "2026-11-04T08:41:22.659Z",
+    "updatedAt": "2026-11-04T08:41:22.659Z",
+    "lastLoginAt": "2026-11-04T08:41:22.659Z"
+  },
+  {
+    "id": "usr_1793783025624_zkzh9",
+    "fullName": "Dr. Sarah Connor",
+    "email": "patient_1793783025505@medivision.health",
+    "passwordHash": "$2a$10$R1cksLEYU86zVfrRo.HeOO1TU0SChSZtqwc3KV4I28RqKyXnXfoaS",
+    "gender": "female",
+    "dateOfBirth": "1990-08-15",
+    "heightCm": 168,
+    "weightKg": 58,
+    "role": "patient",
+    "allergies": [
+      "Penicillin"
+    ],
+    "medicalConditions": [
+      "Asthma (Controlled)"
+    ],
+    "enableWomensHealth": true,
+    "permissions": {
+      "sleep_health": false,
+      "physical_activity": false,
+      "screen_time": false,
+      "device_sensors": false,
+      "medical_documents": false,
+      "notifications": false
+    },
+    "createdAt": "2026-11-04T09:03:45.624Z",
+    "updatedAt": "2026-11-04T09:03:45.624Z",
+    "lastLoginAt": "2026-11-04T09:03:45.624Z"
+  },
+  {
+    "id": "usr_1793783927747_vfctd",
+    "fullName": "Dr. Sarah Connor",
+    "email": "patient_1793783927647@medivision.health",
+    "passwordHash": "$2a$10$o9H9lXEF.JuP3vixcXjVz.sS2g/sb33dHigNW6C/opnnRDwLThnoq",
+    "gender": "female",
+    "dateOfBirth": "1990-08-15",
+    "heightCm": 168,
+    "weightKg": 58,
+    "role": "patient",
+    "allergies": [
+      "Penicillin"
+    ],
+    "medicalConditions": [
+      "Asthma (Controlled)"
+    ],
+    "enableWomensHealth": true,
+    "permissions": {
+      "sleep_health": false,
+      "physical_activity": false,
+      "screen_time": false,
+      "device_sensors": false,
+      "medical_documents": false,
+      "notifications": false
+    },
+    "createdAt": "2026-11-04T09:18:47.747Z",
+    "updatedAt": "2026-11-04T09:18:47.747Z",
+    "lastLoginAt": "2026-11-04T09:18:47.747Z"
+  },
+  {
+    "id": "usr_1793789974325_k6473",
+    "fullName": "SAhil",
+    "email": "sas@gmail.com",
+    "passwordHash": "$2a$10$P65m/zEYDC5J/N6NgSMKWeC1tEXelwQy4R0mLSra.uuhMuxIrhWvm",
+    "gender": "Male",
+    "dateOfBirth": "1994-06-18T00:00:00.000",
+    "heightCm": 168,
+    "weightKg": 58,
+    "role": "patient",
+    "allergies": [
+      "Penicillin",
+      "Sulfa"
+    ],
+    "medicalConditions": [
+      "Asthma (Controlled)"
+    ],
+    "enableWomensHealth": false,
+    "permissions": {
+      "sleep_health": true,
+      "physical_activity": true,
+      "screen_time": true,
+      "device_sensors": true,
+      "medical_documents": true,
+      "notifications": true
+    },
+    "createdAt": "2026-11-04T10:59:34.325Z",
+    "updatedAt": "2026-11-04T11:04:07.385Z",
+    "lastLoginAt": "2026-11-04T11:04:07.349Z"
+  },
+  {
+    "id": "usr_1793790176347_mdyeh",
+    "fullName": "Dr. Sarah Connor",
+    "email": "patient_1793790176019@medivision.health",
+    "passwordHash": "$2a$10$462FkBTZPtyhCtGmWf6Pw.U.RIfcqY./I24uxpdkjOvjT3Q.1VuLW",
+    "gender": "female",
+    "dateOfBirth": "1990-08-15",
+    "heightCm": 168,
+    "weightKg": 58,
+    "role": "patient",
+    "allergies": [],
+    "medicalConditions": [],
+    "enableWomensHealth": true,
+    "permissions": {
+      "sleep_health": true,
+      "physical_activity": true,
+      "screen_time": true,
+      "device_sensors": true,
+      "medical_documents": true,
+      "notifications": true
+    },
+    "createdAt": "2026-11-04T11:02:56.347Z",
+    "updatedAt": "2026-11-04T11:02:56.347Z",
+    "lastLoginAt": "2026-11-04T11:02:56.347Z"
   }
 ]

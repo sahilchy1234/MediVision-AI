@@ -28,7 +28,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _isLoading = true);
-    await Future.delayed(const Duration(milliseconds: 600));
+    await Future.delayed(const Duration(milliseconds: 500));
 
     if (mounted) {
       setState(() {
@@ -49,83 +49,92 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         ),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
-          child: _submitted
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 48),
-                    Container(
-                      width: 90,
-                      height: 90,
-                      decoration: const BoxDecoration(
-                        color: AppColors.secondaryContainer,
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.mark_email_read_rounded,
-                        size: 46,
-                        color: AppColors.secondary,
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    Text(
-                      'Recovery Instructions Sent',
-                      style: AppTypography.displaySmall.copyWith(fontWeight: FontWeight.w700),
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      'If an account exists for ${_emailController.text}, you will receive a secure cryptographic recovery link within a few minutes.',
-                      textAlign: TextAlign.center,
-                      style: AppTypography.bodyMedium,
-                    ),
-                    const SizedBox(height: 36),
-                    PrimaryButton(
-                      label: 'Return to Login',
-                      onPressed: () => context.pop(),
-                    ),
-                  ],
-                )
-              : Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Reset Master Password',
-                        style: AppTypography.displayMedium.copyWith(
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: -0.6,
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 420),
+              child: _submitted
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 48,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            color: AppColors.secondaryContainer,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Icon(
+                            Icons.mark_email_read_outlined,
+                            size: 24,
+                            color: AppColors.secondary,
+                          ),
                         ),
+                        const SizedBox(height: 18),
+                        Text(
+                          'Instructions Sent',
+                          style: AppTypography.titleLarge.copyWith(
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          'If an account exists for ${_emailController.text}, you will receive a secure password reset link.',
+                          textAlign: TextAlign.center,
+                          style: AppTypography.bodySmall,
+                        ),
+                        const SizedBox(height: 24),
+                        PrimaryButton(
+                          label: 'Back to Sign In',
+                          onPressed: () => context.pop(),
+                        ),
+                      ],
+                    )
+                  : Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Reset Password',
+                            style: AppTypography.displayMedium.copyWith(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 24,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            'Enter your email to receive recovery instructions.',
+                            style: AppTypography.bodySmall,
+                          ),
+                          const SizedBox(height: 20),
+                          CustomTextField(
+                            label: 'Email Address',
+                            hintText: 'name@example.com',
+                            controller: _emailController,
+                            keyboardType: TextInputType.emailAddress,
+                            validator: (val) {
+                              if (val == null || val.trim().isEmpty) {
+                                return 'Please enter your email';
+                              }
+                              if (!val.contains('@')) {
+                                return 'Enter a valid email';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 20),
+                          PrimaryButton(
+                            label: 'Send Reset Link',
+                            isLoading: _isLoading,
+                            onPressed: _handleSubmit,
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Enter your verified email. Because MediVision AI uses end-to-end encryption, account recovery relies on your private recovery key.',
-                        style: AppTypography.bodyMedium,
-                      ),
-                      const SizedBox(height: 32),
-                      CustomTextField(
-                        label: 'Registered Email Address',
-                        hintText: 'alex.morgan@example.com',
-                        controller: _emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        prefixIcon: const Icon(Icons.mail_outline_rounded, size: 20),
-                        validator: (val) {
-                          if (val == null || val.trim().isEmpty) return 'Please enter your email';
-                          if (!val.contains('@')) return 'Enter a valid email';
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 28),
-                      PrimaryButton(
-                        label: 'Send Recovery Key',
-                        isLoading: _isLoading,
-                        onPressed: _handleSubmit,
-                      ),
-                    ],
-                  ),
-                ),
+                    ),
+            ),
+          ),
         ),
       ),
     );

@@ -6,9 +6,6 @@ import '../../../core/utils/date_formatter.dart';
 import '../../../core/widgets/glass_card.dart';
 import '../../../shared/widgets/status_badge.dart';
 import '../models/timeline_entry.dart';
-import 'widgets/body_systems_diagram_card.dart';
-import 'widgets/interactive_human_body_diagram.dart';
-import 'widgets/weekly_rhythm_diagram_card.dart';
 
 class HealthTimelineScreen extends StatefulWidget {
   const HealthTimelineScreen({super.key});
@@ -18,7 +15,6 @@ class HealthTimelineScreen extends StatefulWidget {
 }
 
 class _HealthTimelineScreenState extends State<HealthTimelineScreen> {
-  int _viewMode = 0; // 0: Diagram & Balance View, 1: Milestone Journey View
   TimelineCategory _selectedFilter = TimelineCategory.all;
   final List<TimelineEntry> _allEntries = TimelineEntry.getSampleEntries();
 
@@ -29,10 +25,12 @@ class _HealthTimelineScreenState extends State<HealthTimelineScreen> {
       backgroundColor: Colors.transparent,
       builder: (context) {
         return Container(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.all(20),
           decoration: const BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(AppDimensions.radiusXL)),
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(AppDimensions.radiusL),
+            ),
           ),
           child: SafeArea(
             child: Column(
@@ -41,7 +39,7 @@ class _HealthTimelineScreenState extends State<HealthTimelineScreen> {
               children: [
                 Center(
                   child: Container(
-                    width: 44,
+                    width: 36,
                     height: 4,
                     decoration: BoxDecoration(
                       color: AppColors.border,
@@ -49,7 +47,7 @@ class _HealthTimelineScreenState extends State<HealthTimelineScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 18),
+                const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -63,45 +61,37 @@ class _HealthTimelineScreenState extends State<HealthTimelineScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 10),
                 Text(
                   entry.title,
-                  style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.w800),
+                  style: AppTypography.titleLarge.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
                 const SizedBox(height: 6),
                 Text(
                   entry.description,
                   style: AppTypography.bodyMedium,
                 ),
-                const SizedBox(height: 16),
-                // Non-technical Plain-English Box
+                const SizedBox(height: 14),
                 Container(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(14),
                   decoration: BoxDecoration(
-                    color: AppColors.secondaryContainer.withOpacity(0.4),
+                    color: AppColors.surfaceSubtle,
                     borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-                    border: Border.all(color: AppColors.secondary.withOpacity(0.2)),
+                    border: Border.all(color: AppColors.border),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          const Icon(Icons.lightbulb_outline_rounded,
-                              size: 18, color: AppColors.secondaryDark),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              'What this means for you (Simple takeaway)',
-                              style: AppTypography.labelMedium.copyWith(
-                                color: AppColors.secondaryDark,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                        ],
+                      Text(
+                        'Clinical Context',
+                        style: AppTypography.labelMedium.copyWith(
+                          color: AppColors.secondary,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 6),
                       Text(
                         entry.plainEnglishInsight,
                         style: AppTypography.bodyMedium.copyWith(
@@ -112,23 +102,22 @@ class _HealthTimelineScreenState extends State<HealthTimelineScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 16),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                        borderRadius: BorderRadius.circular(AppDimensions.radiusS),
                       ),
                     ),
                     onPressed: () => Navigator.pop(context),
-                    child: const Text('Got It', style: TextStyle(fontWeight: FontWeight.w700)),
+                    child: const Text('Close'),
                   ),
                 ),
-                const SizedBox(height: 8),
               ],
             ),
           ),
@@ -146,244 +135,81 @@ class _HealthTimelineScreenState extends State<HealthTimelineScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('My Health'),
-        actions: [
-          Container(
-            margin: const EdgeInsets.only(right: 14),
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-            decoration: BoxDecoration(
-              color: AppColors.secondaryContainer,
-              borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(Icons.favorite_rounded, size: 14, color: AppColors.secondaryDark),
-                const SizedBox(width: 5),
-                Text(
-                  'Vitals Calm',
-                  style: AppTypography.labelSmall.copyWith(
-                    color: AppColors.secondaryDark,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ],
-            ),
+        title: Text(
+          'Health Timeline',
+          style: AppTypography.titleMedium.copyWith(
+            fontWeight: FontWeight.w700,
           ),
-        ],
+        ),
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            // Ergonomic View Switcher (Body Balance vs Milestone Journey)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-              child: Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: AppColors.surfaceSubtle,
-                  borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
-                  border: Border.all(color: AppColors.border),
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: _ErgonomicViewTab(
-                        label: 'Body Anatomy & Diagrams',
-                        icon: Icons.accessibility_new_rounded,
-                        isSelected: _viewMode == 0,
-                        onTap: () => setState(() => _viewMode = 0),
-                      ),
-                    ),
-                    Expanded(
-                      child: _ErgonomicViewTab(
-                        label: 'Milestone Journey',
-                        icon: Icons.timeline_rounded,
-                        isSelected: _viewMode == 1,
-                        onTap: () => setState(() => _viewMode = 1),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-            Expanded(
-              child: _viewMode == 0
-                  ? _buildDiagramView()
-                  : _buildMilestoneJourneyView(filteredEntries),
-            ),
-          ],
-        ),
+        child: _buildTimelineView(filteredEntries),
       ),
     );
   }
 
-  // --- 1. DIAGRAM & SIMPLE INSIGHTS VIEW ---
-  Widget _buildDiagramView() {
-    return ListView(
-      physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-      children: [
-        // Daily Plain-English Takeaway Banner
-        Container(
-          padding: const EdgeInsets.all(18),
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [Color(0xFF0F1E3D), Color(0xFF132D5E)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
-            boxShadow: const [
-              BoxShadow(
-                color: Color(0x1E0B1B3D),
-                blurRadius: 18,
-                offset: Offset(0, 6),
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                    decoration: BoxDecoration(
-                      color: AppColors.secondary.withOpacity(0.3),
-                      borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
-                    ),
-                    child: Text(
-                      'TODAY\'S TAKEAWAY',
-                      style: AppTypography.labelSmall.copyWith(
-                        color: AppColors.secondaryLight,
-                        fontWeight: FontWeight.w800,
-                        fontSize: 9.5,
-                        letterSpacing: 0.8,
-                      ),
-                    ),
-                  ),
-                  const Spacer(),
-                  const Icon(Icons.check_circle_rounded, color: AppColors.accentEmerald, size: 16),
-                  const SizedBox(width: 4),
-                  Text(
-                    'High Energy Window',
-                    style: AppTypography.labelSmall.copyWith(
-                      color: AppColors.accentEmerald,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Text(
-                'Your body is operating in high harmony today.',
-                style: AppTypography.titleMedium.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                'You had nearly 2 hours of restorative deep sleep, your heart is beating calmly with zero extra strain, and your blood checkups are clean. You have plenty of stamina for the day.',
-                style: AppTypography.bodySmall.copyWith(
-                  color: const Color(0xFFCBD5E1),
-                  height: 1.45,
-                ),
-              ),
-              const SizedBox(height: 14),
-              Row(
-                children: [
-                  const Icon(Icons.water_drop_outlined, size: 14, color: AppColors.secondaryLight),
-                  const SizedBox(width: 6),
-                  Expanded(
-                    child: Text(
-                      'Action for today: Drink an extra glass of water around 3 PM to avoid late afternoon slumps.',
-                      style: AppTypography.labelSmall.copyWith(
-                        color: AppColors.secondaryLight,
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 18),
-
-        // Interactive Human Body Anatomy Diagram (Atlas + Heatmap + Regional Zones)
-        const InteractiveHumanBodyDiagram(),
-        const SizedBox(height: 18),
-
-        // Interactive Body Systems Balance Diagram
-        const BodySystemsDiagramCard(),
-        const SizedBox(height: 18),
-
-        // 7-Day Rhythm Diagram
-        const WeeklyRhythmDiagramCard(),
-        const SizedBox(height: 24),
-      ],
-    );
-  }
-
-  // --- 2. ERGONOMIC MILESTONE JOURNEY VIEW ---
-  Widget _buildMilestoneJourneyView(List<TimelineEntry> filteredEntries) {
+  // --- TIMELINE HISTORY VIEW ---
+  Widget _buildTimelineView(List<TimelineEntry> filteredEntries) {
     return Column(
       children: [
         // Category Filter Chips
         Container(
-          height: 44,
-          padding: const EdgeInsets.symmetric(vertical: 2),
+          height: 38,
+          margin: const EdgeInsets.symmetric(vertical: 6),
           child: ListView(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 20),
             children: [
               _FilterChipItem(
-                label: 'All Milestones',
+                label: 'All Activity',
                 isSelected: _selectedFilter == TimelineCategory.all,
                 onTap: () => setState(() => _selectedFilter = TimelineCategory.all),
               ),
               _FilterChipItem(
-                label: 'Sleep & Rest',
+                label: 'Sleep',
                 isSelected: _selectedFilter == TimelineCategory.sleep,
                 onTap: () => setState(() => _selectedFilter = TimelineCategory.sleep),
               ),
               _FilterChipItem(
-                label: 'Walking & Cardio',
+                label: 'Activity',
                 isSelected: _selectedFilter == TimelineCategory.activity,
                 onTap: () => setState(() => _selectedFilter = TimelineCategory.activity),
               ),
               _FilterChipItem(
-                label: 'Lab & Doctor Scans',
+                label: 'Symptoms',
+                isSelected: _selectedFilter == TimelineCategory.symptoms,
+                onTap: () => setState(() => _selectedFilter = TimelineCategory.symptoms),
+              ),
+              _FilterChipItem(
+                label: 'Reports',
                 isSelected: _selectedFilter == TimelineCategory.reports,
                 onTap: () => setState(() => _selectedFilter = TimelineCategory.reports),
               ),
               _FilterChipItem(
-                label: 'Daily Routines',
+                label: 'Medications',
                 isSelected: _selectedFilter == TimelineCategory.medications,
                 onTap: () => setState(() => _selectedFilter = TimelineCategory.medications),
               ),
             ],
           ),
         ),
-        const SizedBox(height: 8),
 
-        // Diagrammatic Journey List
+        // Timeline Items List
         Expanded(
           child: filteredEntries.isEmpty
               ? Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.history_toggle_off_rounded,
-                          size: 54, color: AppColors.textTertiary),
-                      const SizedBox(height: 12),
+                      const Icon(
+                        Icons.history_rounded,
+                        size: 40,
+                        color: AppColors.textTertiary,
+                      ),
+                      const SizedBox(height: 8),
                       Text(
-                        'No health entries in this category',
-                        style: AppTypography.titleMedium.copyWith(color: AppColors.textSecondary),
+                        'No records found in this category',
+                        style: AppTypography.bodySmall,
                       ),
                     ],
                   ),
@@ -400,51 +226,42 @@ class _HealthTimelineScreenState extends State<HealthTimelineScreen> {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          // Connected Flow Diagram Node Line
+                          // Connected timeline line
                           SizedBox(
-                            width: 38,
+                            width: 30,
                             child: Stack(
                               alignment: Alignment.topCenter,
                               children: [
                                 if (!isLast)
                                   Positioned(
-                                    top: 24,
+                                    top: 18,
                                     bottom: 0,
                                     child: Container(
-                                      width: 2.5,
-                                      color: entry.statusColor.withOpacity(0.25),
+                                      width: 1.5,
+                                      color: AppColors.border,
                                     ),
                                   ),
                                 Container(
                                   margin: const EdgeInsets.only(top: 14),
-                                  width: 26,
-                                  height: 26,
+                                  width: 18,
+                                  height: 18,
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     shape: BoxShape.circle,
-                                    border: Border.all(color: entry.statusColor, width: 3),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: entry.statusColor.withOpacity(0.25),
-                                        blurRadius: 8,
-                                      ),
-                                    ],
-                                  ),
-                                  child: Center(
-                                    child: Icon(entry.icon, size: 13, color: entry.statusColor),
+                                    border: Border.all(color: entry.statusColor, width: 2.5),
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                          const SizedBox(width: 12),
+                          const SizedBox(width: 8),
 
-                          // Ergonomic Journey Card
+                          // Clean Timeline Card
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.only(bottom: 16.0),
+                              padding: const EdgeInsets.only(bottom: 12.0),
                               child: GlassCard(
-                                padding: const EdgeInsets.all(16),
+                                padding: const EdgeInsets.all(14),
                                 onTap: () => _showMilestoneDetails(entry),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -461,61 +278,47 @@ class _HealthTimelineScreenState extends State<HealthTimelineScreen> {
                                         ),
                                         StatusBadge(
                                           label: entry.simplePillTag,
-                                          type: BadgeType.success,
+                                          type: BadgeType.neutral,
+                                          isPill: true,
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(height: 8),
+                                    const SizedBox(height: 6),
                                     Text(
                                       entry.title,
-                                      style: AppTypography.titleMedium.copyWith(
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 16,
+                                      style: AppTypography.titleSmall.copyWith(
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
-                                    const SizedBox(height: 4),
+                                    const SizedBox(height: 3),
                                     Text(
-                                      entry.plainEnglishInsight,
-                                      style: AppTypography.bodySmall.copyWith(
-                                        color: AppColors.textPrimary,
-                                        height: 1.4,
-                                        fontSize: 12.5,
-                                      ),
+                                      entry.description,
+                                      style: AppTypography.bodySmall,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                    const SizedBox(height: 10),
+                                    const SizedBox(height: 8),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                                           decoration: BoxDecoration(
                                             color: AppColors.surfaceSubtle,
-                                            borderRadius: BorderRadius.circular(AppDimensions.radiusS),
+                                            borderRadius: BorderRadius.circular(4),
                                           ),
                                           child: Text(
                                             entry.metricValue,
                                             style: AppTypography.labelSmall.copyWith(
-                                              color: AppColors.textPrimary,
-                                              fontWeight: FontWeight.w700,
+                                              fontWeight: FontWeight.w600,
                                               fontSize: 11,
                                             ),
                                           ),
                                         ),
-                                        Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text(
-                                              'Learn more',
-                                              style: AppTypography.labelSmall.copyWith(
-                                                color: AppColors.secondary,
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 11,
-                                              ),
-                                            ),
-                                            const SizedBox(width: 2),
-                                            const Icon(Icons.chevron_right_rounded,
-                                                size: 16, color: AppColors.secondary),
-                                          ],
+                                        const Icon(
+                                          Icons.chevron_right_rounded,
+                                          size: 16,
+                                          color: AppColors.textTertiary,
                                         ),
                                       ],
                                     ),
@@ -535,68 +338,6 @@ class _HealthTimelineScreenState extends State<HealthTimelineScreen> {
   }
 }
 
-class _ErgonomicViewTab extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _ErgonomicViewTab({
-    required this.label,
-    required this.icon,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.white : Colors.transparent,
-          borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
-          boxShadow: isSelected
-              ? [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.06),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ]
-              : null,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              size: 15,
-              color: isSelected ? AppColors.primary : AppColors.textTertiary,
-            ),
-            const SizedBox(width: 5),
-            Flexible(
-              child: Text(
-                label,
-                style: AppTypography.labelSmall.copyWith(
-                  color: isSelected ? AppColors.primary : AppColors.textSecondary,
-                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                  fontSize: 11.5,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class _FilterChipItem extends StatelessWidget {
   final String label;
   final bool isSelected;
@@ -611,19 +352,22 @@ class _FilterChipItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right: 8.0),
+      padding: const EdgeInsets.only(right: 6),
       child: FilterChip(
         label: Text(label),
         selected: isSelected,
         onSelected: (_) => onTap(),
-        selectedColor: AppColors.primary,
+        selectedColor: AppColors.secondaryContainer,
         backgroundColor: Colors.white,
-        labelStyle: TextStyle(
-          color: isSelected ? Colors.white : AppColors.textSecondary,
-          fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-          fontSize: 12,
+        side: BorderSide(
+          color: isSelected ? AppColors.secondary : AppColors.border,
+          width: 0.8,
         ),
-        side: BorderSide(color: isSelected ? AppColors.primary : AppColors.border),
+        labelStyle: AppTypography.labelSmall.copyWith(
+          color: isSelected ? AppColors.secondary : AppColors.textSecondary,
+          fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
       ),
     );
   }

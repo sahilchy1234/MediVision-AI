@@ -22,7 +22,7 @@ class PrimaryButton extends StatelessWidget {
     this.icon,
     this.isLoading = false,
     this.isFullWidth = true,
-    this.height = 54,
+    this.height = 46,
   });
 
   @override
@@ -53,17 +53,17 @@ class PrimaryButton extends StatelessWidget {
 
     BorderSide? getBorder() {
       if (variant == ButtonVariant.outline) {
-        return const BorderSide(color: AppColors.border, width: 1.5);
+        return const BorderSide(color: AppColors.border, width: 1.0);
       }
       return null;
     }
 
     Widget content = isLoading
         ? SizedBox(
-            height: 20,
-            width: 20,
+            height: 18,
+            width: 18,
             child: CircularProgressIndicator(
-              strokeWidth: 2.2,
+              strokeWidth: 2.0,
               valueColor: AlwaysStoppedAnimation<Color>(getForegroundColor()),
             ),
           )
@@ -72,7 +72,7 @@ class PrimaryButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (icon != null) ...[
-                Icon(icon, size: 18, color: getForegroundColor()),
+                Icon(icon, size: 16, color: getForegroundColor()),
                 const SizedBox(width: 8),
               ],
               Text(
@@ -80,6 +80,7 @@ class PrimaryButton extends StatelessWidget {
                 style: AppTypography.labelLarge.copyWith(
                   color: getForegroundColor(),
                   fontWeight: FontWeight.w600,
+                  fontSize: 13.5,
                 ),
               ),
             ],
@@ -91,9 +92,9 @@ class PrimaryButton extends StatelessWidget {
       elevation: 0,
       side: getBorder(),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+        borderRadius: BorderRadius.circular(AppDimensions.radiusS),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
     );
 
     Widget button = SizedBox(
@@ -106,12 +107,8 @@ class PrimaryButton extends StatelessWidget {
     );
 
     if (isFullWidth) {
-      return SizedBox(
-        width: double.infinity,
-        child: button,
-      );
+      return SizedBox(width: double.infinity, child: button);
     }
     return button;
   }
 }
-

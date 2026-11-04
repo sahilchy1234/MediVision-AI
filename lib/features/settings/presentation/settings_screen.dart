@@ -24,7 +24,6 @@ class SettingsScreen extends ConsumerStatefulWidget {
 
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   bool _biometricsEnabled = true;
-  bool _anonymousInsights = true;
 
   void _showChangeStorageDialog() {
     final current = ref.read(storageSelectionProvider);
@@ -32,16 +31,24 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppDimensions.radiusL)),
-          title: const Text('Change Storage Mode'),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppDimensions.radiusL),
+          ),
+          title: const Text('Storage Mode'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: StorageMode.values.map((mode) {
               return RadioListTile<StorageMode>(
                 value: mode,
                 groupValue: current,
-                title: Text(mode.title, style: const TextStyle(fontWeight: FontWeight.w600)),
-                subtitle: Text(mode.description, style: const TextStyle(fontSize: 12)),
+                title: Text(
+                  mode.title,
+                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13.5),
+                ),
+                subtitle: Text(
+                  mode.description,
+                  style: const TextStyle(fontSize: 12),
+                ),
                 onChanged: (newMode) {
                   if (newMode != null) {
                     ref.read(storageSelectionProvider.notifier).setStorageMode(newMode);
@@ -55,7 +62,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Close'),
+              child: const Text('Done'),
             ),
           ],
         );
@@ -67,35 +74,22 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppDimensions.radiusL)),
-        title: Row(
-          children: [
-            Container(
-              width: 36,
-              height: 36,
-              decoration: BoxDecoration(
-                color: AppColors.primary,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Icon(Icons.remove_red_eye_rounded, color: Colors.white, size: 20),
-            ),
-            const SizedBox(width: 12),
-            const Text('MediVision AI'),
-          ],
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppDimensions.radiusL),
         ),
+        title: const Text('About MediVision'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Version 1.0.0-foundation',
+              'Version 1.0.0 (Production)',
               style: AppTypography.labelMedium.copyWith(color: AppColors.secondary),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
             Text(
-              'Your Personal AI Health Companion & Intelligent Medical History Platform.\n\n'
-              'Built with state-of-the-art Flutter architecture, strict Material 3 design systems, and zero-knowledge privacy standards.\n\n'
-              'Disclaimer: MediVision AI is designed for personal health memory and clinical organization. It does not replace certified physician diagnosis.',
+              'MediVision organizes personal health metrics, medical records, and clinical timelines with client-side zero-knowledge encryption.\n\n'
+              'Notice: MediVision is an information management and consultation aid and does not substitute for emergency medical care or direct clinical diagnosis.',
               style: AppTypography.bodySmall.copyWith(height: 1.45),
             ),
           ],
@@ -103,7 +97,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Done'),
+            child: const Text('Close'),
           ),
         ],
       ),
@@ -120,202 +114,259 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Profile & Settings'),
+        title: Text(
+          'Profile & Settings',
+          style: AppTypography.titleMedium.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
+        ),
       ),
       body: SafeArea(
         child: ListView(
           physics: const BouncingScrollPhysics(),
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
           children: [
             // User Profile Header Card
             GlassCard(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(16),
               child: Row(
                 children: [
                   CircleAvatar(
-                    radius: 32,
-                    backgroundColor: AppColors.primary,
+                    radius: 26,
+                    backgroundColor: AppColors.primaryContainer,
                     child: Text(
-                      profile.fullName.isNotEmpty ? profile.fullName[0].toUpperCase() : 'A',
+                      profile.fullName.isNotEmpty ? profile.fullName[0].toUpperCase() : 'P',
                       style: const TextStyle(
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.primary,
                       ),
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  const SizedBox(width: 14),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           profile.fullName,
-                          style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.w800),
+                          style: AppTypography.titleMedium.copyWith(
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
-                        const SizedBox(height: 4),
+                        const SizedBox(height: 2),
                         Text(
-                          '${profile.gender ?? "Individual"} • ${profile.heightCm?.toStringAsFixed(0) ?? 175} cm • ${profile.weightKg?.toStringAsFixed(1) ?? 68.5} kg',
+                          '${profile.gender ?? "Patient"} • ${profile.heightCm?.toStringAsFixed(0) ?? 175} cm • ${profile.weightKg?.toStringAsFixed(1) ?? 68.5} kg',
                           style: AppTypography.bodySmall,
-                        ),
-                        const SizedBox(height: 6),
-                        const StatusBadge(
-                          label: 'Clinical Profile Verified',
-                          type: BadgeType.success,
-                          icon: Icons.verified_user_rounded,
                         ),
                       ],
                     ),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.edit_outlined, color: AppColors.secondary),
+                    icon: const Icon(Icons.edit_outlined, size: 20, color: AppColors.textSecondary),
                     onPressed: () => context.push('/profile-setup'),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 12),
 
-            // Storage Section
-            const SectionHeader(title: 'Storage & Data Architecture'),
+            // Storage Architecture Section
+            const SectionHeader(title: 'Data & Storage'),
             GlassCard(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              child: ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: AppColors.surfaceSubtle,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(Icons.cloud_queue_rounded, color: AppColors.secondary, size: 18),
+                ),
+                title: Text(
+                  storageMode.title,
+                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13.5),
+                ),
+                subtitle: Text(
+                  storageMode.description,
+                  style: AppTypography.bodySmall.copyWith(fontSize: 11),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                trailing: TextButton(
+                  onPressed: _showChangeStorageDialog,
+                  child: const Text('Change'),
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+
+            // Integrations & Permissions
+            const SectionHeader(title: 'Connected Health Sources'),
+            GlassCard(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               child: Column(
                 children: [
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     leading: Container(
-                      padding: const EdgeInsets.all(10),
+                      width: 36,
+                      height: 36,
                       decoration: BoxDecoration(
-                        color: AppColors.secondaryContainer,
-                        borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                        color: AppColors.surfaceSubtle,
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                      child: const Icon(Icons.cloud_sync_rounded, color: AppColors.secondaryDark),
+                      child: const Icon(Icons.tune_rounded, color: AppColors.primary, size: 18),
                     ),
-                    title: Text(storageMode.title, style: const TextStyle(fontWeight: FontWeight.w700)),
+                    title: const Text(
+                      'Data Permissions',
+                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13.5),
+                    ),
                     subtitle: Text(
-                      storageMode.description,
-                      style: AppTypography.bodySmall,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                      '$connectedCount of ${permissions.length} active',
+                      style: AppTypography.bodySmall.copyWith(fontSize: 11),
                     ),
-                    trailing: OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                        minimumSize: const Size(0, 32),
-                      ),
-                      onPressed: _showChangeStorageDialog,
-                      child: const Text('Change'),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            // Integration & Permissions
-            const SectionHeader(title: 'Integrations & Access'),
-            GlassCard(
-              padding: const EdgeInsets.all(8),
-              child: Column(
-                children: [
-                  ListTile(
-                    leading: const Icon(Icons.security_rounded, color: AppColors.primary),
-                    title: const Text('Permissions & Data Sources', style: TextStyle(fontWeight: FontWeight.w600)),
-                    subtitle: Text('$connectedCount of ${permissions.length} live data sources connected'),
-                    trailing: StatusBadge(
-                      label: '$connectedCount Connected',
-                      type: connectedCount > 0 ? BadgeType.success : BadgeType.neutral,
-                    ),
+                    trailing: const Icon(Icons.chevron_right_rounded, size: 18, color: AppColors.textTertiary),
                     onTap: () => context.push('/permissions'),
                   ),
                   if (profile.isFemale) ...[
                     const Divider(height: 1),
                     ListTile(
-                      leading: const Icon(Icons.spa_rounded, color: AppColors.accentRose),
-                      title: const Text("Women's Health Companion", style: TextStyle(fontWeight: FontWeight.w600)),
-                      subtitle: const Text('Cycle intelligence, PCOS/Endo screening & reproductive vault'),
-                      trailing: const Icon(Icons.chevron_right_rounded),
+                      contentPadding: EdgeInsets.zero,
+                      leading: Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: AppColors.accentRose.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Icon(Icons.water_drop_outlined, color: AppColors.accentRose, size: 18),
+                      ),
+                      title: const Text(
+                        "Women's Health Settings",
+                        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13.5),
+                      ),
+                      subtitle: Text(
+                        'Cycle tracking & private vault',
+                        style: AppTypography.bodySmall.copyWith(fontSize: 11),
+                      ),
+                      trailing: const Icon(Icons.chevron_right_rounded, size: 18, color: AppColors.textTertiary),
                       onTap: () => context.push('/womens-health'),
                     ),
                   ],
-                  const Divider(height: 1),
-                  ListTile(
-                    leading: const Icon(Icons.watch_rounded, color: AppColors.secondary),
-                    title: const Text('Connected Health Monitors', style: TextStyle(fontWeight: FontWeight.w600)),
-                    subtitle: const Text('Apple Watch Series 9, Oura Ring Gen 3 (Paired)'),
-                    trailing: const StatusBadge(label: '2 Active', type: BadgeType.info),
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Connected Devices: Apple Watch & Oura Ring active.')),
-                      );
-                    },
-                  ),
                 ],
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 12),
 
             // Privacy & Security
-            const SectionHeader(title: 'Privacy & Security'),
+            const SectionHeader(title: 'Security'),
             GlassCard(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               child: Column(
                 children: [
                   SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
                     value: _biometricsEnabled,
                     activeColor: AppColors.secondary,
-                    secondary: const Icon(Icons.fingerprint_rounded, color: AppColors.primary),
-                    title: const Text('Biometric Authentication', style: TextStyle(fontWeight: FontWeight.w600)),
-                    subtitle: const Text('Require FaceID / Fingerprint on launch'),
+                    secondary: Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: AppColors.surfaceSubtle,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Icon(Icons.fingerprint_rounded, color: AppColors.primary, size: 18),
+                    ),
+                    title: const Text(
+                      'Biometric Lock',
+                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13.5),
+                    ),
+                    subtitle: Text(
+                      'Require authentication on open',
+                      style: AppTypography.bodySmall.copyWith(fontSize: 11),
+                    ),
                     onChanged: (val) => setState(() => _biometricsEnabled = val),
                   ),
                   const Divider(height: 1),
-                  SwitchListTile(
-                    value: _anonymousInsights,
-                    activeColor: AppColors.secondary,
-                    secondary: const Icon(Icons.psychology_alt_rounded, color: AppColors.accentIndigo),
-                    title: const Text('Differential Privacy Analysis', style: TextStyle(fontWeight: FontWeight.w600)),
-                    subtitle: const Text('Enable on-device model learning without raw data export'),
-                    onChanged: (val) => setState(() => _anonymousInsights = val),
-                  ),
-                  const Divider(height: 1),
                   ListTile(
-                    leading: const Icon(Icons.file_download_outlined, color: AppColors.accentEmerald),
-                    title: const Text('Data Export & FHIR Transfer', style: TextStyle(fontWeight: FontWeight.w600)),
-                    subtitle: const Text('Export all personal health data in encrypted JSON/PDF'),
-                    trailing: const Icon(Icons.chevron_right_rounded),
+                    contentPadding: EdgeInsets.zero,
+                    leading: Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: AppColors.surfaceSubtle,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Icon(Icons.download_outlined, color: AppColors.secondary, size: 18),
+                    ),
+                    title: const Text(
+                      'Export Health Archive',
+                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13.5),
+                    ),
+                    subtitle: Text(
+                      'Download records in JSON / PDF format',
+                      style: AppTypography.bodySmall.copyWith(fontSize: 11),
+                    ),
+                    trailing: const Icon(Icons.chevron_right_rounded, size: 18, color: AppColors.textTertiary),
                     onTap: () {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Preparing secure FHIR data archive...')),
+                        const SnackBar(
+                          content: Text('Exporting patient health archive...'),
+                          behavior: SnackBarBehavior.floating,
+                        ),
                       );
                     },
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 12),
 
-            // About & System
-            const SectionHeader(title: 'Information & Support'),
+            // Information & Sign Out
+            const SectionHeader(title: 'Account'),
             GlassCard(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               child: Column(
                 children: [
                   ListTile(
-                    leading: const Icon(Icons.info_outline_rounded, color: AppColors.textSecondary),
-                    title: const Text('About MediVision AI', style: TextStyle(fontWeight: FontWeight.w600)),
-                    subtitle: const Text('Platform architecture & medical notices'),
-                    trailing: const Icon(Icons.chevron_right_rounded),
+                    contentPadding: EdgeInsets.zero,
+                    leading: Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: AppColors.surfaceSubtle,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Icon(Icons.info_outline_rounded, color: AppColors.textSecondary, size: 18),
+                    ),
+                    title: const Text(
+                      'About MediVision',
+                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13.5),
+                    ),
+                    trailing: const Icon(Icons.chevron_right_rounded, size: 18, color: AppColors.textTertiary),
                     onTap: _showAboutDialog,
                   ),
                   const Divider(height: 1),
                   ListTile(
-                    leading: const Icon(Icons.logout_rounded, color: AppColors.error),
+                    contentPadding: EdgeInsets.zero,
+                    leading: Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: AppColors.errorBackground,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Icon(Icons.logout_rounded, color: AppColors.error, size: 18),
+                    ),
                     title: const Text(
                       'Sign Out',
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
+                        fontSize: 13.5,
                         color: AppColors.error,
                       ),
                     ),
@@ -330,7 +381,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 36),
+            const SizedBox(height: 30),
           ],
         ),
       ),

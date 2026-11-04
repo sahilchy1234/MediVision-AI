@@ -1,17 +1,15 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:medivision_app/app/app.dart';
-import 'package:medivision_app/features/splash/presentation/splash_screen.dart';
+import 'package:medivision_app/features/dashboard/presentation/dashboard_screen.dart';
 
 void main() {
-  testWidgets('MediVision AI app smoke test', (WidgetTester tester) async {
+  testWidgets('MediVision app smoke test', (WidgetTester tester) async {
     await tester.pumpWidget(const ProviderScope(child: MediVisionApp()));
+    await tester.pumpAndSettle();
 
-    // Initial frame renders splash screen and brand tagline
-    expect(find.byType(SplashScreen), findsOneWidget);
-    expect(
-      find.text('Your Health. Your Data. Your AI.'),
-      findsOneWidget,
-    );
+    // Initial frame renders home dashboard
+    expect(find.byType(DashboardScreen), findsOneWidget);
+    expect(find.text('Patient Overview'), findsOneWidget);
   });
 }
