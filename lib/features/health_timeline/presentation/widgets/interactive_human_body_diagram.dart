@@ -286,6 +286,11 @@ class _InteractiveHumanBodyDiagramState
 
   @override
   Widget build(BuildContext context) {
+    // Prevent unlaid-out background rendering when this tab is offstage in IndexedStack
+    if (!TickerMode.of(context)) {
+      return const SizedBox.shrink();
+    }
+
     return GlassCard(
       padding: const EdgeInsets.all(20),
       borderRadius: AppDimensions.radiusXL,
@@ -618,11 +623,13 @@ class _InteractiveHumanBodyDiagramState
         return SizedBox(
           width: 300,
           height: 330,
-          child: BodyAtlasView<MuscleInfo>(
-            view: _atlasView,
-            resolver: const MuscleResolver(),
-            colorMapping: colorMap,
-            onTapElement: _onAtlasTapped,
+          child: ExcludeSemantics(
+            child: BodyAtlasView<MuscleInfo>(
+              view: _atlasView,
+              resolver: const MuscleResolver(),
+              colorMapping: colorMap,
+              onTapElement: _onAtlasTapped,
+            ),
           ),
         );
 

@@ -139,8 +139,8 @@
     "medicalConditions": [],
     "enableWomensHealth": false,
     "createdAt": "2026-11-04T06:11:58.320Z",
-    "updatedAt": "2026-11-04T06:51:39.536Z",
-    "lastLoginAt": "2026-11-04T06:51:39.534Z",
+    "updatedAt": "2026-11-04T07:17:57.083Z",
+    "lastLoginAt": "2026-11-04T07:02:52.214Z",
     "permissions": {
       "sleep_health": true,
       "physical_activity": true,
