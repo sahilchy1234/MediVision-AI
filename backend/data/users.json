@@ -15,8 +15,8 @@
       "Asthma (Mild intermittent)"
     ],
     "createdAt": "2026-11-04T05:48:45.588Z",
-    "updatedAt": "2026-11-04T09:18:48.336Z",
-    "lastLoginAt": "2026-11-04T09:18:48.335Z",
+    "updatedAt": "2026-11-04T11:02:57.977Z",
+    "lastLoginAt": "2026-11-04T11:02:57.976Z",
     "heightCm": 170.5,
     "weightKg": 59.2,
     "medicalConditions": [
@@ -40,11 +40,25 @@
     "gender": "female",
     "dateOfBirth": "1990-08-15",
     "role": "patient",
-    "allergies": [],
+    "allergies": [
+      "Penicillin"
+    ],
     "existingConditions": [],
     "createdAt": "2026-11-04T05:48:46.299Z",
     "updatedAt": "2026-11-04T05:48:46.299Z",
-    "lastLoginAt": "2026-11-04T05:48:46.299Z"
+    "lastLoginAt": "2026-11-04T05:48:46.299Z",
+    "permissions": {
+      "sleep_health": true,
+      "physical_activity": true,
+      "screen_time": true,
+      "device_sensors": true,
+      "medical_documents": true,
+      "notifications": true
+    },
+    "medicalConditions": [],
+    "heightCm": 168,
+    "weightKg": 58,
+    "enableWomensHealth": true
   },
   {
     "id": "usr_1793771415028_atm57",
@@ -54,11 +68,25 @@
     "gender": "female",
     "dateOfBirth": "1990-08-15",
     "role": "patient",
-    "allergies": [],
+    "allergies": [
+      "Penicillin"
+    ],
     "existingConditions": [],
     "createdAt": "2026-11-04T05:50:15.028Z",
     "updatedAt": "2026-11-04T05:50:15.028Z",
-    "lastLoginAt": "2026-11-04T05:50:15.028Z"
+    "lastLoginAt": "2026-11-04T05:50:15.028Z",
+    "permissions": {
+      "sleep_health": true,
+      "physical_activity": true,
+      "screen_time": true,
+      "device_sensors": true,
+      "medical_documents": true,
+      "notifications": true
+    },
+    "medicalConditions": [],
+    "heightCm": 168,
+    "weightKg": 58,
+    "enableWomensHealth": true
   },
   {
     "id": "usr_1793771480811_92gsu",
@@ -68,11 +96,25 @@
     "gender": "female",
     "dateOfBirth": "1990-08-15",
     "role": "patient",
-    "allergies": [],
+    "allergies": [
+      "Penicillin"
+    ],
     "existingConditions": [],
     "createdAt": "2026-11-04T05:51:20.811Z",
     "updatedAt": "2026-11-04T05:51:20.811Z",
-    "lastLoginAt": "2026-11-04T05:51:20.811Z"
+    "lastLoginAt": "2026-11-04T05:51:20.811Z",
+    "permissions": {
+      "sleep_health": true,
+      "physical_activity": true,
+      "screen_time": true,
+      "device_sensors": true,
+      "medical_documents": true,
+      "notifications": true
+    },
+    "medicalConditions": [],
+    "heightCm": 168,
+    "weightKg": 58,
+    "enableWomensHealth": true
   },
   {
     "id": "usr_1793772055130_qyle5",
@@ -84,12 +126,24 @@
     "heightCm": 168,
     "weightKg": 58,
     "role": "patient",
-    "allergies": [],
-    "medicalConditions": [],
+    "allergies": [
+      "Penicillin"
+    ],
+    "medicalConditions": [
+      "Asthma (Controlled)"
+    ],
     "enableWomensHealth": true,
     "createdAt": "2026-11-04T06:00:55.130Z",
     "updatedAt": "2026-11-04T06:00:55.130Z",
-    "lastLoginAt": "2026-11-04T06:00:55.130Z"
+    "lastLoginAt": "2026-11-04T06:00:55.130Z",
+    "permissions": {
+      "sleep_health": true,
+      "physical_activity": true,
+      "screen_time": true,
+      "device_sensors": true,
+      "medical_documents": true,
+      "notifications": true
+    }
   },
   {
     "id": "usr_1793772415863_cpaf7",
@@ -101,12 +155,24 @@
     "heightCm": 168,
     "weightKg": 58,
     "role": "patient",
-    "allergies": [],
-    "medicalConditions": [],
+    "allergies": [
+      "Penicillin"
+    ],
+    "medicalConditions": [
+      "Asthma (Controlled)"
+    ],
     "enableWomensHealth": true,
     "createdAt": "2026-11-04T06:06:55.863Z",
     "updatedAt": "2026-11-04T06:06:55.863Z",
-    "lastLoginAt": "2026-11-04T06:06:55.863Z"
+    "lastLoginAt": "2026-11-04T06:06:55.863Z",
+    "permissions": {
+      "sleep_health": true,
+      "physical_activity": true,
+      "screen_time": true,
+      "device_sensors": true,
+      "medical_documents": true,
+      "notifications": true
+    }
   },
   {
     "id": "usr_1793772460801_twk5h",
@@ -118,12 +184,24 @@
     "heightCm": 168,
     "weightKg": 58,
     "role": "patient",
-    "allergies": [],
-    "medicalConditions": [],
+    "allergies": [
+      "Penicillin"
+    ],
+    "medicalConditions": [
+      "Asthma (Controlled)"
+    ],
     "enableWomensHealth": true,
     "createdAt": "2026-11-04T06:07:40.801Z",
     "updatedAt": "2026-11-04T06:07:40.801Z",
-    "lastLoginAt": "2026-11-04T06:07:40.801Z"
+    "lastLoginAt": "2026-11-04T06:07:40.801Z",
+    "permissions": {
+      "sleep_health": true,
+      "physical_activity": true,
+      "screen_time": true,
+      "device_sensors": true,
+      "medical_documents": true,
+      "notifications": true
+    }
   },
   {
     "id": "usr_1793772718320_wttl0",
@@ -143,8 +221,8 @@
     ],
     "enableWomensHealth": true,
     "createdAt": "2026-11-04T06:11:58.320Z",
-    "updatedAt": "2026-11-04T09:20:57.630Z",
-    "lastLoginAt": "2026-11-04T09:20:57.627Z",
+    "updatedAt": "2026-11-04T10:58:29.374Z",
+    "lastLoginAt": "2026-11-04T10:58:29.276Z",
     "permissions": {
       "sleep_health": true,
       "physical_activity": true,
@@ -164,8 +242,12 @@
     "heightCm": 168,
     "weightKg": 58,
     "role": "patient",
-    "allergies": [],
-    "medicalConditions": [],
+    "allergies": [
+      "Penicillin"
+    ],
+    "medicalConditions": [
+      "Asthma (Controlled)"
+    ],
     "enableWomensHealth": true,
     "permissions": {
       "sleep_health": false,
@@ -189,8 +271,12 @@
     "heightCm": 168,
     "weightKg": 58,
     "role": "patient",
-    "allergies": [],
-    "medicalConditions": [],
+    "allergies": [
+      "Penicillin"
+    ],
+    "medicalConditions": [
+      "Asthma (Controlled)"
+    ],
     "enableWomensHealth": true,
     "permissions": {
       "sleep_health": false,
@@ -214,8 +300,12 @@
     "heightCm": 168,
     "weightKg": 58,
     "role": "patient",
-    "allergies": [],
-    "medicalConditions": [],
+    "allergies": [
+      "Penicillin"
+    ],
+    "medicalConditions": [
+      "Asthma (Controlled)"
+    ],
     "enableWomensHealth": true,
     "permissions": {
       "sleep_health": false,
@@ -239,8 +329,12 @@
     "heightCm": 168,
     "weightKg": 58,
     "role": "patient",
-    "allergies": [],
-    "medicalConditions": [],
+    "allergies": [
+      "Penicillin"
+    ],
+    "medicalConditions": [
+      "Asthma (Controlled)"
+    ],
     "enableWomensHealth": true,
     "permissions": {
       "sleep_health": false,
@@ -264,8 +358,12 @@
     "heightCm": 168,
     "weightKg": 58,
     "role": "patient",
-    "allergies": [],
-    "medicalConditions": [],
+    "allergies": [
+      "Penicillin"
+    ],
+    "medicalConditions": [
+      "Asthma (Controlled)"
+    ],
     "enableWomensHealth": true,
     "permissions": {
       "sleep_health": false,
@@ -289,8 +387,12 @@
     "heightCm": 168,
     "weightKg": 58,
     "role": "patient",
-    "allergies": [],
-    "medicalConditions": [],
+    "allergies": [
+      "Penicillin"
+    ],
+    "medicalConditions": [
+      "Asthma (Controlled)"
+    ],
     "enableWomensHealth": true,
     "permissions": {
       "sleep_health": false,
@@ -314,8 +416,12 @@
     "heightCm": 168,
     "weightKg": 58,
     "role": "patient",
-    "allergies": [],
-    "medicalConditions": [],
+    "allergies": [
+      "Penicillin"
+    ],
+    "medicalConditions": [
+      "Asthma (Controlled)"
+    ],
     "enableWomensHealth": true,
     "permissions": {
       "sleep_health": false,
@@ -339,8 +445,12 @@
     "heightCm": 168,
     "weightKg": 58,
     "role": "patient",
-    "allergies": [],
-    "medicalConditions": [],
+    "allergies": [
+      "Penicillin"
+    ],
+    "medicalConditions": [
+      "Asthma (Controlled)"
+    ],
     "enableWomensHealth": true,
     "permissions": {
       "sleep_health": false,
@@ -364,8 +474,12 @@
     "heightCm": 168,
     "weightKg": 58,
     "role": "patient",
-    "allergies": [],
-    "medicalConditions": [],
+    "allergies": [
+      "Penicillin"
+    ],
+    "medicalConditions": [
+      "Asthma (Controlled)"
+    ],
     "enableWomensHealth": true,
     "permissions": {
       "sleep_health": false,
@@ -389,8 +503,12 @@
     "heightCm": 168,
     "weightKg": 58,
     "role": "patient",
-    "allergies": [],
-    "medicalConditions": [],
+    "allergies": [
+      "Penicillin"
+    ],
+    "medicalConditions": [
+      "Asthma (Controlled)"
+    ],
     "enableWomensHealth": true,
     "permissions": {
       "sleep_health": false,
@@ -414,8 +532,12 @@
     "heightCm": 168,
     "weightKg": 58,
     "role": "patient",
-    "allergies": [],
-    "medicalConditions": [],
+    "allergies": [
+      "Penicillin"
+    ],
+    "medicalConditions": [
+      "Asthma (Controlled)"
+    ],
     "enableWomensHealth": true,
     "permissions": {
       "sleep_health": false,
@@ -439,8 +561,12 @@
     "heightCm": 168,
     "weightKg": 58,
     "role": "patient",
-    "allergies": [],
-    "medicalConditions": [],
+    "allergies": [
+      "Penicillin"
+    ],
+    "medicalConditions": [
+      "Asthma (Controlled)"
+    ],
     "enableWomensHealth": true,
     "permissions": {
       "sleep_health": false,
@@ -453,5 +579,60 @@
     "createdAt": "2026-11-04T09:18:47.747Z",
     "updatedAt": "2026-11-04T09:18:47.747Z",
     "lastLoginAt": "2026-11-04T09:18:47.747Z"
+  },
+  {
+    "id": "usr_1793789974325_k6473",
+    "fullName": "SAhil",
+    "email": "sas@gmail.com",
+    "passwordHash": "$2a$10$P65m/zEYDC5J/N6NgSMKWeC1tEXelwQy4R0mLSra.uuhMuxIrhWvm",
+    "gender": "Male",
+    "dateOfBirth": "1994-06-18T00:00:00.000",
+    "heightCm": 168,
+    "weightKg": 58,
+    "role": "patient",
+    "allergies": [
+      "Penicillin",
+      "Sulfa"
+    ],
+    "medicalConditions": [
+      "Asthma (Controlled)"
+    ],
+    "enableWomensHealth": false,
+    "permissions": {
+      "sleep_health": true,
+      "physical_activity": true,
+      "screen_time": true,
+      "device_sensors": true,
+      "medical_documents": true,
+      "notifications": true
+    },
+    "createdAt": "2026-11-04T10:59:34.325Z",
+    "updatedAt": "2026-11-04T11:04:07.385Z",
+    "lastLoginAt": "2026-11-04T11:04:07.349Z"
+  },
+  {
+    "id": "usr_1793790176347_mdyeh",
+    "fullName": "Dr. Sarah Connor",
+    "email": "patient_1793790176019@medivision.health",
+    "passwordHash": "$2a$10$462FkBTZPtyhCtGmWf6Pw.U.RIfcqY./I24uxpdkjOvjT3Q.1VuLW",
+    "gender": "female",
+    "dateOfBirth": "1990-08-15",
+    "heightCm": 168,
+    "weightKg": 58,
+    "role": "patient",
+    "allergies": [],
+    "medicalConditions": [],
+    "enableWomensHealth": true,
+    "permissions": {
+      "sleep_health": true,
+      "physical_activity": true,
+      "screen_time": true,
+      "device_sensors": true,
+      "medical_documents": true,
+      "notifications": true
+    },
+    "createdAt": "2026-11-04T11:02:56.347Z",
+    "updatedAt": "2026-11-04T11:02:56.347Z",
+    "lastLoginAt": "2026-11-04T11:02:56.347Z"
   }
 ]

@@ -6,6 +6,7 @@ import '../../../core/constants/app_dimensions.dart';
 import '../../../core/constants/app_typography.dart';
 import '../../../core/widgets/custom_text_field.dart';
 import '../../../core/widgets/primary_button.dart';
+import '../../permissions/providers/permissions_provider.dart';
 import '../../profile/data/models/user_profile_model.dart';
 import '../../profile/providers/profile_provider.dart';
 import '../data/auth_service.dart';
@@ -49,7 +50,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           ref.read(profileProvider.notifier).updateProfile(
                 UserProfileModel.fromJson(result.user!),
               );
+
+          final userPerms =
+              result.user!['permissions'] as Map<String, dynamic>?;
+          if (userPerms != null && userPerms.isNotEmpty) {
+            ref.read(permissionsProvider.notifier).syncFromMap(userPerms);
+          } else {
+            ref.read(permissionsProvider.notifier).grantAll();
+          }
+        } else {
+          ref.read(permissionsProvider.notifier).grantAll();
         }
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(result.message),

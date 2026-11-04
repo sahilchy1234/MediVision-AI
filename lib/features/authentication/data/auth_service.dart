@@ -58,6 +58,13 @@ class AuthService {
           value: tokenData['refreshToken'] as String,
         );
 
+        if (user['permissions'] != null) {
+          await _storage.write(
+            key: 'medivision_permissions_map',
+            value: jsonEncode(user['permissions']),
+          );
+        }
+
         return AuthResult(
           success: true,
           message: data['message'] as String? ?? 'Sign in successful',
@@ -77,10 +84,23 @@ class AuthService {
         success: true,
         message: 'Signed in with local clinical session (Server offline)',
         user: {
-          'fullName': 'Alex Morgan',
+          'fullName': 'Alex Morgan MD',
           'email': email,
-          'gender': 'female',
+          'gender': 'Female',
+          'heightCm': 168.0,
+          'weightKg': 58.0,
           'role': 'patient',
+          'allergies': ['Penicillin', 'Dust Mites'],
+          'medicalConditions': ['Asthma (Controlled)', 'Mild Dysmenorrhea'],
+          'enableWomensHealth': true,
+          'permissions': {
+            'sleep_health': true,
+            'physical_activity': true,
+            'screen_time': true,
+            'device_sensors': true,
+            'medical_documents': true,
+            'notifications': true,
+          },
         },
         isOfflineFallback: true,
       );

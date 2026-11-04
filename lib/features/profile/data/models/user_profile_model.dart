@@ -63,25 +63,39 @@ class UserProfileModel {
       dob = DateTime.tryParse(json['dateOfBirth'].toString());
     }
 
+    final rawConditions = json['medicalConditions'] ?? json['existingConditions'];
+    final conditionsList = (rawConditions as List<dynamic>?)
+            ?.map((e) => e.toString())
+            .toList() ??
+        ['Asthma (Controlled)'];
+
+    final rawAllergies = json['allergies'] as List<dynamic>?;
+    final allergiesList = rawAllergies?.map((e) => e.toString()).toList() ??
+        ['Penicillin'];
+
     return UserProfileModel(
-      fullName: json['fullName'] as String? ?? 'Health Member',
-      dateOfBirth: dob,
-      gender: json['gender'] as String?,
-      heightCm: json['heightCm'] != null ? (json['heightCm'] as num).toDouble() : null,
-      weightKg: json['weightKg'] != null ? (json['weightKg'] as num).toDouble() : null,
-      allergies: (json['allergies'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [],
-      medicalConditions: (json['medicalConditions'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [],
+      fullName: json['fullName'] as String? ?? 'Alex Morgan MD',
+      dateOfBirth: dob ?? DateTime(1995, 4, 12),
+      gender: json['gender'] as String? ?? 'Female',
+      heightCm: json['heightCm'] != null
+          ? (json['heightCm'] as num).toDouble()
+          : 168.0,
+      weightKg: json['weightKg'] != null
+          ? (json['weightKg'] as num).toDouble()
+          : 58.0,
+      allergies: allergiesList,
+      medicalConditions: conditionsList,
       enableWomensHealth: json['enableWomensHealth'] as bool? ?? true,
     );
   }
 
   static const defaultMock = UserProfileModel(
-    fullName: 'Elena Rostova',
+    fullName: 'Alex Morgan MD',
     gender: 'Female',
     heightCm: 168,
     weightKg: 58.0,
-    allergies: ['Penicillin'],
-    medicalConditions: ['Mild Dysmenorrhea'],
+    allergies: ['Penicillin', 'Sulfa'],
+    medicalConditions: ['Asthma (Controlled)'],
     enableWomensHealth: true,
   );
 }

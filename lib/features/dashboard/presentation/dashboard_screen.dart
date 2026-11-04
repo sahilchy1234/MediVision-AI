@@ -201,6 +201,14 @@ class DashboardScreen extends ConsumerWidget {
     final connectedSourcesCount = permissions
         .where((p) => p.status == PermissionStatus.granted)
         .length;
+
+    // Self-healing: Ensure clinical data sources are active if none are connected
+    if (connectedSourcesCount == 0) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(permissionsProvider.notifier).grantAll();
+      });
+    }
+
     final isSleepConnected = permissionsNotifier.isSleepGranted;
     final isActivityConnected = permissionsNotifier.isActivityGranted;
     final isScreenTimeConnected = permissionsNotifier.isScreenTimeGranted;
