@@ -106,12 +106,8 @@ class PrimaryButton extends StatelessWidget {
     );
 
     if (isFullWidth) {
-      return SizedBox(
-        width: double.infinity,
-        child: button,
-      );
+      return SizedBox(width: double.infinity, child: button);
     }
     return button;
   }
 }
-

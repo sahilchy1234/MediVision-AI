@@ -31,7 +31,9 @@ class DashboardScreen extends ConsumerWidget {
           padding: const EdgeInsets.all(24),
           decoration: const BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(AppDimensions.radiusXL)),
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(AppDimensions.radiusXL),
+            ),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -53,9 +55,14 @@ class DashboardScreen extends ConsumerWidget {
                 children: [
                   Text(
                     'Clinical Health Summary',
-                    style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.w800),
+                    style: AppTypography.titleLarge.copyWith(
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
-                  const StatusBadge(label: 'FHIR Standard', type: BadgeType.success),
+                  const StatusBadge(
+                    label: 'FHIR Standard',
+                    type: BadgeType.success,
+                  ),
                 ],
               ),
               const SizedBox(height: 6),
@@ -76,7 +83,9 @@ class DashboardScreen extends ConsumerWidget {
                   children: [
                     Text(
                       'Executive Vitals & Biomarker Analysis',
-                      style: AppTypography.labelLarge.copyWith(fontWeight: FontWeight.w700),
+                      style: AppTypography.labelLarge.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Text(
@@ -97,7 +106,9 @@ class DashboardScreen extends ConsumerWidget {
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('Clinical summary exported successfully to Secure Storage.'),
+                      content: Text(
+                        'Clinical summary exported successfully to Secure Storage.',
+                      ),
                       backgroundColor: AppColors.secondary,
                     ),
                   );
@@ -115,7 +126,9 @@ class DashboardScreen extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppDimensions.radiusL)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppDimensions.radiusL),
+        ),
         title: Row(
           children: [
             Container(
@@ -124,7 +137,10 @@ class DashboardScreen extends ConsumerWidget {
                 color: AppColors.secondaryContainer,
                 borderRadius: BorderRadius.circular(AppDimensions.radiusS),
               ),
-              child: const Icon(Icons.upload_file_rounded, color: AppColors.secondaryDark),
+              child: const Icon(
+                Icons.upload_file_rounded,
+                color: AppColors.secondaryDark,
+              ),
             ),
             const SizedBox(width: 12),
             const Text('Upload Report'),
@@ -140,7 +156,10 @@ class DashboardScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 16),
             ListTile(
-              leading: const Icon(Icons.picture_as_pdf_rounded, color: AppColors.error),
+              leading: const Icon(
+                Icons.picture_as_pdf_rounded,
+                color: AppColors.error,
+              ),
               title: const Text('PDF Lab Document'),
               subtitle: const Text('Blood panels, metabolic reports'),
               onTap: () {
@@ -149,7 +168,10 @@ class DashboardScreen extends ConsumerWidget {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.camera_alt_rounded, color: AppColors.secondary),
+              leading: const Icon(
+                Icons.camera_alt_rounded,
+                color: AppColors.secondary,
+              ),
               title: const Text('Scan Camera / Prescription'),
               subtitle: const Text('Medication labels, doctor notes'),
               onTap: () {
@@ -176,7 +198,9 @@ class DashboardScreen extends ConsumerWidget {
     final permissionsNotifier = ref.read(permissionsProvider.notifier);
     final recentEntries = TimelineEntry.getSampleEntries();
 
-    final connectedSourcesCount = permissions.where((p) => p.status == PermissionStatus.granted).length;
+    final connectedSourcesCount = permissions
+        .where((p) => p.status == PermissionStatus.granted)
+        .length;
     final isSleepConnected = permissionsNotifier.isSleepGranted;
     final isActivityConnected = permissionsNotifier.isActivityGranted;
     final isScreenTimeConnected = permissionsNotifier.isScreenTimeGranted;
@@ -200,7 +224,9 @@ class DashboardScreen extends ConsumerWidget {
                     children: [
                       Text(
                         'Good morning,',
-                        style: AppTypography.bodyMedium.copyWith(color: AppColors.textTertiary),
+                        style: AppTypography.bodyMedium.copyWith(
+                          color: AppColors.textTertiary,
+                        ),
                       ),
                       const SizedBox(height: 2),
                       Text(
@@ -224,7 +250,10 @@ class DashboardScreen extends ConsumerWidget {
                         child: IconButton(
                           icon: const Stack(
                             children: [
-                              Icon(Icons.notifications_outlined, color: AppColors.textPrimary),
+                              Icon(
+                                Icons.notifications_outlined,
+                                color: AppColors.textPrimary,
+                              ),
                               Positioned(
                                 right: 0,
                                 top: 0,
@@ -237,7 +266,11 @@ class DashboardScreen extends ConsumerWidget {
                           ),
                           onPressed: () {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('All system notifications are up to date.')),
+                              const SnackBar(
+                                content: Text(
+                                  'All system notifications are up to date.',
+                                ),
+                              ),
                             );
                           },
                         ),
@@ -251,7 +284,9 @@ class DashboardScreen extends ConsumerWidget {
                           radius: 22,
                           backgroundColor: AppColors.primary,
                           child: Text(
-                            profile.fullName.isNotEmpty ? profile.fullName[0].toUpperCase() : 'A',
+                            profile.fullName.isNotEmpty
+                                ? profile.fullName[0].toUpperCase()
+                                : 'A',
                             style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w700,
@@ -268,15 +303,24 @@ class DashboardScreen extends ConsumerWidget {
 
               // Realistic Demo Data Notice Banner
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.secondaryContainer.withOpacity(0.5),
                   borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-                  border: Border.all(color: AppColors.secondary.withOpacity(0.3)),
+                  border: Border.all(
+                    color: AppColors.secondary.withOpacity(0.3),
+                  ),
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.science_outlined, size: 16, color: AppColors.secondaryDark),
+                    const Icon(
+                      Icons.science_outlined,
+                      size: 16,
+                      color: AppColors.secondaryDark,
+                    ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
@@ -290,26 +334,41 @@ class DashboardScreen extends ConsumerWidget {
                     const SizedBox(width: 8),
                     InkWell(
                       onTap: () {
-                        ref.read(permissionsProvider.notifier).useMockDataSources();
+                        ref
+                            .read(permissionsProvider.notifier)
+                            .useMockDataSources();
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text('Connected to simulated clinical mock data sources!'),
+                            content: Text(
+                              'Connected to simulated clinical mock data sources!',
+                            ),
                             backgroundColor: AppColors.secondary,
                             behavior: SnackBarBehavior.floating,
                           ),
                         );
                       },
-                      borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
+                      borderRadius: BorderRadius.circular(
+                        AppDimensions.radiusFull,
+                      ),
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 5,
+                        ),
                         decoration: BoxDecoration(
                           color: AppColors.secondary,
-                          borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
+                          borderRadius: BorderRadius.circular(
+                            AppDimensions.radiusFull,
+                          ),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(Icons.auto_fix_high_rounded, size: 12, color: Colors.white),
+                            const Icon(
+                              Icons.auto_fix_high_rounded,
+                              size: 12,
+                              color: Colors.white,
+                            ),
                             const SizedBox(width: 4),
                             Text(
                               'Use Mock Data',
@@ -344,7 +403,9 @@ class DashboardScreen extends ConsumerWidget {
                       children: [
                         Text(
                           "Today's Health Overview",
-                          style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w700),
+                          style: AppTypography.titleMedium.copyWith(
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                         const StatusBadge(
                           label: 'Vitals Stable',
@@ -401,7 +462,9 @@ class DashboardScreen extends ConsumerWidget {
                           height: 80,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: AppColors.secondaryContainer.withOpacity(0.4),
+                            color: AppColors.secondaryContainer.withOpacity(
+                              0.4,
+                            ),
                           ),
                           child: const Center(
                             child: Icon(
@@ -461,7 +524,10 @@ class DashboardScreen extends ConsumerWidget {
                         label: 'Clinical Summary',
                         icon: Icons.description_rounded,
                         color: AppColors.accentEmerald,
-                        onTap: () => _showGenerateSummarySheet(context, profile.fullName),
+                        onTap: () => _showGenerateSummarySheet(
+                          context,
+                          profile.fullName,
+                        ),
                       ),
                     ),
                   ],
@@ -483,12 +549,22 @@ class DashboardScreen extends ConsumerWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SectionHeader(title: 'Biometric Telemetry ($connectedSourcesCount Active)'),
+                  SectionHeader(
+                    title:
+                        'Biometric Telemetry ($connectedSourcesCount Active)',
+                  ),
                   TextButton.icon(
                     style: TextButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 2,
+                      ),
                     ),
-                    icon: const Icon(Icons.tune_rounded, size: 14, color: AppColors.secondary),
+                    icon: const Icon(
+                      Icons.tune_rounded,
+                      size: 14,
+                      color: AppColors.secondary,
+                    ),
                     label: Text(
                       'Data Sources',
                       style: AppTypography.labelSmall.copyWith(
@@ -512,12 +588,20 @@ class DashboardScreen extends ConsumerWidget {
                           ? '1h 48m Deep sleep (Optimal)'
                           : 'Tap to connect Sleep data',
                       icon: Icons.bedtime_rounded,
-                      iconColor: isSleepConnected ? AppColors.accentIndigo : AppColors.textTertiary,
+                      iconColor: isSleepConnected
+                          ? AppColors.accentIndigo
+                          : AppColors.textTertiary,
                       progress: isSleepConnected ? 0.88 : 0.0,
-                      progressColor: isSleepConnected ? AppColors.accentIndigo : AppColors.border,
+                      progressColor: isSleepConnected
+                          ? AppColors.accentIndigo
+                          : AppColors.border,
                       badgeText: isSleepConnected ? '89% Quality' : 'Paused',
-                      badgeColor: isSleepConnected ? AppColors.accentIndigo : AppColors.textTertiary,
-                      onTap: () => isSleepConnected ? context.go('/timeline') : context.push('/permissions'),
+                      badgeColor: isSleepConnected
+                          ? AppColors.accentIndigo
+                          : AppColors.textTertiary,
+                      onTap: () => isSleepConnected
+                          ? context.go('/timeline')
+                          : context.push('/permissions'),
                     ),
                   ),
                   const SizedBox(width: 14),
@@ -530,12 +614,20 @@ class DashboardScreen extends ConsumerWidget {
                           ? 'Goal: 10,000 steps (84%)'
                           : 'Tap to connect Steps data',
                       icon: Icons.directions_run_rounded,
-                      iconColor: isActivityConnected ? AppColors.secondary : AppColors.textTertiary,
+                      iconColor: isActivityConnected
+                          ? AppColors.secondary
+                          : AppColors.textTertiary,
                       progress: isActivityConnected ? 0.84 : 0.0,
-                      progressColor: isActivityConnected ? AppColors.secondary : AppColors.border,
+                      progressColor: isActivityConnected
+                          ? AppColors.secondary
+                          : AppColors.border,
                       badgeText: isActivityConnected ? '482 kcal' : 'Paused',
-                      badgeColor: isActivityConnected ? AppColors.secondary : AppColors.textTertiary,
-                      onTap: () => isActivityConnected ? context.go('/timeline') : context.push('/permissions'),
+                      badgeColor: isActivityConnected
+                          ? AppColors.secondary
+                          : AppColors.textTertiary,
+                      onTap: () => isActivityConnected
+                          ? context.go('/timeline')
+                          : context.push('/permissions'),
                     ),
                   ),
                 ],
@@ -553,12 +645,22 @@ class DashboardScreen extends ConsumerWidget {
                           ? '45m before bed alert active'
                           : 'Tap to connect Screen data',
                       icon: Icons.phone_android_rounded,
-                      iconColor: isScreenTimeConnected ? AppColors.accentAmber : AppColors.textTertiary,
+                      iconColor: isScreenTimeConnected
+                          ? AppColors.accentAmber
+                          : AppColors.textTertiary,
                       progress: isScreenTimeConnected ? 0.55 : 0.0,
-                      progressColor: isScreenTimeConnected ? AppColors.accentAmber : AppColors.border,
-                      badgeText: isScreenTimeConnected ? '-32m vs avg' : 'Paused',
-                      badgeColor: isScreenTimeConnected ? AppColors.accentEmerald : AppColors.textTertiary,
-                      onTap: () => isScreenTimeConnected ? context.go('/timeline') : context.push('/permissions'),
+                      progressColor: isScreenTimeConnected
+                          ? AppColors.accentAmber
+                          : AppColors.border,
+                      badgeText: isScreenTimeConnected
+                          ? '-32m vs avg'
+                          : 'Paused',
+                      badgeColor: isScreenTimeConnected
+                          ? AppColors.accentEmerald
+                          : AppColors.textTertiary,
+                      onTap: () => isScreenTimeConnected
+                          ? context.go('/timeline')
+                          : context.push('/permissions'),
                     ),
                   ),
                   const SizedBox(width: 14),
@@ -571,12 +673,20 @@ class DashboardScreen extends ConsumerWidget {
                           ? 'Healthy athletic baseline'
                           : 'Tap to pair Bluetooth sensors',
                       icon: Icons.monitor_heart_rounded,
-                      iconColor: isSensorsConnected ? AppColors.accentRose : AppColors.textTertiary,
+                      iconColor: isSensorsConnected
+                          ? AppColors.accentRose
+                          : AppColors.textTertiary,
                       progress: isSensorsConnected ? 0.65 : 0.0,
-                      progressColor: isSensorsConnected ? AppColors.accentRose : AppColors.border,
+                      progressColor: isSensorsConnected
+                          ? AppColors.accentRose
+                          : AppColors.border,
                       badgeText: isSensorsConnected ? 'Optimal' : 'Paused',
-                      badgeColor: isSensorsConnected ? AppColors.accentEmerald : AppColors.textTertiary,
-                      onTap: () => isSensorsConnected ? context.go('/timeline') : context.push('/permissions'),
+                      badgeColor: isSensorsConnected
+                          ? AppColors.accentEmerald
+                          : AppColors.textTertiary,
+                      onTap: () => isSensorsConnected
+                          ? context.go('/timeline')
+                          : context.push('/permissions'),
                     ),
                   ),
                 ],
@@ -589,7 +699,9 @@ class DashboardScreen extends ConsumerWidget {
                 onSeeAllTap: () => context.go('/timeline'),
                 onEntryTap: (entry) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('${entry.title}: ${entry.description}')),
+                    SnackBar(
+                      content: Text('${entry.title}: ${entry.description}'),
+                    ),
                   );
                 },
               ),
@@ -617,10 +729,7 @@ class _WomensHealthDashboardCard extends ConsumerWidget {
       onTap: onTap,
       padding: const EdgeInsets.all(18),
       gradient: LinearGradient(
-        colors: [
-          Colors.white,
-          AppColors.accentRose.withOpacity(0.06),
-        ],
+        colors: [Colors.white, AppColors.accentRose.withOpacity(0.06)],
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
       ),
@@ -649,7 +758,9 @@ class _WomensHealthDashboardCard extends ConsumerWidget {
                   children: [
                     Text(
                       "Women's Health & Cycle",
-                      style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w800),
+                      style: AppTypography.titleMedium.copyWith(
+                        fontWeight: FontWeight.w800,
+                      ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -664,7 +775,10 @@ class _WomensHealthDashboardCard extends ConsumerWidget {
               ),
               const SizedBox(width: 8),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
                   color: phase.color.withOpacity(0.12),
                   borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
@@ -690,7 +804,9 @@ class _WomensHealthDashboardCard extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      cycle.isFertileWindow ? 'Fertile Ovulatory Window Open' : 'Luteal Phase Active',
+                      cycle.isFertileWindow
+                          ? 'Fertile Ovulatory Window Open'
+                          : 'Luteal Phase Active',
                       style: AppTypography.labelLarge.copyWith(
                         fontWeight: FontWeight.w700,
                         color: AppColors.textPrimary,
@@ -704,7 +820,11 @@ class _WomensHealthDashboardCard extends ConsumerWidget {
                   ],
                 ),
               ),
-              const Icon(Icons.arrow_forward_ios_rounded, size: 14, color: AppColors.textTertiary),
+              const Icon(
+                Icons.arrow_forward_ios_rounded,
+                size: 14,
+                color: AppColors.textTertiary,
+              ),
             ],
           ),
           const SizedBox(height: 12),
@@ -718,7 +838,11 @@ class _WomensHealthDashboardCard extends ConsumerWidget {
             ),
             child: Row(
               children: [
-                const Icon(Icons.biotech_rounded, size: 14, color: AppColors.secondaryDark),
+                const Icon(
+                  Icons.biotech_rounded,
+                  size: 14,
+                  color: AppColors.secondaryDark,
+                ),
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(

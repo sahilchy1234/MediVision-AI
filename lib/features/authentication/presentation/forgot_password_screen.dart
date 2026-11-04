@@ -28,7 +28,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _isLoading = true);
-    await Future.delayed(const Duration(milliseconds: 600));
+    await Future.delayed(const Duration(milliseconds: 500));
 
     if (mounted) {
       setState(() {
@@ -41,7 +41,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.mainBackground,
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_rounded),
@@ -57,32 +57,34 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   children: [
                     const SizedBox(height: 48),
                     Container(
-                      width: 90,
-                      height: 90,
+                      width: 64,
+                      height: 64,
                       decoration: const BoxDecoration(
-                        color: AppColors.secondaryContainer,
+                        color: AppColors.mintAccent,
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(
-                        Icons.mark_email_read_rounded,
-                        size: 46,
-                        color: AppColors.secondary,
+                        Icons.mark_email_read_outlined,
+                        size: 32,
+                        color: AppColors.forestGreen,
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 20),
                     Text(
                       'Recovery Instructions Sent',
-                      style: AppTypography.displaySmall.copyWith(fontWeight: FontWeight.w700),
+                      style: AppTypography.titleLarge.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 8),
                     Text(
                       'If an account exists for ${_emailController.text}, you will receive a secure cryptographic recovery link within a few minutes.',
                       textAlign: TextAlign.center,
                       style: AppTypography.bodyMedium,
                     ),
-                    const SizedBox(height: 36),
+                    const SizedBox(height: 32),
                     PrimaryButton(
-                      label: 'Return to Login',
+                      label: 'Return to Sign In',
                       onPressed: () => context.pop(),
                     ),
                   ],
@@ -94,30 +96,30 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     children: [
                       Text(
                         'Reset Master Password',
-                        style: AppTypography.displayMedium.copyWith(
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: -0.6,
-                        ),
+                        style: AppTypography.displayMedium,
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 6),
                       Text(
-                        'Enter your verified email. Because MediVision AI uses end-to-end encryption, account recovery relies on your private recovery key.',
+                        'Enter your registered email. Because MediVision uses end-to-end encryption, account recovery relies on your private key.',
                         style: AppTypography.bodyMedium,
                       ),
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 28),
                       CustomTextField(
                         label: 'Registered Email Address',
                         hintText: 'alex.morgan@example.com',
                         controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
-                        prefixIcon: const Icon(Icons.mail_outline_rounded, size: 20),
                         validator: (val) {
-                          if (val == null || val.trim().isEmpty) return 'Please enter your email';
-                          if (!val.contains('@')) return 'Enter a valid email';
+                          if (val == null || val.trim().isEmpty) {
+                            return 'Please enter your email';
+                          }
+                          if (!val.contains('@')) {
+                            return 'Enter a valid email';
+                          }
                           return null;
                         },
                       ),
-                      const SizedBox(height: 28),
+                      const SizedBox(height: 24),
                       PrimaryButton(
                         label: 'Send Recovery Key',
                         isLoading: _isLoading,

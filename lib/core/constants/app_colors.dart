@@ -16,6 +16,7 @@ class AppColors {
   static const Color secondaryLight = Color(0xFF14B8A6);
   static const Color secondaryDark = Color(0xFF0F766E);
   static const Color secondaryContainer = Color(0xFFCCFBF1);
+  static const Color secondarySage = Color(0xFF99F6E4);
 
   // Convenience Aliases for Medical/Green palette
   static const Color primaryGreen = Color(0xFF0D9488);

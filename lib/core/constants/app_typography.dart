@@ -29,6 +29,13 @@ class AppTypography {
         height: 1.3,
       );
 
+  static TextStyle get metricLarge => GoogleFonts.plusJakartaSans(
+        fontSize: 22,
+        fontWeight: FontWeight.w800,
+        letterSpacing: -0.5,
+        color: AppColors.textPrimary,
+      );
+
   static TextStyle get titleLarge => GoogleFonts.plusJakartaSans(
         fontSize: 19,
         fontWeight: FontWeight.w600,

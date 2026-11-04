@@ -10,7 +10,7 @@ void main() {
     // Initial frame renders splash screen and brand tagline
     expect(find.byType(SplashScreen), findsOneWidget);
     expect(
-      find.text('Your Health. Your Data. Your AI.'),
+      find.text('Intelligent Medical History & Clinical Companion'),
       findsOneWidget,
     );
   });
