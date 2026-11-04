@@ -21,7 +21,7 @@ app.use(
   cors({
     origin: '*',
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'x-groq-api-key'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'x-groq-api-key', 'ngrok-skip-browser-warning'],
   })
 );
 

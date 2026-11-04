@@ -1,5 +1,19 @@
 require('dotenv').config();
+const http = require('http');
 const ngrok = require('@ngrok/ngrok');
+
+function isServerRunning(port) {
+  return new Promise((resolve) => {
+    const req = http.get(`http://127.0.0.1:${port}/api/health`, (res) => {
+      resolve(res.statusCode === 200);
+    });
+    req.on('error', () => resolve(false));
+    req.setTimeout(1200, () => {
+      req.destroy();
+      resolve(false);
+    });
+  });
+}
 
 async function startTunnel() {
   const token = process.env.NGROK_AUTHTOKEN;
@@ -18,6 +32,17 @@ async function startTunnel() {
     process.exit(1);
   }
 
+  // Automatically start backend server if it is not already running
+  const running = await isServerRunning(port);
+  if (!running) {
+    console.log(`Starting Express backend server on port ${port}...`);
+    require('./src/server');
+    // Wait briefly for server to bind
+    await new Promise((r) => setTimeout(r, 600));
+  } else {
+    console.log(`Express backend is already running on port ${port}.`);
+  }
+
   try {
     const listener = await ngrok.forward({
       addr: port,
@@ -26,8 +51,9 @@ async function startTunnel() {
 
     const url = listener.url();
     console.log('\n===============================================');
-    console.log('🚀 Ngrok Tunnel is Live & Connected!');
-    console.log(`🌐 Public URL: ${url}`);
+    console.log('🚀 MediVision AI Server + Ngrok Tunnel are LIVE!');
+    console.log(`📍 Local Server: http://127.0.0.1:${port}`);
+    console.log(`🌐 Public URL:   ${url}`);
     console.log(`🩺 Health Check: ${url}/api/health`);
     console.log('===============================================');
     console.log('🟢 Leave this terminal running while using the app.');

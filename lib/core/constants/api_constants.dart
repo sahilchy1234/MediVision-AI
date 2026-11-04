@@ -19,6 +19,11 @@ class ApiConstants {
   static String? customBaseUrl = 'https://satchel-thirsting-trough.ngrok-free.dev/api';
 
   static String get baseUrl {
+    // When running in a web browser on desktop, connect directly to localhost backend
+    if (kIsWeb) {
+      return 'http://127.0.0.1:5000/api';
+    }
+
     if (customBaseUrl != null && customBaseUrl!.trim().isNotEmpty) {
       return customBaseUrl!.trim();
     }
@@ -33,6 +38,14 @@ class ApiConstants {
     }
     return 'http://127.0.0.1:5000/api';
   }
+
+  /// Standard headers including authorization and ngrok browser warning bypass
+  static Map<String, String> headers([String? token]) => {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'ngrok-skip-browser-warning': 'true',
+        if (token != null && token.isNotEmpty) 'Authorization': 'Bearer $token',
+      };
 
   static String get login => '$baseUrl/auth/login';
   static String get register => '$baseUrl/auth/register';
