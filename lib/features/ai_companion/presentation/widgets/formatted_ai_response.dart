@@ -20,7 +20,7 @@ class FormattedAiResponse extends StatelessWidget {
     this.onAskDoctor,
   });
 
-  /// Sanitize and format the raw text from AI (strip think tags, clean markdown)
+  /// Sanitize and format the raw text from AI (strip think tags, clean markdown, complete truncated disclaimers)
   String _preprocessText(String text) {
     var cleaned = text;
 
@@ -32,6 +32,31 @@ class FormattedAiResponse extends StatelessWidget {
 
     // 3. Normalize excessive vertical whitespace
     cleaned = cleaned.replaceAll(RegExp(r'\n{3,}'), '\n\n');
+
+    // 4. Complete truncated medical disclaimer if cut off near the end
+    // Matches patterns like "*Consult your", "> *Consult your", "Consult your physician", etc.
+    final truncatedDisclaimerPattern = RegExp(
+      r'(?:>\s*)?\*?Consult\s+your(?:\s+(?:physician|doctor|healthcare|care|specialist|medical)[^.\n]*)?(?:\*|\.)?\s*$',
+      caseSensitive: false,
+    );
+
+    if (truncatedDisclaimerPattern.hasMatch(cleaned)) {
+      cleaned = cleaned.replaceFirst(
+        truncatedDisclaimerPattern,
+        '> *Consult your doctor or qualified healthcare specialist for personalized medical advice.*',
+      );
+    }
+
+    // 5. Ensure dangling markdown asterisks in the last line are safely closed
+    final lines = cleaned.split('\n');
+    if (lines.isNotEmpty) {
+      final lastLine = lines.last;
+      final asteriskCount = '*'.allMatches(lastLine).length;
+      if (asteriskCount % 2 != 0) {
+        lines[lines.length - 1] = '$lastLine*';
+        cleaned = lines.join('\n');
+      }
+    }
 
     return cleaned.trim();
   }

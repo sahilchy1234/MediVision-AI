@@ -15,8 +15,8 @@
       "Asthma (Mild intermittent)"
     ],
     "createdAt": "2026-11-04T05:48:45.588Z",
-    "updatedAt": "2026-11-04T09:03:46.462Z",
-    "lastLoginAt": "2026-11-04T09:03:46.461Z",
+    "updatedAt": "2026-11-04T09:18:48.336Z",
+    "lastLoginAt": "2026-11-04T09:18:48.335Z",
     "heightCm": 170.5,
     "weightKg": 59.2,
     "medicalConditions": [
@@ -127,20 +127,24 @@
   },
   {
     "id": "usr_1793772718320_wttl0",
-    "fullName": "Sahil Alom Choudhury",
+    "fullName": "Elena Rostova",
     "email": "alosahil98@gmail.com",
     "passwordHash": "$2a$10$BEdm55V0IHOaKirVh.OA.Oe8ckXR5Roduza7vcHM03vGPuoJKmF6G",
-    "gender": "unspecified",
+    "gender": "Female",
     "dateOfBirth": "1994-06-18T00:00:00.000",
     "heightCm": 168,
     "weightKg": 58,
     "role": "patient",
-    "allergies": [],
-    "medicalConditions": [],
-    "enableWomensHealth": false,
+    "allergies": [
+      "Penicillin"
+    ],
+    "medicalConditions": [
+      "Mild Dysmenorrhea"
+    ],
+    "enableWomensHealth": true,
     "createdAt": "2026-11-04T06:11:58.320Z",
-    "updatedAt": "2026-11-04T08:49:32.875Z",
-    "lastLoginAt": "2026-11-04T08:49:32.873Z",
+    "updatedAt": "2026-11-04T09:20:57.630Z",
+    "lastLoginAt": "2026-11-04T09:20:57.627Z",
     "permissions": {
       "sleep_health": true,
       "physical_activity": true,
@@ -424,5 +428,30 @@
     "createdAt": "2026-11-04T09:03:45.624Z",
     "updatedAt": "2026-11-04T09:03:45.624Z",
     "lastLoginAt": "2026-11-04T09:03:45.624Z"
+  },
+  {
+    "id": "usr_1793783927747_vfctd",
+    "fullName": "Dr. Sarah Connor",
+    "email": "patient_1793783927647@medivision.health",
+    "passwordHash": "$2a$10$o9H9lXEF.JuP3vixcXjVz.sS2g/sb33dHigNW6C/opnnRDwLThnoq",
+    "gender": "female",
+    "dateOfBirth": "1990-08-15",
+    "heightCm": 168,
+    "weightKg": 58,
+    "role": "patient",
+    "allergies": [],
+    "medicalConditions": [],
+    "enableWomensHealth": true,
+    "permissions": {
+      "sleep_health": false,
+      "physical_activity": false,
+      "screen_time": false,
+      "device_sensors": false,
+      "medical_documents": false,
+      "notifications": false
+    },
+    "createdAt": "2026-11-04T09:18:47.747Z",
+    "updatedAt": "2026-11-04T09:18:47.747Z",
+    "lastLoginAt": "2026-11-04T09:18:47.747Z"
   }
 ]

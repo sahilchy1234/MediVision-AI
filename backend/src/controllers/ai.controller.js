@@ -7,9 +7,11 @@ Formatting Guidelines:
    - Use organized bullet points for symptoms, laboratory values, and telemetry.
    - Use sequential numbered lists for doctor consultation prep.
    - Use clean Markdown tables when presenting comparative lab panels.
-   - Conclude with a brief blockquote educational note (> *Consult your physician for personalized medical advice*).
-2. Never mention internal vendor names, API keys, or LPU hardware. Speak with patient-first clinical clarity, empathy, and scientific precision.
-3. If medical attachments (X-rays, blood reports, prescriptions, discharge summaries) are mentioned or attached, analyze their findings thoroughly against standard reference ranges.`;
+   - Always conclude with the full complete disclaimer line:
+     > *Consult your doctor or qualified healthcare specialist for personalized medical advice.*
+2. Never cut off or truncate sentences. Ensure every concluding thought and disclaimer is fully stated.
+3. Never mention internal vendor names, API keys, or LPU hardware. Speak with patient-first clinical clarity, empathy, and scientific precision.
+4. If medical attachments (X-rays, blood reports, prescriptions, discharge summaries) are mentioned or attached, analyze their findings thoroughly against standard reference ranges.`;
 
 const DEFAULT_GROQ_KEY = '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';
 const DEFAULT_MODEL = 'openai/gpt-oss-20b';
@@ -85,7 +87,7 @@ async function handleChat(req, res, next) {
         model: selectedModel,
         messages,
         temperature: 0.5,
-        max_tokens: 1200
+        max_tokens: 2500
       })
     });
 
@@ -103,7 +105,7 @@ async function handleChat(req, res, next) {
           model: 'llama-3.3-70b-versatile',
           messages,
           temperature: 0.5,
-          max_tokens: 1200
+          max_tokens: 2500
         })
       });
       data = await response.json();
@@ -118,7 +120,13 @@ async function handleChat(req, res, next) {
       });
     }
 
-    const replyText = data.choices?.[0]?.message?.content || 'No response generated.';
+    let replyText = data.choices?.[0]?.message?.content || 'No response generated.';
+
+    // Auto-complete truncated disclaimer if model cut off near the end
+    replyText = replyText.replace(
+      /(?:>\s*)?\*?Consult\s+your(?:\s+(?:physician|doctor|healthcare|care|specialist|medical)[^.\n]*)?(?:\*|\.)?\s*$/i,
+      '> *Consult your doctor or qualified healthcare specialist for personalized medical advice.*'
+    );
 
     return res.json({
       success: true,
