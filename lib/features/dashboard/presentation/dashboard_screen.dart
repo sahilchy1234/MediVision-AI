@@ -546,35 +546,30 @@ class DashboardScreen extends ConsumerWidget {
               const SizedBox(height: 22),
 
               // Biometric & Daily Lifestyle Cards
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SectionHeader(
-                    title:
-                        'Biometric Telemetry ($connectedSourcesCount Active)',
-                  ),
-                  TextButton.icon(
-                    style: TextButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 2,
-                      ),
+              SectionHeader(
+                title:
+                    'Biometric Telemetry ($connectedSourcesCount Active)',
+                trailing: TextButton.icon(
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 2,
                     ),
-                    icon: const Icon(
-                      Icons.tune_rounded,
-                      size: 14,
+                  ),
+                  icon: const Icon(
+                    Icons.tune_rounded,
+                    size: 14,
+                    color: AppColors.secondary,
+                  ),
+                  label: Text(
+                    'Data Sources',
+                    style: AppTypography.labelSmall.copyWith(
                       color: AppColors.secondary,
+                      fontWeight: FontWeight.w700,
                     ),
-                    label: Text(
-                      'Data Sources',
-                      style: AppTypography.labelSmall.copyWith(
-                        color: AppColors.secondary,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    onPressed: () => context.push('/permissions'),
                   ),
-                ],
+                  onPressed: () => context.push('/permissions'),
+                ),
               ),
               const SizedBox(height: 6),
               Row(
