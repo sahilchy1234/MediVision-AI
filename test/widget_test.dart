@@ -7,11 +7,10 @@ void main() {
   testWidgets('MediVision AI app smoke test', (WidgetTester tester) async {
     await tester.pumpWidget(const ProviderScope(child: MediVisionApp()));
 
-    // Initial frame renders splash screen and brand title
+    // Initial frame renders splash screen and brand tagline
     expect(find.byType(SplashScreen), findsOneWidget);
-    expect(find.text('MediVision AI'), findsOneWidget);
     expect(
-      find.text('Intelligent Medical History & Clinical Companion'),
+      find.text('Your Health. Your Data. Your AI.'),
       findsOneWidget,
     );
   });
