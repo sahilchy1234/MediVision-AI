@@ -8,7 +8,6 @@ import '../../../core/widgets/primary_button.dart';
 import '../../permissions/providers/permissions_provider.dart';
 import '../../profile/data/models/user_profile_model.dart';
 import '../../profile/providers/profile_provider.dart';
-import '../../permissions/providers/permissions_provider.dart';
 import '../data/auth_service.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
