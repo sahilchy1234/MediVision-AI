@@ -28,7 +28,6 @@ class _InteractiveHumanBodyDiagramState
   // Muscle Atlas state
   AtlasAsset _atlasView = AtlasAsset.musclesFront;
   MuscleInfo? _selectedMuscle;
-  MuscleInfo? _hoveredMuscle;
 
   // Default highlighted muscles (e.g. from active recovery / posture tracking)
   final Set<String> _engagedMuscleIds = {
@@ -67,14 +66,6 @@ class _InteractiveHumanBodyDiagramState
     setState(() {
       _selectedMuscle = muscle;
     });
-  }
-
-  void _onAtlasHover(MuscleInfo? muscle) {
-    if (mounted) {
-      setState(() {
-        _hoveredMuscle = muscle;
-      });
-    }
   }
 
   void _toggleRegion(String regionKey) {
@@ -486,14 +477,22 @@ class _InteractiveHumanBodyDiagramState
               ),
             ],
           ),
-          if (_hoveredMuscle != null)
+          if (_selectedMuscle != null)
             Flexible(
-              child: Text(
-                _hoveredMuscle!.displayName,
-                overflow: TextOverflow.ellipsis,
-                style: AppTypography.labelSmall.copyWith(
-                  color: AppColors.secondaryDark,
-                  fontWeight: FontWeight.w700,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                decoration: BoxDecoration(
+                  color: AppColors.secondaryContainer,
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
+                ),
+                child: Text(
+                  _selectedMuscle!.displayName,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTypography.labelSmall.copyWith(
+                    color: AppColors.secondaryDark,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 11,
+                  ),
                 ),
               ),
             ),
@@ -617,15 +616,13 @@ class _InteractiveHumanBodyDiagramState
         }
 
         return SizedBox(
+          width: 300,
           height: 330,
           child: BodyAtlasView<MuscleInfo>(
             view: _atlasView,
             resolver: const MuscleResolver(),
             colorMapping: colorMap,
-            hoveredOver: _hoveredMuscle,
-            hoverColor: (color) => AppColors.secondaryLight,
             onTapElement: _onAtlasTapped,
-            onHoverOverElement: _onAtlasHover,
           ),
         );
 

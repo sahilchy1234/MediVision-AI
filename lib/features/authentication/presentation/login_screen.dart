@@ -59,7 +59,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             behavior: SnackBarBehavior.floating,
           ),
         );
-        context.go('/dashboard');
+        context.go('/home');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

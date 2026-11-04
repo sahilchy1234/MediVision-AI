@@ -67,6 +67,12 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) => const WomensHealthScreen(),
     ),
 
+    // Dashboard alias redirect to Home tab
+    GoRoute(
+      path: '/dashboard',
+      redirect: (context, state) => '/home',
+    ),
+
     // Main App Shell with 5 Persistent Bottom Navigation Tabs
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
