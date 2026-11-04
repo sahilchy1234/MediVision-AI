@@ -8,8 +8,10 @@ import '../../../core/widgets/glass_card.dart';
 import '../../../shared/models/storage_mode.dart';
 import '../../../shared/widgets/section_header.dart';
 import '../../../shared/widgets/status_badge.dart';
+import '../../profile/data/models/user_profile_model.dart';
 import '../../profile/providers/profile_provider.dart';
 import '../../storage_selection/providers/storage_provider.dart';
+import '../../authentication/data/auth_service.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -310,8 +312,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         color: AppColors.error,
                       ),
                     ),
-                    onTap: () {
-                      context.go('/login');
+                    onTap: () async {
+                      await AuthService.logout();
+                      ref.read(profileProvider.notifier).updateProfile(UserProfileModel.defaultMock);
+                      if (context.mounted) {
+                        context.go('/login');
+                      }
                     },
                   ),
                 ],

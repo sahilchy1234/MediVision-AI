@@ -10,6 +10,7 @@ import '../../../core/widgets/glass_card.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../data/models/user_profile_model.dart';
 import '../providers/profile_provider.dart';
+import '../../authentication/data/auth_service.dart';
 
 class UserProfileSetupScreen extends ConsumerStatefulWidget {
   const UserProfileSetupScreen({super.key});
@@ -82,7 +83,7 @@ class _UserProfileSetupScreenState extends ConsumerState<UserProfileSetupScreen>
     }
   }
 
-  void _saveAndContinue() {
+  void _saveAndContinue() async {
     if (!_formKey.currentState!.validate()) return;
 
     final allergies = _allergiesController.text
@@ -97,19 +98,27 @@ class _UserProfileSetupScreenState extends ConsumerState<UserProfileSetupScreen>
         .where((e) => e.isNotEmpty)
         .toList();
 
-    ref.read(profileProvider.notifier).updateProfile(
-          UserProfileModel(
-            fullName: _nameController.text.trim().isEmpty ? 'Health Member' : _nameController.text.trim(),
-            dateOfBirth: _selectedDob,
-            gender: _selectedGender,
-            heightCm: double.tryParse(_heightController.text.trim()),
-            weightKg: double.tryParse(_weightController.text.trim()),
-            allergies: allergies,
-            medicalConditions: conditions,
-          ),
-        );
+    final updatedProfile = UserProfileModel(
+      fullName: _nameController.text.trim().isEmpty
+          ? 'Health Member'
+          : _nameController.text.trim(),
+      dateOfBirth: _selectedDob,
+      gender: _selectedGender,
+      heightCm: double.tryParse(_heightController.text.trim()),
+      weightKg: double.tryParse(_weightController.text.trim()),
+      allergies: allergies,
+      medicalConditions: conditions,
+      enableWomensHealth: _selectedGender.toLowerCase() == 'female',
+    );
 
-    context.go('/storage-selection');
+    ref.read(profileProvider.notifier).updateProfile(updatedProfile);
+
+    // Save directly to the real backend database
+    await AuthService.updateProfile(updatedProfile);
+
+    if (mounted) {
+      context.go('/storage-selection');
+    }
   }
 
   void _skip() {

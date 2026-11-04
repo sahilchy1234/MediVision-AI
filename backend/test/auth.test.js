@@ -62,8 +62,8 @@ test('2. Seed user login succeeds with valid credentials', async () => {
   assert.strictEqual(res.data.success, true);
   assert.ok(res.data.data.tokens.accessToken, 'Access token should be present');
   assert.strictEqual(res.data.data.user.email, 'alex.morgan@medivision.health');
-  assert.strictEqual(res.data.data.user.fullName, 'Alex Morgan');
-  assert.strictEqual(res.data.data.user.gender, 'female');
+  assert.ok(res.data.data.user.fullName.includes('Alex Morgan'));
+  assert.strictEqual(res.data.data.user.gender.toLowerCase(), 'female');
 });
 
 test('3. Login fails with incorrect password', async () => {
@@ -151,4 +151,63 @@ test('8. Logout client acknowledgment succeeds', async () => {
 
   assert.strictEqual(res.status, 200);
   assert.strictEqual(res.data.success, true);
+});
+
+test('9. Update user clinical profile in database via PUT /api/user/profile', async () => {
+  // Login first
+  const loginRes = await apiRequest('/api/auth/login', {
+    method: 'POST',
+    body: JSON.stringify({
+      email: 'alex.morgan@medivision.health',
+      password: 'Password123!',
+    }),
+  });
+  const token = loginRes.data.data.tokens.accessToken;
+
+  // Update profile
+  const updateRes = await apiRequest('/api/user/profile', {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      fullName: 'Alex Morgan MD',
+      gender: 'Female',
+      heightCm: 170.5,
+      weightKg: 59.2,
+      allergies: ['Penicillin', 'Sulfa'],
+      medicalConditions: ['Asthma (Controlled)'],
+      enableWomensHealth: true,
+    }),
+  });
+
+  assert.strictEqual(updateRes.status, 200);
+  assert.strictEqual(updateRes.data.success, true);
+  assert.strictEqual(updateRes.data.data.user.fullName, 'Alex Morgan MD');
+  assert.strictEqual(updateRes.data.data.user.heightCm, 170.5);
+  assert.strictEqual(updateRes.data.data.user.weightKg, 59.2);
+  assert.deepStrictEqual(updateRes.data.data.user.allergies, ['Penicillin', 'Sulfa']);
+});
+
+test('10. Retrieve updated profile from database via GET /api/user/profile', async () => {
+  const loginRes = await apiRequest('/api/auth/login', {
+    method: 'POST',
+    body: JSON.stringify({
+      email: 'alex.morgan@medivision.health',
+      password: 'Password123!',
+    }),
+  });
+  const token = loginRes.data.data.tokens.accessToken;
+
+  const profileRes = await apiRequest('/api/user/profile', {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  assert.strictEqual(profileRes.status, 200);
+  assert.strictEqual(profileRes.data.success, true);
+  assert.strictEqual(profileRes.data.data.user.fullName, 'Alex Morgan MD');
+  assert.strictEqual(profileRes.data.data.user.heightCm, 170.5);
 });

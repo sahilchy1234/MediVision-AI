@@ -1,22 +1,28 @@
 [
   {
     "id": "usr_demo_alex_morgan",
-    "fullName": "Alex Morgan",
+    "fullName": "Alex Morgan MD",
     "email": "alex.morgan@medivision.health",
     "passwordHash": "$2a$10$3FrscRrJmwat9SMNE5R/t.omhI/z.qoVEN8TzSRN5ZtHZBgt8I8Oq",
-    "gender": "female",
+    "gender": "Female",
     "dateOfBirth": "1995-04-12",
     "role": "patient",
     "allergies": [
       "Penicillin",
-      "Dust Mites"
+      "Sulfa"
     ],
     "existingConditions": [
       "Asthma (Mild intermittent)"
     ],
     "createdAt": "2026-11-04T05:48:45.588Z",
-    "updatedAt": "2026-11-04T05:51:20.912Z",
-    "lastLoginAt": "2026-11-04T05:51:20.912Z"
+    "updatedAt": "2026-11-04T06:07:41.091Z",
+    "lastLoginAt": "2026-11-04T06:07:41.090Z",
+    "heightCm": 170.5,
+    "weightKg": 59.2,
+    "medicalConditions": [
+      "Asthma (Controlled)"
+    ],
+    "enableWomensHealth": true
   },
   {
     "id": "usr_1793771326299_9ye5o",
@@ -59,5 +65,56 @@
     "createdAt": "2026-11-04T05:51:20.811Z",
     "updatedAt": "2026-11-04T05:51:20.811Z",
     "lastLoginAt": "2026-11-04T05:51:20.811Z"
+  },
+  {
+    "id": "usr_1793772055130_qyle5",
+    "fullName": "Dr. Sarah Connor",
+    "email": "patient_1793772055044@medivision.health",
+    "passwordHash": "$2a$10$BK2W3mrdL5y0M8.WHwKjg.vSj3vChjsqSBHfbQ1w0715vlj1ifsNK",
+    "gender": "female",
+    "dateOfBirth": "1990-08-15",
+    "heightCm": 168,
+    "weightKg": 58,
+    "role": "patient",
+    "allergies": [],
+    "medicalConditions": [],
+    "enableWomensHealth": true,
+    "createdAt": "2026-11-04T06:00:55.130Z",
+    "updatedAt": "2026-11-04T06:00:55.130Z",
+    "lastLoginAt": "2026-11-04T06:00:55.130Z"
+  },
+  {
+    "id": "usr_1793772415863_cpaf7",
+    "fullName": "Dr. Sarah Connor",
+    "email": "patient_1793772415769@medivision.health",
+    "passwordHash": "$2a$10$31BugAtfYZCVn6Dx2fDXQ.uty3y4FfLKnsHXlRQQHAy7V7f8vKYnC",
+    "gender": "female",
+    "dateOfBirth": "1990-08-15",
+    "heightCm": 168,
+    "weightKg": 58,
+    "role": "patient",
+    "allergies": [],
+    "medicalConditions": [],
+    "enableWomensHealth": true,
+    "createdAt": "2026-11-04T06:06:55.863Z",
+    "updatedAt": "2026-11-04T06:06:55.863Z",
+    "lastLoginAt": "2026-11-04T06:06:55.863Z"
+  },
+  {
+    "id": "usr_1793772460801_twk5h",
+    "fullName": "Dr. Sarah Connor",
+    "email": "patient_1793772460705@medivision.health",
+    "passwordHash": "$2a$10$3ikuURQcskK5W53oL0f9lOIn8PAQYzs27wnZ7c4OvVy5oOALQLLWa",
+    "gender": "female",
+    "dateOfBirth": "1990-08-15",
+    "heightCm": 168,
+    "weightKg": 58,
+    "role": "patient",
+    "allergies": [],
+    "medicalConditions": [],
+    "enableWomensHealth": true,
+    "createdAt": "2026-11-04T06:07:40.801Z",
+    "updatedAt": "2026-11-04T06:07:40.801Z",
+    "lastLoginAt": "2026-11-04T06:07:40.801Z"
   }
 ]

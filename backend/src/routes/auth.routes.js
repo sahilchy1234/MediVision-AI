@@ -18,3 +18,4 @@ router.post('/refresh', authController.refresh);
 router.get('/me', requireAuth, authController.getMe);
 
 module.exports = router;
+

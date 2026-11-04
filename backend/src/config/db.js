@@ -10,31 +10,44 @@ if (!fs.existsSync(DATA_DIR)) {
   fs.mkdirSync(DATA_DIR, { recursive: true });
 }
 
-// Initialize seed user if not present
+// Initialize seed user if not present or missing fields
 function initDb() {
+  const salt = bcrypt.genSaltSync(10);
+  const demoPasswordHash = bcrypt.hashSync('Password123!', salt);
+
+  const demoUser = {
+    id: 'usr_demo_alex_morgan',
+    fullName: 'Alex Morgan',
+    email: 'alex.morgan@medivision.health',
+    passwordHash: demoPasswordHash,
+    gender: 'Female',
+    dateOfBirth: '1995-04-12',
+    heightCm: 168.0,
+    weightKg: 58.0,
+    role: 'patient',
+    allergies: ['Penicillin', 'Dust Mites'],
+    medicalConditions: ['Asthma (Mild intermittent)', 'Mild Dysmenorrhea'],
+    enableWomensHealth: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    lastLoginAt: new Date().toISOString(),
+  };
+
   if (!fs.existsSync(USERS_FILE)) {
-    const salt = bcrypt.genSaltSync(10);
-    const demoPasswordHash = bcrypt.hashSync('Password123!', salt);
-
-    const initialUsers = [
-      {
-        id: 'usr_demo_alex_morgan',
-        fullName: 'Alex Morgan',
-        email: 'alex.morgan@medivision.health',
-        passwordHash: demoPasswordHash,
-        gender: 'female',
-        dateOfBirth: '1995-04-12',
-        role: 'patient',
-        allergies: ['Penicillin', 'Dust Mites'],
-        existingConditions: ['Asthma (Mild intermittent)'],
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        lastLoginAt: new Date().toISOString(),
-      },
-    ];
-
-    fs.writeFileSync(USERS_FILE, JSON.stringify(initialUsers, null, 2), 'utf-8');
+    fs.writeFileSync(USERS_FILE, JSON.stringify([demoUser], null, 2), 'utf-8');
     console.log('📦 Database initialized with seed demo account (alex.morgan@medivision.health)');
+  } else {
+    // If exists, ensure demo user is present
+    try {
+      const users = JSON.parse(fs.readFileSync(USERS_FILE, 'utf-8'));
+      const hasDemo = users.some((u) => u.email.toLowerCase() === 'alex.morgan@medivision.health');
+      if (!hasDemo) {
+        users.unshift(demoUser);
+        fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2), 'utf-8');
+      }
+    } catch (_) {
+      fs.writeFileSync(USERS_FILE, JSON.stringify([demoUser], null, 2), 'utf-8');
+    }
   }
 }
 
@@ -87,14 +100,20 @@ const db = {
 
     const newUser = {
       id,
-      fullName: userData.fullName.trim(),
+      fullName: (userData.fullName || 'Health Member').trim(),
       email: userData.email.trim().toLowerCase(),
       passwordHash: userData.passwordHash,
-      gender: userData.gender || 'unspecified',
+      gender: userData.gender || 'Female',
       dateOfBirth: userData.dateOfBirth || null,
+      heightCm: userData.heightCm != null ? Number(userData.heightCm) : 168.0,
+      weightKg: userData.weightKg != null ? Number(userData.weightKg) : 58.0,
       role: userData.role || 'patient',
-      allergies: userData.allergies || [],
-      existingConditions: userData.existingConditions || [],
+      allergies: Array.isArray(userData.allergies) ? userData.allergies : [],
+      medicalConditions: Array.isArray(userData.medicalConditions)
+        ? userData.medicalConditions
+        : [],
+      enableWomensHealth:
+        userData.enableWomensHealth !== undefined ? Boolean(userData.enableWomensHealth) : true,
       createdAt: now,
       updatedAt: now,
       lastLoginAt: now,

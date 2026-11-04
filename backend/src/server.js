@@ -4,6 +4,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 
 const authRoutes = require('./routes/auth.routes');
+const userRoutes = require('./routes/user.routes');
 const healthRoutes = require('./routes/health.routes');
 const { notFoundHandler, globalErrorHandler } = require('./middleware/error.middleware');
 
@@ -31,6 +32,7 @@ if (process.env.NODE_ENV !== 'test') {
 // API Routes
 app.use('/api', healthRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/user', userRoutes);
 
 // Welcome Root Route
 app.get('/', (req, res) => {
@@ -67,3 +69,4 @@ if (process.env.NODE_ENV !== 'test') {
 }
 
 module.exports = app;
+

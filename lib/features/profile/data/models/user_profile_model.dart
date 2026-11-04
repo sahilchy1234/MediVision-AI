@@ -44,6 +44,37 @@ class UserProfileModel {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'fullName': fullName,
+      'dateOfBirth': dateOfBirth?.toIso8601String(),
+      'gender': gender,
+      'heightCm': heightCm,
+      'weightKg': weightKg,
+      'allergies': allergies,
+      'medicalConditions': medicalConditions,
+      'enableWomensHealth': enableWomensHealth,
+    };
+  }
+
+  factory UserProfileModel.fromJson(Map<String, dynamic> json) {
+    DateTime? dob;
+    if (json['dateOfBirth'] != null) {
+      dob = DateTime.tryParse(json['dateOfBirth'].toString());
+    }
+
+    return UserProfileModel(
+      fullName: json['fullName'] as String? ?? 'Health Member',
+      dateOfBirth: dob,
+      gender: json['gender'] as String?,
+      heightCm: json['heightCm'] != null ? (json['heightCm'] as num).toDouble() : null,
+      weightKg: json['weightKg'] != null ? (json['weightKg'] as num).toDouble() : null,
+      allergies: (json['allergies'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [],
+      medicalConditions: (json['medicalConditions'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [],
+      enableWomensHealth: json['enableWomensHealth'] as bool? ?? true,
+    );
+  }
+
   static const defaultMock = UserProfileModel(
     fullName: 'Elena Rostova',
     gender: 'Female',

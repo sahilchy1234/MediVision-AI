@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_typography.dart';
 import '../../../core/widgets/custom_text_field.dart';
 import '../../../core/widgets/primary_button.dart';
+import '../../profile/data/models/user_profile_model.dart';
+import '../../profile/providers/profile_provider.dart';
 import '../data/auth_service.dart';
 
-class SignupScreen extends StatefulWidget {
+class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({super.key});
 
   @override
-  State<SignupScreen> createState() => _SignupScreenState();
+  ConsumerState<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen> {
+class _SignupScreenState extends ConsumerState<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -36,7 +39,9 @@ class _SignupScreenState extends State<SignupScreen> {
     if (!_formKey.currentState!.validate()) return;
     if (!_termsAccepted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please accept the privacy terms to continue.')),
+        const SnackBar(
+          content: Text('Please accept the privacy terms to continue.'),
+        ),
       );
       return;
     }
@@ -44,8 +49,8 @@ class _SignupScreenState extends State<SignupScreen> {
     setState(() => _isLoading = true);
 
     final result = await AuthService.register(
-      fullName: _nameController.text,
-      email: _emailController.text,
+      fullName: _nameController.text.trim(),
+      email: _emailController.text.trim(),
       password: _passwordController.text,
     );
 
@@ -53,6 +58,11 @@ class _SignupScreenState extends State<SignupScreen> {
       setState(() => _isLoading = false);
 
       if (result.success) {
+        if (result.user != null) {
+          ref.read(profileProvider.notifier).updateProfile(
+                UserProfileModel.fromJson(result.user!),
+              );
+        }
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(result.message),
@@ -78,7 +88,7 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.mainBackground,
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_rounded),
@@ -94,122 +104,124 @@ class _SignupScreenState extends State<SignupScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Create Your Health\nIdentity',
-                  style: AppTypography.displayMedium.copyWith(
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: -0.6,
-                  ),
+                  'Create Patient Profile',
+                  style: AppTypography.displayMedium,
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 6),
                 Text(
-                  'Start your journey with end-to-end encrypted medical memory and real-time AI assistance.',
+                  'End-to-end encrypted medical memory with zero cloud disclosure.',
                   style: AppTypography.bodyMedium,
                 ),
-                const SizedBox(height: 28),
+                const SizedBox(height: 24),
 
-                // Full Name
                 CustomTextField(
                   label: 'Full Legal Name',
                   hintText: 'e.g. Alex Morgan',
                   controller: _nameController,
-                  prefixIcon: const Icon(Icons.person_outline_rounded, size: 20),
-                  validator: (val) =>
-                      val == null || val.trim().isEmpty ? 'Please enter your full name' : null,
+                  validator: (val) => val == null || val.trim().isEmpty
+                      ? 'Please enter your full name'
+                      : null,
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 14),
 
-                // Email
                 CustomTextField(
                   label: 'Email Address',
                   hintText: 'alex.morgan@example.com',
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
-                  prefixIcon: const Icon(Icons.mail_outline_rounded, size: 20),
                   validator: (val) {
-                    if (val == null || val.trim().isEmpty) return 'Please enter your email';
-                    if (!val.contains('@') || !val.contains('.')) return 'Enter a valid email';
+                    if (val == null || val.trim().isEmpty) {
+                      return 'Please enter your email';
+                    }
+                    if (!val.contains('@')) {
+                      return 'Enter a valid email';
+                    }
                     return null;
                   },
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 14),
 
-                // Password
                 CustomTextField(
                   label: 'Master Password',
                   hintText: 'Minimum 8 characters with numbers',
                   controller: _passwordController,
                   obscureText: _obscurePassword,
-                  prefixIcon: const Icon(Icons.lock_outline_rounded, size: 20),
                   suffixIcon: IconButton(
                     icon: Icon(
-                      _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                      size: 20,
+                      _obscurePassword
+                          ? Icons.visibility_off_outlined
+                          : Icons.visibility_outlined,
+                      size: 18,
                     ),
-                    onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                    onPressed: () =>
+                        setState(() => _obscurePassword = !_obscurePassword),
                   ),
-                  validator: (val) =>
-                      val == null || val.length < 6 ? 'Password must be at least 6 characters' : null,
+                  validator: (val) => val == null || val.length < 6
+                      ? 'Password must be at least 6 characters'
+                      : null,
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 14),
 
-                // Confirm Password
                 CustomTextField(
                   label: 'Confirm Master Password',
-                  hintText: 'Re-enter your master password',
+                  hintText: 'Re-enter your password',
                   controller: _confirmPasswordController,
                   obscureText: _obscurePassword,
-                  prefixIcon: const Icon(Icons.lock_reset_rounded, size: 20),
                   validator: (val) {
-                    if (val != _passwordController.text) return 'Passwords do not match';
+                    if (val != _passwordController.text) {
+                      return 'Passwords do not match';
+                    }
                     return null;
                   },
                 ),
                 const SizedBox(height: 16),
 
-                // Terms checkbox
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Checkbox(
                       value: _termsAccepted,
-                      activeColor: AppColors.secondary,
+                      activeColor: AppColors.primaryGreen,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(4),
                       ),
-                      onChanged: (val) => setState(() => _termsAccepted = val ?? false),
+                      onChanged: (val) =>
+                          setState(() => _termsAccepted = val ?? false),
                     ),
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.only(top: 10),
                         child: Text(
-                          'I acknowledge that MediVision AI provides health insights and not definitive clinical diagnoses. All data is governed by zero-knowledge encryption.',
+                          'I acknowledge that MediVision provides educational clinical guidance and not certified medical diagnosis. All telemetry is encrypted.',
                           style: AppTypography.bodySmall,
                         ),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 20),
 
                 PrimaryButton(
-                  label: 'Create Secure Account',
+                  label: 'Create Encrypted Account',
                   isLoading: _isLoading,
-                  icon: Icons.shield_rounded,
                   onPressed: _handleSignup,
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 20),
 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Already have an account?', style: AppTypography.bodyMedium),
+                    Text(
+                      'Already have an account?',
+                      style: AppTypography.bodyMedium,
+                    ),
                     TextButton(
                       onPressed: () => context.pop(),
                       child: Text(
                         'Sign In',
                         style: AppTypography.labelLarge.copyWith(
-                          color: AppColors.secondary,
-                          fontWeight: FontWeight.w700,
+                          color: AppColors.primaryGreen,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),

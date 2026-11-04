@@ -209,3 +209,4 @@ The database auto-initializes with a pre-configured demo patient account that ma
 * **CORS Enabled:** Seamlessly accepts requests from Flutter Web (`http://localhost:*`), Flutter Mobile, and Flutter Desktop.
 * **Zero Configuration Persistence:** Atomic file-based JSON repository in `data/users.json` that requires no external database engine installation and persists across server restarts.
 * **Central Error & 404 Handling:** Structured JSON error responses across all routes.
+

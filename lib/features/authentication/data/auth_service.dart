@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import '../../../core/constants/api_constants.dart';
+import '../../profile/data/models/user_profile_model.dart';
 
 class AuthResult {
   final bool success;
@@ -148,6 +149,58 @@ class AuthService {
     }
   }
 
+  /// Update user profile in the persistent database
+  static Future<bool> updateProfile(UserProfileModel profile) async {
+    try {
+      final token = await _storage.read(key: _tokenKey);
+      if (token == null) return false;
+
+      final response = await http
+          .put(
+            Uri.parse(ApiConstants.profile),
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token',
+            },
+            body: jsonEncode(profile.toJson()),
+          )
+          .timeout(const Duration(seconds: 4));
+
+      return response.statusCode == 200;
+    } catch (e) {
+      debugPrint('Failed to sync profile to backend: $e');
+      return false;
+    }
+  }
+
+  /// Fetch full user profile from the database
+  static Future<UserProfileModel?> fetchProfile() async {
+    try {
+      final token = await _storage.read(key: _tokenKey);
+      if (token == null) return null;
+
+      final response = await http
+          .get(
+            Uri.parse(ApiConstants.profile),
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token',
+            },
+          )
+          .timeout(const Duration(seconds: 4));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body) as Map<String, dynamic>;
+        final userData = data['data']['user'] as Map<String, dynamic>;
+        return UserProfileModel.fromJson(userData);
+      }
+      return null;
+    } catch (e) {
+      debugPrint('Failed to fetch profile from backend: $e');
+      return null;
+    }
+  }
+
   /// Sign out user and clear secure JWT tokens
   static Future<void> logout() async {
     try {
@@ -176,3 +229,4 @@ class AuthService {
     return _storage.read(key: _tokenKey);
   }
 }
+
