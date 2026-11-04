@@ -26,9 +26,29 @@ class PermissionsScreen extends ConsumerWidget {
         actions: [
           TextButton(
             onPressed: () {
-              ref.read(permissionsProvider.notifier).grantAll();
+              if (grantedCount == permissions.length) {
+                ref.read(permissionsProvider.notifier).revokeAll();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('All health data sources disconnected.'),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              } else {
+                ref.read(permissionsProvider.notifier).grantAll();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('All health data sources successfully connected!'),
+                    backgroundColor: AppColors.secondary,
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              }
             },
-            child: const Text('Connect All'),
+            child: Text(
+              grantedCount == permissions.length ? 'Disconnect All' : 'Connect All',
+              style: const TextStyle(fontWeight: FontWeight.w700),
+            ),
           ),
           const SizedBox(width: 8),
         ],
@@ -224,6 +244,20 @@ class PermissionsScreen extends ConsumerWidget {
                                 ref
                                     .read(permissionsProvider.notifier)
                                     .togglePermission(item.id);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      isGranted
+                                          ? 'Disconnected ${item.title}'
+                                          : 'Connected ${item.title} data source',
+                                    ),
+                                    duration: const Duration(seconds: 1),
+                                    backgroundColor: isGranted
+                                        ? AppColors.primary
+                                        : AppColors.secondary,
+                                    behavior: SnackBarBehavior.floating,
+                                  ),
+                                );
                               },
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,

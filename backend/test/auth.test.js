@@ -211,3 +211,59 @@ test('10. Retrieve updated profile from database via GET /api/user/profile', asy
   assert.strictEqual(profileRes.data.data.user.fullName, 'Alex Morgan MD');
   assert.strictEqual(profileRes.data.data.user.heightCm, 170.5);
 });
+
+test('11. Update data sources & permissions via PUT /api/user/permissions', async () => {
+  const loginRes = await apiRequest('/api/auth/login', {
+    method: 'POST',
+    body: JSON.stringify({
+      email: 'alex.morgan@medivision.health',
+      password: 'Password123!',
+    }),
+  });
+  const token = loginRes.data.data.tokens.accessToken;
+
+  const res = await apiRequest('/api/user/permissions', {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      permissions: {
+        sleep_health: true,
+        physical_activity: true,
+        screen_time: true,
+        device_sensors: true,
+        medical_documents: true,
+        notifications: true,
+      },
+    }),
+  });
+
+  assert.strictEqual(res.status, 200);
+  assert.strictEqual(res.data.success, true);
+  assert.strictEqual(res.data.data.permissions.sleep_health, true);
+  assert.strictEqual(res.data.data.permissions.physical_activity, true);
+});
+
+test('12. Retrieve live permissions from database via GET /api/user/permissions', async () => {
+  const loginRes = await apiRequest('/api/auth/login', {
+    method: 'POST',
+    body: JSON.stringify({
+      email: 'alex.morgan@medivision.health',
+      password: 'Password123!',
+    }),
+  });
+  const token = loginRes.data.data.tokens.accessToken;
+
+  const res = await apiRequest('/api/user/permissions', {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  assert.strictEqual(res.status, 200);
+  assert.strictEqual(res.data.success, true);
+  assert.strictEqual(res.data.data.permissions.sleep_health, true);
+  assert.strictEqual(res.data.data.permissions.notifications, true);
+});

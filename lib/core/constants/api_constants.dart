@@ -15,6 +15,7 @@ class ApiConstants {
   static String get me => '$baseUrl/auth/me';
   static String get refresh => '$baseUrl/auth/refresh';
   static String get profile => '$baseUrl/user/profile';
+  static String get permissions => '$baseUrl/user/permissions';
   static String get health => '$baseUrl/health';
 }
 

@@ -11,5 +11,8 @@ router.use(requireAuth);
 
 router.get('/profile', userController.getProfile);
 router.put('/profile', userController.updateProfile);
+router.get('/permissions', userController.getPermissions);
+router.put('/permissions', userController.updatePermissions);
 
 module.exports = router;
+

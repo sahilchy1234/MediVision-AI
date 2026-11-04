@@ -6,7 +6,6 @@ import '../../../core/constants/app_dimensions.dart';
 import '../../../core/constants/app_typography.dart';
 import '../../../core/utils/date_formatter.dart';
 import '../../../core/widgets/custom_text_field.dart';
-import '../../../core/widgets/glass_card.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../data/models/user_profile_model.dart';
 import '../providers/profile_provider.dart';
@@ -16,10 +15,12 @@ class UserProfileSetupScreen extends ConsumerStatefulWidget {
   const UserProfileSetupScreen({super.key});
 
   @override
-  ConsumerState<UserProfileSetupScreen> createState() => _UserProfileSetupScreenState();
+  ConsumerState<UserProfileSetupScreen> createState() =>
+      _UserProfileSetupScreenState();
 }
 
-class _UserProfileSetupScreenState extends ConsumerState<UserProfileSetupScreen> {
+class _UserProfileSetupScreenState
+    extends ConsumerState<UserProfileSetupScreen> {
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _nameController;
   late TextEditingController _heightController;
@@ -30,17 +31,30 @@ class _UserProfileSetupScreenState extends ConsumerState<UserProfileSetupScreen>
   DateTime? _selectedDob = DateTime(1994, 6, 18);
   String _selectedGender = 'Non-binary';
 
-  final List<String> _genderOptions = ['Female', 'Male', 'Non-binary', 'Prefer not to say'];
+  final List<String> _genderOptions = [
+    'Female',
+    'Male',
+    'Non-binary',
+    'Prefer not to say',
+  ];
 
   @override
   void initState() {
     super.initState();
     final current = ref.read(profileProvider);
     _nameController = TextEditingController(text: current.fullName);
-    _heightController = TextEditingController(text: current.heightCm?.toStringAsFixed(0) ?? '175');
-    _weightController = TextEditingController(text: current.weightKg?.toStringAsFixed(1) ?? '68.5');
-    _allergiesController = TextEditingController(text: current.allergies.join(', '));
-    _conditionsController = TextEditingController(text: current.medicalConditions.join(', '));
+    _heightController = TextEditingController(
+      text: current.heightCm?.toStringAsFixed(0) ?? '175',
+    );
+    _weightController = TextEditingController(
+      text: current.weightKg?.toStringAsFixed(1) ?? '68.5',
+    );
+    _allergiesController = TextEditingController(
+      text: current.allergies.join(', '),
+    );
+    _conditionsController = TextEditingController(
+      text: current.medicalConditions.join(', '),
+    );
     if (current.gender != null) {
       _selectedGender = current.gender!;
     }
@@ -69,9 +83,9 @@ class _UserProfileSetupScreenState extends ConsumerState<UserProfileSetupScreen>
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
-              primary: AppColors.primary,
+              primary: AppColors.primaryGreen,
               onPrimary: Colors.white,
-              onSurface: AppColors.textPrimary,
+              onSurface: AppColors.primaryText,
             ),
           ),
           child: child!,
@@ -128,17 +142,11 @@ class _UserProfileSetupScreenState extends ConsumerState<UserProfileSetupScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.mainBackground,
       appBar: AppBar(
-        title: const Text('Clinical Profile Setup'),
+        title: const Text('Clinical Baseline Setup'),
         actions: [
-          TextButton(
-            onPressed: _skip,
-            child: Text(
-              'Skip for now',
-              style: AppTypography.labelLarge.copyWith(color: AppColors.textSecondary),
-            ),
-          ),
+          TextButton(onPressed: _skip, child: const Text('Skip')),
           const SizedBox(width: 8),
         ],
       ),
@@ -150,59 +158,57 @@ class _UserProfileSetupScreenState extends ConsumerState<UserProfileSetupScreen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Top Progress indicator
+                // Minimal 3-step progress indicator
                 Row(
                   children: [
                     Expanded(
                       child: Container(
-                        height: 4,
+                        height: 3,
                         decoration: BoxDecoration(
-                          color: AppColors.secondary,
-                          borderRadius: BorderRadius.circular(2),
+                          color: AppColors.primaryGreen,
+                          borderRadius: BorderRadius.circular(1.5),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 6),
                     Expanded(
                       child: Container(
-                        height: 4,
+                        height: 3,
                         decoration: BoxDecoration(
                           color: AppColors.border,
-                          borderRadius: BorderRadius.circular(2),
+                          borderRadius: BorderRadius.circular(1.5),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 6),
                     Expanded(
                       child: Container(
-                        height: 4,
+                        height: 3,
                         decoration: BoxDecoration(
                           color: AppColors.border,
-                          borderRadius: BorderRadius.circular(2),
+                          borderRadius: BorderRadius.circular(1.5),
                         ),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 18),
 
                 Text(
-                  'Tell Us About Yourself',
-                  style: AppTypography.displaySmall.copyWith(fontWeight: FontWeight.w800),
+                  'Patient Demographics',
+                  style: AppTypography.displayMedium,
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: 4),
                 Text(
-                  'This baseline data allows the MediVision AI companion to calculate personalized metabolic ratios and clinical normal ranges.',
+                  'Used to calculate physiological normal ranges and calibrate clinical reference intervals.',
                   style: AppTypography.bodyMedium,
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 20),
 
-                // Full Name
                 CustomTextField(
                   label: 'Full Name *',
                   hintText: 'Enter your name',
                   controller: _nameController,
-                  prefixIcon: const Icon(Icons.person_outline_rounded, size: 20),
                   validator: (val) {
                     if (val == null || val.trim().isEmpty) {
                       return 'Full name is required';
@@ -210,86 +216,94 @@ class _UserProfileSetupScreenState extends ConsumerState<UserProfileSetupScreen>
                     return null;
                   },
                 ),
-                const SizedBox(height: 18),
+                const SizedBox(height: 14),
 
-                // Date of Birth
                 Text(
                   'Date of Birth',
-                  style: AppTypography.labelLarge.copyWith(fontWeight: FontWeight.w600),
+                  style: AppTypography.labelLarge.copyWith(
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 6),
                 InkWell(
                   onTap: _selectDob,
                   borderRadius: BorderRadius.circular(AppDimensions.radiusM),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-                      border: Border.all(color: AppColors.border, width: 1.2),
+                      borderRadius: BorderRadius.circular(
+                        AppDimensions.radiusM,
+                      ),
+                      border: Border.all(color: AppColors.border, width: 1.0),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          children: [
-                            const Icon(Icons.calendar_today_rounded,
-                                size: 18, color: AppColors.textSecondary),
-                            const SizedBox(width: 12),
-                            Text(
-                              _selectedDob != null
-                                  ? DateFormatter.formatDate(_selectedDob!)
-                                  : 'Select date of birth',
-                              style: AppTypography.bodyLarge.copyWith(
-                                color: _selectedDob != null
-                                    ? AppColors.textPrimary
-                                    : AppColors.textTertiary,
-                              ),
-                            ),
-                          ],
+                        Text(
+                          _selectedDob != null
+                              ? DateFormatter.formatDate(_selectedDob!)
+                              : 'Select date of birth',
+                          style: AppTypography.bodyMedium.copyWith(
+                            color: _selectedDob != null
+                                ? AppColors.primaryText
+                                : AppColors.textTertiary,
+                          ),
                         ),
-                        const Icon(Icons.keyboard_arrow_down_rounded,
-                            color: AppColors.textSecondary),
+                        const Icon(
+                          Icons.calendar_today_outlined,
+                          size: 16,
+                          color: AppColors.secondaryText,
+                        ),
                       ],
                     ),
                   ),
                 ),
-                const SizedBox(height: 18),
+                const SizedBox(height: 16),
 
-                // Gender Chips (Optional)
                 Text(
                   'Gender (Optional)',
-                  style: AppTypography.labelLarge.copyWith(fontWeight: FontWeight.w600),
+                  style: AppTypography.labelLarge.copyWith(
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 6),
                 Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
+                  spacing: 6,
+                  runSpacing: 6,
                   children: _genderOptions.map((gender) {
                     final isSelected = _selectedGender == gender;
                     return ChoiceChip(
                       label: Text(gender),
                       selected: isSelected,
                       onSelected: (selected) {
-                        if (selected) {
-                          setState(() => _selectedGender = gender);
-                        }
+                        if (selected) setState(() => _selectedGender = gender);
                       },
-                      selectedColor: AppColors.primary,
+                      selectedColor: AppColors.mintAccent,
                       backgroundColor: Colors.white,
                       labelStyle: TextStyle(
-                        color: isSelected ? Colors.white : AppColors.textPrimary,
-                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                        color: isSelected
+                            ? AppColors.forestGreen
+                            : AppColors.secondaryText,
+                        fontWeight: isSelected
+                            ? FontWeight.w600
+                            : FontWeight.w400,
+                        fontSize: 12,
                       ),
                       side: BorderSide(
-                        color: isSelected ? AppColors.primary : AppColors.border,
+                        color: isSelected
+                            ? AppColors.primaryGreen
+                            : AppColors.border,
+                        width: 1.0,
                       ),
                     );
                   }).toList(),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 16),
 
-                // Physical Biometrics (Height & Weight)
                 Row(
                   children: [
                     Expanded(
@@ -298,69 +312,43 @@ class _UserProfileSetupScreenState extends ConsumerState<UserProfileSetupScreen>
                         hintText: '175',
                         controller: _heightController,
                         keyboardType: TextInputType.number,
-                        prefixIcon: const Icon(Icons.height_rounded, size: 20),
                       ),
                     ),
-                    const SizedBox(width: 14),
+                    const SizedBox(width: 12),
                     Expanded(
                       child: CustomTextField(
                         label: 'Weight (kg)',
                         hintText: '68.5',
                         controller: _weightController,
-                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                        prefixIcon: const Icon(Icons.monitor_weight_outlined, size: 20),
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: true,
+                        ),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 16),
 
-                // Known Allergies
                 CustomTextField(
-                  label: 'Known Allergies (Optional)',
+                  label: 'Documented Allergies (Optional)',
                   hintText: 'e.g. Penicillin, Peanuts, Sulfa (comma separated)',
                   controller: _allergiesController,
-                  prefixIcon: const Icon(Icons.warning_amber_rounded, size: 20),
                 ),
-                const SizedBox(height: 18),
+                const SizedBox(height: 14),
 
-                // Medical Conditions
                 CustomTextField(
-                  label: 'Existing Medical Conditions (Optional)',
+                  label: 'Active Clinical Conditions (Optional)',
                   hintText: 'e.g. Mild Asthma, Hypertension, Diabetes Type 2',
                   controller: _conditionsController,
                   maxLines: 2,
-                  prefixIcon: const Icon(Icons.medical_information_outlined, size: 20),
                 ),
                 const SizedBox(height: 24),
-
-                GlassCard(
-                  backgroundColor: AppColors.secondaryContainer.withOpacity(0.4),
-                  borderColor: AppColors.secondaryLight.withOpacity(0.3),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.lock_rounded, size: 20, color: AppColors.secondaryDark),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          'Your profile fields are encrypted on-device and will never be shared without explicit consent.',
-                          style: AppTypography.bodySmall.copyWith(
-                            color: AppColors.secondaryDark,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 28),
 
                 PrimaryButton(
-                  label: 'Continue to Storage Mode',
-                  icon: Icons.arrow_forward_rounded,
+                  label: 'Continue to Storage Architecture',
                   onPressed: _saveAndContinue,
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 20),
               ],
             ),
           ),
@@ -369,4 +357,3 @@ class _UserProfileSetupScreenState extends ConsumerState<UserProfileSetupScreen>
     );
   }
 }
-

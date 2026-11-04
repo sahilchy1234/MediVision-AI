@@ -9,6 +9,8 @@ import '../../../core/widgets/primary_button.dart';
 import '../../../shared/widgets/section_header.dart';
 import '../../../shared/widgets/status_badge.dart';
 import '../../health_timeline/models/timeline_entry.dart';
+import '../../permissions/data/permission_item.dart';
+import '../../permissions/providers/permissions_provider.dart';
 import '../../profile/providers/profile_provider.dart';
 import '../../womens_health/providers/womens_health_provider.dart';
 import 'widgets/ai_insight_card.dart';
@@ -170,7 +172,15 @@ class DashboardScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profile = ref.watch(profileProvider);
+    final permissions = ref.watch(permissionsProvider);
+    final permissionsNotifier = ref.read(permissionsProvider.notifier);
     final recentEntries = TimelineEntry.getSampleEntries();
+
+    final connectedSourcesCount = permissions.where((p) => p.status == PermissionStatus.granted).length;
+    final isSleepConnected = permissionsNotifier.isSleepGranted;
+    final isActivityConnected = permissionsNotifier.isActivityGranted;
+    final isScreenTimeConnected = permissionsNotifier.isScreenTimeGranted;
+    final isSensorsConnected = permissionsNotifier.isSensorsGranted;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -434,22 +444,44 @@ class DashboardScreen extends ConsumerWidget {
               const SizedBox(height: 22),
 
               // Biometric & Daily Lifestyle Cards
-              const SectionHeader(title: 'Biometric & Lifestyle telemetry'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SectionHeader(title: 'Biometric Telemetry ($connectedSourcesCount Active)'),
+                  TextButton.icon(
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    ),
+                    icon: const Icon(Icons.tune_rounded, size: 14, color: AppColors.secondary),
+                    label: Text(
+                      'Data Sources',
+                      style: AppTypography.labelSmall.copyWith(
+                        color: AppColors.secondary,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    onPressed: () => context.push('/permissions'),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 6),
               Row(
                 children: [
                   // Sleep Card
                   Expanded(
                     child: MetricCard(
                       title: 'Sleep Duration',
-                      value: '7h 42m',
-                      subtitle: '1h 48m Deep sleep (Optimal)',
+                      value: isSleepConnected ? '7h 42m' : 'Disconnected',
+                      subtitle: isSleepConnected
+                          ? '1h 48m Deep sleep (Optimal)'
+                          : 'Tap to connect Sleep data',
                       icon: Icons.bedtime_rounded,
-                      iconColor: AppColors.accentIndigo,
-                      progress: 0.88,
-                      progressColor: AppColors.accentIndigo,
-                      badgeText: '89% Quality',
-                      badgeColor: AppColors.accentIndigo,
-                      onTap: () => context.go('/timeline'),
+                      iconColor: isSleepConnected ? AppColors.accentIndigo : AppColors.textTertiary,
+                      progress: isSleepConnected ? 0.88 : 0.0,
+                      progressColor: isSleepConnected ? AppColors.accentIndigo : AppColors.border,
+                      badgeText: isSleepConnected ? '89% Quality' : 'Paused',
+                      badgeColor: isSleepConnected ? AppColors.accentIndigo : AppColors.textTertiary,
+                      onTap: () => isSleepConnected ? context.go('/timeline') : context.push('/permissions'),
                     ),
                   ),
                   const SizedBox(width: 14),
@@ -457,15 +489,17 @@ class DashboardScreen extends ConsumerWidget {
                   Expanded(
                     child: MetricCard(
                       title: 'Daily Steps',
-                      value: '8,420',
-                      subtitle: 'Goal: 10,000 steps (84%)',
+                      value: isActivityConnected ? '8,420' : 'Disconnected',
+                      subtitle: isActivityConnected
+                          ? 'Goal: 10,000 steps (84%)'
+                          : 'Tap to connect Steps data',
                       icon: Icons.directions_run_rounded,
-                      iconColor: AppColors.secondary,
-                      progress: 0.84,
-                      progressColor: AppColors.secondary,
-                      badgeText: '482 kcal',
-                      badgeColor: AppColors.secondary,
-                      onTap: () => context.go('/timeline'),
+                      iconColor: isActivityConnected ? AppColors.secondary : AppColors.textTertiary,
+                      progress: isActivityConnected ? 0.84 : 0.0,
+                      progressColor: isActivityConnected ? AppColors.secondary : AppColors.border,
+                      badgeText: isActivityConnected ? '482 kcal' : 'Paused',
+                      badgeColor: isActivityConnected ? AppColors.secondary : AppColors.textTertiary,
+                      onTap: () => isActivityConnected ? context.go('/timeline') : context.push('/permissions'),
                     ),
                   ),
                 ],
@@ -478,15 +512,17 @@ class DashboardScreen extends ConsumerWidget {
                   Expanded(
                     child: MetricCard(
                       title: 'Screen Time',
-                      value: '3h 15m',
-                      subtitle: '45m before bed alert active',
+                      value: isScreenTimeConnected ? '3h 15m' : 'Disconnected',
+                      subtitle: isScreenTimeConnected
+                          ? '45m before bed alert active'
+                          : 'Tap to connect Screen data',
                       icon: Icons.phone_android_rounded,
-                      iconColor: AppColors.accentAmber,
-                      progress: 0.55,
-                      progressColor: AppColors.accentAmber,
-                      badgeText: '-32m vs avg',
-                      badgeColor: AppColors.accentEmerald,
-                      onTap: () => context.go('/timeline'),
+                      iconColor: isScreenTimeConnected ? AppColors.accentAmber : AppColors.textTertiary,
+                      progress: isScreenTimeConnected ? 0.55 : 0.0,
+                      progressColor: isScreenTimeConnected ? AppColors.accentAmber : AppColors.border,
+                      badgeText: isScreenTimeConnected ? '-32m vs avg' : 'Paused',
+                      badgeColor: isScreenTimeConnected ? AppColors.accentEmerald : AppColors.textTertiary,
+                      onTap: () => isScreenTimeConnected ? context.go('/timeline') : context.push('/permissions'),
                     ),
                   ),
                   const SizedBox(width: 14),
@@ -494,15 +530,17 @@ class DashboardScreen extends ConsumerWidget {
                   Expanded(
                     child: MetricCard(
                       title: 'Resting Pulse',
-                      value: '61 bpm',
-                      subtitle: 'Healthy athletic baseline',
+                      value: isSensorsConnected ? '61 bpm' : 'Disconnected',
+                      subtitle: isSensorsConnected
+                          ? 'Healthy athletic baseline'
+                          : 'Tap to pair Bluetooth sensors',
                       icon: Icons.monitor_heart_rounded,
-                      iconColor: AppColors.accentRose,
-                      progress: 0.65,
-                      progressColor: AppColors.accentRose,
-                      badgeText: 'Optimal',
-                      badgeColor: AppColors.accentEmerald,
-                      onTap: () => context.go('/timeline'),
+                      iconColor: isSensorsConnected ? AppColors.accentRose : AppColors.textTertiary,
+                      progress: isSensorsConnected ? 0.65 : 0.0,
+                      progressColor: isSensorsConnected ? AppColors.accentRose : AppColors.border,
+                      badgeText: isSensorsConnected ? 'Optimal' : 'Paused',
+                      badgeColor: isSensorsConnected ? AppColors.accentEmerald : AppColors.textTertiary,
+                      onTap: () => isSensorsConnected ? context.go('/timeline') : context.push('/permissions'),
                     ),
                   ),
                 ],

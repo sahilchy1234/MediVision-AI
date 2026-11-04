@@ -90,6 +90,78 @@ const userController = {
       next(err);
     }
   },
+
+  /**
+   * GET /api/user/permissions
+   * Return authenticated user's permissions & connected data sources
+   */
+  async getPermissions(req, res, next) {
+    try {
+      const user = await db.findById(req.user.id);
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: 'User profile not found.',
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        data: {
+          permissions: user.permissions || {
+            sleep_health: false,
+            physical_activity: false,
+            screen_time: false,
+            device_sensors: false,
+            medical_documents: false,
+            notifications: false,
+          },
+        },
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  /**
+   * PUT /api/user/permissions
+   * Update authenticated user's permissions & connected data sources
+   */
+  async updatePermissions(req, res, next) {
+    try {
+      const { permissions } = req.body;
+      if (!permissions || typeof permissions !== 'object') {
+        return res.status(400).json({
+          success: false,
+          message: 'Permissions payload must be a valid key-value object.',
+        });
+      }
+
+      const user = await db.findById(req.user.id);
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: 'User profile not found.',
+        });
+      }
+
+      const current = user.permissions || {};
+      const merged = { ...current, ...permissions };
+
+      const updated = await db.updateUser(req.user.id, { permissions: merged });
+
+      return res.status(200).json({
+        success: true,
+        message: 'Data sources & permissions updated in database.',
+        data: {
+          permissions: updated.permissions,
+        },
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
 };
 
 module.exports = userController;
+

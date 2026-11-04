@@ -8,6 +8,8 @@ import '../../../core/widgets/glass_card.dart';
 import '../../../shared/models/storage_mode.dart';
 import '../../../shared/widgets/section_header.dart';
 import '../../../shared/widgets/status_badge.dart';
+import '../../permissions/data/permission_item.dart';
+import '../../permissions/providers/permissions_provider.dart';
 import '../../profile/data/models/user_profile_model.dart';
 import '../../profile/providers/profile_provider.dart';
 import '../../storage_selection/providers/storage_provider.dart';
@@ -112,6 +114,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   Widget build(BuildContext context) {
     final profile = ref.watch(profileProvider);
     final storageMode = ref.watch(storageSelectionProvider);
+    final permissions = ref.watch(permissionsProvider);
+    final connectedCount = permissions.where((p) => p.status == PermissionStatus.granted).length;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -217,9 +221,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 children: [
                   ListTile(
                     leading: const Icon(Icons.security_rounded, color: AppColors.primary),
-                    title: const Text('Permissions Centre', style: TextStyle(fontWeight: FontWeight.w600)),
-                    subtitle: const Text('Manage sensor, sleep, and record authorization'),
-                    trailing: const Icon(Icons.chevron_right_rounded),
+                    title: const Text('Permissions & Data Sources', style: TextStyle(fontWeight: FontWeight.w600)),
+                    subtitle: Text('$connectedCount of ${permissions.length} live data sources connected'),
+                    trailing: StatusBadge(
+                      label: '$connectedCount Connected',
+                      type: connectedCount > 0 ? BadgeType.success : BadgeType.neutral,
+                    ),
                     onTap: () => context.push('/permissions'),
                   ),
                   if (profile.isFemale) ...[
