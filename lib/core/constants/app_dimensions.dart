@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AppDimensions {
   AppDimensions._();
 
-  // Spacing
+  // Spacing Scale
   static const double xs = 4.0;
   static const double sm = 8.0;
   static const double md = 12.0;
@@ -13,11 +13,11 @@ class AppDimensions {
   static const double xxxl = 32.0;
   static const double huge = 48.0;
 
-  // Corner Radii (Design standard: 16–22px)
-  static const double radiusS = 10.0;
-  static const double radiusM = 16.0;
-  static const double radiusL = 20.0;
-  static const double radiusXL = 24.0;
+  // Corner Radii - Clean, production-grade rounded aesthetic
+  static const double radiusS = 8.0;
+  static const double radiusM = 12.0;
+  static const double radiusL = 16.0;
+  static const double radiusXL = 20.0;
   static const double radiusFull = 999.0;
 
   // Border Radii
@@ -27,38 +27,37 @@ class AppDimensions {
   static const BorderRadius borderRadiusXL = BorderRadius.all(Radius.circular(radiusXL));
   static const BorderRadius borderRadiusFull = BorderRadius.all(Radius.circular(radiusFull));
 
-  // Card Paddings
+  // Layout Paddings
   static const EdgeInsets paddingScreen = EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0);
-  static const EdgeInsets paddingCard = EdgeInsets.all(18.0);
-  static const EdgeInsets paddingCardCompact = EdgeInsets.all(14.0);
-  static const EdgeInsets paddingButton = EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0);
+  static const EdgeInsets paddingCard = EdgeInsets.all(16.0);
+  static const EdgeInsets paddingCardCompact = EdgeInsets.all(12.0);
+  static const EdgeInsets paddingButton = EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0);
 
-  // Elevation / Shadows
+  // Elevation / Shadows - Very soft, organic, and clean
   static const List<BoxShadow> cardShadow = [
     BoxShadow(
-      color: Color(0x0A0B1B3D),
+      color: Color(0x060F172A),
+      blurRadius: 8,
+      spreadRadius: 0,
+      offset: Offset(0, 2),
+    ),
+  ];
+
+  static const List<BoxShadow> elevatedShadow = [
+    BoxShadow(
+      color: Color(0x0D0F172A),
       blurRadius: 16,
       spreadRadius: 0,
       offset: Offset(0, 4),
     ),
   ];
 
-  static const List<BoxShadow> elevatedShadow = [
-    BoxShadow(
-      color: Color(0x140B1B3D),
-      blurRadius: 24,
-      spreadRadius: 0,
-      offset: Offset(0, 8),
-    ),
-  ];
-
   static const List<BoxShadow> glowTeal = [
     BoxShadow(
-      color: Color(0x330D9488),
-      blurRadius: 20,
-      spreadRadius: 2,
-      offset: Offset(0, 4),
+      color: Color(0x140D9488),
+      blurRadius: 12,
+      spreadRadius: 0,
+      offset: Offset(0, 2),
     ),
   ];
 }
-

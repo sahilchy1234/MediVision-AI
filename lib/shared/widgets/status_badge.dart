@@ -47,21 +47,21 @@ class StatusBadge extends StatelessWidget {
         case BadgeType.info:
           return AppColors.info;
         case BadgeType.neutral:
-          return AppColors.secondaryText;
+          return AppColors.textSecondary;
       }
     }
 
     final textColor = getTextColor();
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2.5),
       decoration: BoxDecoration(
         color: getBackgroundColor(),
         borderRadius: BorderRadius.circular(
           isPill ? AppDimensions.radiusFull : AppDimensions.radiusS,
         ),
         border: Border.all(
-          color: textColor.withValues(alpha: 0.25),
+          color: textColor.withValues(alpha: 0.18),
           width: 0.8,
         ),
       ),
@@ -70,14 +70,14 @@ class StatusBadge extends StatelessWidget {
         children: [
           if (icon != null) ...[
             Icon(icon, size: 11, color: textColor),
-            const SizedBox(width: 4),
+            const SizedBox(width: 3.5),
           ],
           Text(
             label,
             style: AppTypography.labelSmall.copyWith(
               color: textColor,
               fontWeight: FontWeight.w600,
-              fontSize: 11,
+              fontSize: 10.5,
             ),
           ),
         ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_dimensions.dart';
 
+/// Clean, minimal card container following production design standards
 class GlassCard extends StatelessWidget {
   final Widget child;
   final EdgeInsetsGeometry? padding;
@@ -21,7 +22,7 @@ class GlassCard extends StatelessWidget {
     this.onTap,
     this.backgroundColor,
     this.borderColor,
-    this.borderRadius = AppDimensions.radiusL,
+    this.borderRadius = AppDimensions.radiusM,
     this.boxShadow = AppDimensions.cardShadow,
     this.gradient,
   });
@@ -35,8 +36,8 @@ class GlassCard extends StatelessWidget {
         gradient: gradient,
         borderRadius: BorderRadius.circular(borderRadius),
         border: Border.all(
-          color: borderColor ?? AppColors.borderSubtle,
-          width: 1.2,
+          color: borderColor ?? AppColors.border,
+          width: 1.0,
         ),
         boxShadow: boxShadow,
       ),
@@ -56,4 +57,3 @@ class GlassCard extends StatelessWidget {
     return card;
   }
 }
-

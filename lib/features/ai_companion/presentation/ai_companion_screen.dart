@@ -21,10 +21,10 @@ class _AiCompanionScreenState extends ConsumerState<AiCompanionScreen> {
   ChatAttachment? _stagedAttachment;
 
   final List<String> _suggestedPrompts = [
-    'Explain my latest blood panel.',
-    'Review my chest X-Ray findings.',
-    'What should I discuss with my doctor?',
-    'Correlate my sleep duration with my resting heart rate.',
+    'Explain my latest lab results',
+    'Review active medications and dosage',
+    'Questions to prepare for my next doctor visit',
+    'Summarize my health metrics over the last 30 days',
   ];
 
   @override
@@ -102,64 +102,56 @@ class _AiCompanionScreenState extends ConsumerState<AiCompanionScreen> {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'Attach Medical Record or Scan',
-                  style: AppTypography.titleLarge.copyWith(
-                    fontWeight: FontWeight.w600,
+                  'Attach Health Document',
+                  style: AppTypography.titleMedium.copyWith(
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  'Encrypted and analyzed on-device without cloud training disclosure',
-                  style: AppTypography.bodySmall,
-                ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 14),
 
                 _AttachmentOptionTile(
                   icon: Icons.document_scanner_outlined,
-                  title: 'Chest X-Ray / Diagnostic Imaging',
-                  subtitle:
-                      'DICOM, JPEG, or PNG radiograph (Chest, Spine, Extremities)',
-                  badge: 'DICOM Supported',
+                  title: 'Chest X-Ray / Imaging',
+                  subtitle: 'DICOM radiographic study',
+                  badge: 'Imaging',
                   onTap: () {
                     Navigator.pop(context);
                     _stageAttachment(
                       const ChatAttachment(
-                        fileName: 'Chest_XRay_PA_Nov2026.dcm',
+                        fileName: 'CXR_Posteroanterior_20261014.dcm',
                         fileType: 'xray',
-                        fileSize: '14.2 MB DICOM',
+                        fileSize: '4.8 MB DICOM',
                       ),
-                      defaultPrompt:
-                          'Please review this Chest X-Ray radiograph for any abnormalities.',
+                      defaultPrompt: 'Review and explain the clinical findings in this chest X-ray.',
                     );
                   },
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 8),
 
                 _AttachmentOptionTile(
                   icon: Icons.water_drop_outlined,
-                  title: 'Blood & Metabolic Lab Report',
-                  subtitle: 'PDF panel, complete blood count, or lipid profile',
-                  badge: 'PDF OCR',
+                  title: 'Complete Metabolic Panel & CBC',
+                  subtitle: 'Laboratory blood chemistry report',
+                  badge: 'Lab Panel',
                   onTap: () {
                     Navigator.pop(context);
                     _stageAttachment(
                       const ChatAttachment(
-                        fileName: 'Comprehensive_Metabolic_Panel.pdf',
+                        fileName: 'Lab_Report_Metabolic_CBC.pdf',
                         fileType: 'bloodReport',
-                        fileSize: '1.8 MB PDF',
+                        fileSize: '1.2 MB PDF',
                       ),
-                      defaultPrompt:
-                          'Explain the biomarkers and abnormal flags in this blood panel.',
+                      defaultPrompt: 'Explain the biomarkers and abnormal flags in this blood panel.',
                     );
                   },
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 8),
 
                 _AttachmentOptionTile(
                   icon: Icons.medication_outlined,
                   title: 'Prescription & Medication Order',
-                  subtitle: 'Doctor Rx slip or medication bottle photo',
-                  badge: 'Dosage Check',
+                  subtitle: 'Doctor Rx slip or medication instructions',
+                  badge: 'Medication',
                   onTap: () {
                     Navigator.pop(context);
                     _stageAttachment(
@@ -168,29 +160,7 @@ class _AiCompanionScreenState extends ConsumerState<AiCompanionScreen> {
                         fileType: 'prescription',
                         fileSize: '640 KB Image',
                       ),
-                      defaultPrompt:
-                          'Check dosage instructions and interactions for this medication.',
-                    );
-                  },
-                ),
-                const SizedBox(height: 10),
-
-                _AttachmentOptionTile(
-                  icon: Icons.description_outlined,
-                  title: 'Clinical Summary or Discharge Note',
-                  subtitle:
-                      'Hospital consultation notes, visit summaries, or records',
-                  badge: 'Document',
-                  onTap: () {
-                    Navigator.pop(context);
-                    _stageAttachment(
-                      const ChatAttachment(
-                        fileName: 'Annual_Physical_Summary.pdf',
-                        fileType: 'document',
-                        fileSize: '2.1 MB PDF',
-                      ),
-                      defaultPrompt:
-                          'Summarize the key findings from this medical report.',
+                      defaultPrompt: 'Check dosage instructions and interactions for this medication.',
                     );
                   },
                 ),
@@ -208,49 +178,29 @@ class _AiCompanionScreenState extends ConsumerState<AiCompanionScreen> {
     final chatState = ref.watch(aiCompanionProvider);
 
     ref.listen(aiCompanionProvider, (previous, next) {
-      if (next.messages.length != previous?.messages.length ||
-          next.isThinking) {
+      if (next.messages.length != previous?.messages.length || next.isThinking) {
         _scrollToBottom();
       }
     });
 
     return Scaffold(
-      backgroundColor: AppColors.mainBackground,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: Row(
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                color: AppColors.forestGreen,
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: const Icon(
-                Icons.shield_outlined,
-                color: Colors.white,
-                size: 16,
+            Text(
+              'Clinical Assistant',
+              style: AppTypography.titleMedium.copyWith(
+                fontWeight: FontWeight.w700,
               ),
             ),
-            const SizedBox(width: 12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Clinical Health Companion',
-                  style: AppTypography.titleMedium.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                Text(
-                  'Encrypted Medical Memory • Active',
-                  style: AppTypography.bodySmall.copyWith(
-                    color: AppColors.primaryGreen,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
+            Text(
+              'Personal Health Consultation',
+              style: AppTypography.bodySmall.copyWith(
+                color: AppColors.textTertiary,
+                fontSize: 11,
+              ),
             ),
           ],
         ),
@@ -295,42 +245,20 @@ class _AiCompanionScreenState extends ConsumerState<AiCompanionScreen> {
               ref.read(aiCompanionProvider.notifier).clearChat();
             },
           ),
-          const SizedBox(width: 4),
+          const SizedBox(width: 8),
         ],
       ),
       body: SafeArea(
         child: Column(
           children: [
-            // Clinical Educational Disclaimer (Subtle and human-centered)
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-              color: AppColors.surfaceSubtle,
-              child: Center(
-                child: Text(
-                  'AI Companion provides educational information based on your records, not certified medical diagnosis.',
-                  textAlign: TextAlign.center,
-                  style: AppTypography.labelSmall.copyWith(
-                    color: AppColors.secondaryText,
-                    fontSize: 11,
-                  ),
-                ),
-              ),
-            ),
-
             // Chat Messages History
             Expanded(
               child: ListView.builder(
                 controller: _scrollController,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
-                itemCount:
-                    chatState.messages.length + (chatState.isThinking ? 1 : 0),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                itemCount: chatState.messages.length + (chatState.isThinking ? 1 : 0),
                 itemBuilder: (context, index) {
-                  if (index == chatState.messages.length &&
-                      chatState.isThinking) {
+                  if (index == chatState.messages.length && chatState.isThinking) {
                     return _ThinkingBubble();
                   }
 
@@ -338,89 +266,29 @@ class _AiCompanionScreenState extends ConsumerState<AiCompanionScreen> {
                   final isUser = message.isUser;
 
                   return Align(
-                    alignment: isUser
-                        ? Alignment.centerRight
-                        : Alignment.centerLeft,
+                    alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
                     child: Container(
                       margin: const EdgeInsets.symmetric(vertical: 6),
                       constraints: BoxConstraints(
                         maxWidth: MediaQuery.of(context).size.width * 0.85,
                       ),
                       child: Column(
-                        crossAxisAlignment: isUser
-                            ? CrossAxisAlignment.end
-                            : CrossAxisAlignment.start,
+                        crossAxisAlignment: isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                         children: [
                           Container(
                             padding: const EdgeInsets.all(14),
                             decoration: BoxDecoration(
-                              color: isUser
-                                  ? AppColors.forestGreen
-                                  : Colors.white,
-                              borderRadius: BorderRadius.circular(
-                                AppDimensions.radiusM,
-                              ),
+                              color: isUser ? AppColors.primary : Colors.white,
+                              borderRadius: BorderRadius.circular(AppDimensions.radiusM),
                               border: isUser
                                   ? null
-                                  : Border.all(
-                                      color: AppColors.border,
-                                      width: 1.0,
-                                    ),
-                              boxShadow: isUser
-                                  ? null
-                                  : AppDimensions.cardShadow,
+                                  : Border.all(color: AppColors.border, width: 1.0),
+                              boxShadow: isUser ? null : AppDimensions.cardShadow,
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                // AI Header label for assistant messages
-                                if (!isUser) ...[
-                                  Row(
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 8,
-                                          vertical: 3,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: AppColors.primaryGreen.withOpacity(0.08),
-                                          borderRadius: BorderRadius.circular(
-                                            AppDimensions.radiusFull,
-                                          ),
-                                          border: Border.all(
-                                            color: AppColors.primaryGreen.withOpacity(0.2),
-                                            width: 0.8,
-                                          ),
-                                        ),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            const Icon(
-                                              Icons.auto_awesome,
-                                              size: 11,
-                                              color: AppColors.primaryGreen,
-                                            ),
-                                            const SizedBox(width: 4),
-                                            Text(
-                                              'CLINICAL INTELLIGENCE',
-                                              style: AppTypography.labelSmall
-                                                  .copyWith(
-                                                    color:
-                                                        AppColors.primaryGreen,
-                                                    fontWeight: FontWeight.w700,
-                                                    fontSize: 9.5,
-                                                    letterSpacing: 0.3,
-                                                  ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 8),
-                                ],
-
-                                // User attachment card
+                                // Attachment card (if present)
                                 if (message.attachment != null) ...[
                                   _AttachmentBubbleCard(
                                     attachment: message.attachment!,
@@ -429,13 +297,13 @@ class _AiCompanionScreenState extends ConsumerState<AiCompanionScreen> {
                                   const SizedBox(height: 8),
                                 ],
 
-                                // Message Text (Rendered cleanly as Markdown for AI)
+                                // Message Text
                                 if (isUser)
                                   Text(
                                     message.text,
                                     style: AppTypography.bodyMedium.copyWith(
                                       color: Colors.white,
-                                      height: 1.5,
+                                      height: 1.45,
                                     ),
                                   )
                                 else
@@ -447,15 +315,12 @@ class _AiCompanionScreenState extends ConsumerState<AiCompanionScreen> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(
-                              top: 3,
-                              left: 4,
-                              right: 4,
-                            ),
+                            padding: const EdgeInsets.only(top: 3, left: 4, right: 4),
                             child: Text(
                               DateFormatter.formatTime(message.timestamp),
                               style: AppTypography.bodySmall.copyWith(
                                 fontSize: 10,
+                                color: AppColors.textTertiary,
                               ),
                             ),
                           ),
@@ -467,15 +332,15 @@ class _AiCompanionScreenState extends ConsumerState<AiCompanionScreen> {
               ),
             ),
 
-            // Suggested Clinical Questions
+            // Clean Suggested Prompts
             Container(
-              height: 40,
+              height: 36,
               margin: const EdgeInsets.only(bottom: 8),
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 itemCount: _suggestedPrompts.length,
-                separatorBuilder: (_, index) => const SizedBox(width: 8),
+                separatorBuilder: (_, _) => const SizedBox(width: 8),
                 itemBuilder: (context, index) {
                   final prompt = _suggestedPrompts[index];
                   return ActionChip(
@@ -484,7 +349,7 @@ class _AiCompanionScreenState extends ConsumerState<AiCompanionScreen> {
                     label: Text(
                       prompt,
                       style: AppTypography.labelSmall.copyWith(
-                        color: AppColors.primaryText,
+                        color: AppColors.textSecondary,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -498,21 +363,18 @@ class _AiCompanionScreenState extends ConsumerState<AiCompanionScreen> {
             if (_stagedAttachment != null)
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 8,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-                  border: Border.all(color: AppColors.primaryGreen, width: 1.0),
+                  border: Border.all(color: AppColors.secondary, width: 1.0),
                 ),
                 child: Row(
                   children: [
                     Icon(
                       _getIconForType(_stagedAttachment!.fileType),
-                      size: 18,
-                      color: AppColors.primaryGreen,
+                      size: 16,
+                      color: AppColors.secondary,
                     ),
                     const SizedBox(width: 8),
                     Expanded(
@@ -523,16 +385,13 @@ class _AiCompanionScreenState extends ConsumerState<AiCompanionScreen> {
                             _stagedAttachment!.fileName,
                             style: AppTypography.labelSmall.copyWith(
                               fontWeight: FontWeight.w600,
-                              color: AppColors.primaryText,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
-                            '${_stagedAttachment!.fileSize} • Staged for analysis',
-                            style: AppTypography.bodySmall.copyWith(
-                              fontSize: 10,
-                            ),
+                            _stagedAttachment!.fileSize,
+                            style: AppTypography.bodySmall.copyWith(fontSize: 10),
                           ),
                         ],
                       ),
@@ -551,7 +410,7 @@ class _AiCompanionScreenState extends ConsumerState<AiCompanionScreen> {
                 ),
               ),
 
-            // Refined Clinical Message Composer
+            // Refined Message Input Bar
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               decoration: const BoxDecoration(
@@ -562,58 +421,47 @@ class _AiCompanionScreenState extends ConsumerState<AiCompanionScreen> {
               ),
               child: Row(
                 children: [
-                  // Document Upload Button
                   IconButton(
                     icon: const Icon(
                       Icons.attach_file_rounded,
                       size: 20,
-                      color: AppColors.forestGreen,
+                      color: AppColors.textSecondary,
                     ),
-                    tooltip: 'Upload report or X-Ray',
+                    tooltip: 'Attach document or report',
                     onPressed: _showAttachmentModal,
                   ),
-
-                  // Text Field
                   Expanded(
                     child: TextField(
                       controller: _inputController,
-                      style: AppTypography.bodyMedium.copyWith(
-                        color: AppColors.primaryText,
-                      ),
+                      style: AppTypography.bodyMedium,
                       decoration: InputDecoration(
                         hintText: _stagedAttachment != null
-                            ? 'Add question for this ${_stagedAttachment!.fileType == "xray" ? "X-ray" : "report"}...'
-                            : 'Ask a health question or attach records...',
+                            ? 'Add a question about this attachment...'
+                            : 'Ask a clinical question...',
                         hintStyle: AppTypography.bodyMedium.copyWith(
                           color: AppColors.textTertiary,
                         ),
                         filled: true,
-                        fillColor: AppColors.mainBackground,
+                        fillColor: AppColors.surfaceSubtle,
                         contentPadding: const EdgeInsets.symmetric(
                           horizontal: 14,
                           vertical: 10,
                         ),
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(
-                            AppDimensions.radiusM,
-                          ),
+                          borderRadius: BorderRadius.circular(AppDimensions.radiusM),
                           borderSide: BorderSide.none,
                         ),
                       ),
-                      onSubmitted: (val) => _sendMessage(),
+                      onSubmitted: (_) => _sendMessage(),
                     ),
                   ),
                   const SizedBox(width: 8),
-
-                  // Send Action Button
                   Container(
-                    width: 40,
-                    height: 40,
+                    width: 38,
+                    height: 38,
                     decoration: BoxDecoration(
-                      color: AppColors.primaryGreen,
-                      borderRadius: BorderRadius.circular(
-                        AppDimensions.radiusM,
-                      ),
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.circular(AppDimensions.radiusM),
                     ),
                     child: IconButton(
                       icon: const Icon(
@@ -670,21 +518,21 @@ class _AttachmentOptionTile extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: AppColors.mainBackground,
+          color: AppColors.surfaceSubtle,
           borderRadius: BorderRadius.circular(AppDimensions.radiusM),
           border: Border.all(color: AppColors.border, width: 1.0),
         ),
         child: Row(
           children: [
             Container(
-              width: 38,
-              height: 38,
+              width: 34,
+              height: 34,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(6),
                 border: Border.all(color: AppColors.border, width: 1.0),
               ),
-              child: Icon(icon, color: AppColors.forestGreen, size: 18),
+              child: Icon(icon, color: AppColors.secondary, size: 16),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -705,19 +553,16 @@ class _AttachmentOptionTile extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 6,
-                          vertical: 1,
-                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
                         decoration: BoxDecoration(
-                          color: AppColors.mintAccent,
+                          color: AppColors.secondaryContainer,
                           borderRadius: BorderRadius.circular(3),
                         ),
                         child: Text(
                           badge,
                           style: AppTypography.labelSmall.copyWith(
                             fontSize: 9.5,
-                            color: AppColors.forestGreen,
+                            color: AppColors.secondaryDark,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -750,11 +595,9 @@ class _AttachmentBubbleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: isUser
-            ? Colors.white.withValues(alpha: 0.12)
-            : AppColors.mainBackground,
+        color: isUser ? Colors.white.withValues(alpha: 0.12) : AppColors.surfaceSubtle,
         borderRadius: BorderRadius.circular(AppDimensions.radiusS),
         border: Border.all(
           color: isUser ? Colors.white24 : AppColors.border,
@@ -766,8 +609,8 @@ class _AttachmentBubbleCard extends StatelessWidget {
         children: [
           Icon(
             _getIconForType(attachment.fileType),
-            size: 18,
-            color: isUser ? Colors.white : AppColors.forestGreen,
+            size: 16,
+            color: isUser ? Colors.white : AppColors.secondary,
           ),
           const SizedBox(width: 8),
           Flexible(
@@ -778,16 +621,16 @@ class _AttachmentBubbleCard extends StatelessWidget {
                 Text(
                   attachment.fileName,
                   style: AppTypography.labelSmall.copyWith(
-                    color: isUser ? Colors.white : AppColors.primaryText,
+                    color: isUser ? Colors.white : AppColors.textPrimary,
                     fontWeight: FontWeight.w600,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
-                  '${attachment.fileSize} • Encrypted DICOM/PDF',
+                  attachment.fileSize,
                   style: AppTypography.bodySmall.copyWith(
-                    color: isUser ? Colors.white70 : AppColors.secondaryText,
+                    color: isUser ? Colors.white70 : AppColors.textTertiary,
                     fontSize: 10,
                   ),
                 ),
@@ -821,16 +664,14 @@ class _ThinkingBubble extends StatelessWidget {
               height: 12,
               child: CircularProgressIndicator(
                 strokeWidth: 1.8,
-                valueColor: AlwaysStoppedAnimation<Color>(
-                  AppColors.primaryGreen,
-                ),
+                valueColor: AlwaysStoppedAnimation<Color>(AppColors.secondary),
               ),
             ),
             const SizedBox(width: 8),
             Text(
-              'Cross-referencing authorized clinical history...',
+              'Reviewing clinical records...',
               style: AppTypography.bodySmall.copyWith(
-                color: AppColors.secondaryText,
+                color: AppColors.textSecondary,
               ),
             ),
           ],

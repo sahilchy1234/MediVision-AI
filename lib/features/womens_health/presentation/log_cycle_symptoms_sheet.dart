@@ -17,14 +17,15 @@ class LogCycleSymptomsSheet extends ConsumerStatefulWidget {
 
 class _LogCycleSymptomsSheetState extends ConsumerState<LogCycleSymptomsSheet> {
   PeriodFlow _flow = PeriodFlow.none;
-  double _crampsSeverity = 1;
+  double _crampsSeverity = 0;
   double _pelvicPainSeverity = 0;
   String _mood = 'Calm';
-  final Set<String> _selectedSymptoms = {'Mild Bloating'};
+  final Set<String> _selectedSymptoms = {};
   final Set<String> _selectedPcosObservations = {};
-  final TextEditingController _tempController = TextEditingController(text: '36.7');
+  late TextEditingController _tempController;
   String _cervicalMucus = 'Egg-white (Fertile)';
-  final TextEditingController _notesController = TextEditingController();
+  late TextEditingController _notesController;
+  bool _isPeriodStart = false;
 
   final List<String> _moodOptions = [
     'Calm',
@@ -65,13 +66,35 @@ class _LogCycleSymptomsSheetState extends ConsumerState<LogCycleSymptomsSheet> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    final todayLog = ref.read(womensHealthProvider).todayLog;
+    if (todayLog != null) {
+      _flow = todayLog.flow;
+      _crampsSeverity = todayLog.crampsSeverity.toDouble();
+      _pelvicPainSeverity = todayLog.pelvicPainSeverity.toDouble();
+      _mood = todayLog.mood;
+      _selectedSymptoms.addAll(todayLog.physicalSymptoms);
+      _selectedPcosObservations.addAll(todayLog.pcosObservations);
+      _tempController = TextEditingController(
+        text: todayLog.basalBodyTemp != null ? todayLog.basalBodyTemp!.toStringAsFixed(1) : '',
+      );
+      _cervicalMucus = todayLog.cervicalMucus ?? 'Egg-white (Fertile)';
+      _notesController = TextEditingController(text: todayLog.notes ?? '');
+    } else {
+      _tempController = TextEditingController(text: '');
+      _notesController = TextEditingController();
+    }
+  }
+
+  @override
   void dispose() {
     _tempController.dispose();
     _notesController.dispose();
     super.dispose();
   }
 
-  void _saveLog() {
+  Future<void> _saveLog() async {
     final log = DailySymptomLog(
       id: 'log_${DateTime.now().millisecondsSinceEpoch}',
       date: DateTime.now(),
@@ -86,15 +109,20 @@ class _LogCycleSymptomsSheetState extends ConsumerState<LogCycleSymptomsSheet> {
       notes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
     );
 
-    ref.read(womensHealthProvider.notifier).logDailySymptoms(log);
-    Navigator.pop(context);
+    await ref.read(womensHealthProvider.notifier).logDailySymptoms(
+          log,
+          isPeriodStart: _isPeriodStart,
+        );
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Today\'s symptoms and reproductive indicators securely saved.'),
-        backgroundColor: AppColors.secondary,
-      ),
-    );
+    if (mounted) {
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Today\'s symptoms and reproductive indicators securely saved.'),
+          backgroundColor: AppColors.secondary,
+        ),
+      );
+    }
   }
 
   @override
@@ -133,7 +161,7 @@ class _LogCycleSymptomsSheetState extends ConsumerState<LogCycleSymptomsSheet> {
                     style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.w800),
                   ),
                   Text(
-                    'Tracks hormonal, fertility & clinical symptoms',
+                    'Real-time hormonal, fertility & clinical tracking',
                     style: AppTypography.bodySmall,
                   ),
                 ],
@@ -166,7 +194,14 @@ class _LogCycleSymptomsSheetState extends ConsumerState<LogCycleSymptomsSheet> {
                         label: Text(flow.label),
                         selected: isSelected,
                         onSelected: (val) {
-                          if (val) setState(() => _flow = flow);
+                          if (val) {
+                            setState(() {
+                              _flow = flow;
+                              if (flow == PeriodFlow.heavy || flow == PeriodFlow.medium) {
+                                _isPeriodStart = true;
+                              }
+                            });
+                          }
                         },
                         selectedColor: AppColors.accentRose,
                         backgroundColor: AppColors.surfaceSubtle,
@@ -180,7 +215,39 @@ class _LogCycleSymptomsSheetState extends ConsumerState<LogCycleSymptomsSheet> {
                       );
                     }).toList(),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
+
+                  // Period Start Switch
+                  if (_flow != PeriodFlow.none)
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: AppColors.surfaceSubtle,
+                        borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                        border: Border.all(color: AppColors.border),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              const Icon(Icons.water_drop_rounded, size: 18, color: AppColors.accentRose),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Mark as Day 1 of Period',
+                                style: AppTypography.labelMedium.copyWith(fontWeight: FontWeight.w700),
+                              ),
+                            ],
+                          ),
+                          Switch(
+                            value: _isPeriodStart,
+                            activeColor: AppColors.accentRose,
+                            onChanged: (val) => setState(() => _isPeriodStart = val),
+                          ),
+                        ],
+                      ),
+                    ),
+                  const SizedBox(height: 16),
 
                   // 2. Dysmenorrhea Cramps Scale (0 to 5)
                   Row(
@@ -191,7 +258,7 @@ class _LogCycleSymptomsSheetState extends ConsumerState<LogCycleSymptomsSheet> {
                         style: AppTypography.titleSmall.copyWith(fontWeight: FontWeight.w700),
                       ),
                       Text(
-                        '${_crampsSeverity.toInt()} / 5 (${_crampsSeverity >= 4 ? "Severe" : _crampsSeverity >= 2 ? "Moderate" : "Mild"})',
+                        '${_crampsSeverity.toInt()} / 5 (${_crampsSeverity >= 4 ? "Severe" : _crampsSeverity >= 2 ? "Moderate" : _crampsSeverity > 0 ? "Mild" : "None"})',
                         style: AppTypography.labelSmall.copyWith(
                           color: _crampsSeverity >= 4 ? AppColors.accentRose : AppColors.secondary,
                           fontWeight: FontWeight.w700,
@@ -385,7 +452,7 @@ class _LogCycleSymptomsSheetState extends ConsumerState<LogCycleSymptomsSheet> {
                               controller: _tempController,
                               keyboardType: const TextInputType.numberWithOptions(decimal: true),
                               decoration: InputDecoration(
-                                hintText: '36.6',
+                                hintText: 'e.g. 36.6',
                                 prefixIcon: const Icon(Icons.thermostat_rounded, size: 20),
                                 filled: true,
                                 fillColor: AppColors.surfaceSubtle,

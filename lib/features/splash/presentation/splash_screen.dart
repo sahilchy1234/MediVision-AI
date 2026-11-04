@@ -22,16 +22,15 @@ class _SplashScreenState extends State<SplashScreen>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1000),
+      duration: const Duration(milliseconds: 900),
     );
 
     _fadeAnimation = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
-
     _controller.forward();
 
-    _timer = Timer(const Duration(milliseconds: 2400), () {
+    _timer = Timer(const Duration(milliseconds: 1800), () {
       if (mounted) {
-        context.go('/onboarding');
+        context.go('/home');
       }
     });
   }
@@ -45,13 +44,13 @@ class _SplashScreenState extends State<SplashScreen>
 
   void _skipSplash() {
     _timer?.cancel();
-    context.go('/onboarding');
+    context.go('/home');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.forestGreen,
+      backgroundColor: AppColors.primary,
       body: InkWell(
         onTap: _skipSplash,
         child: SafeArea(
@@ -61,62 +60,40 @@ class _SplashScreenState extends State<SplashScreen>
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Minimal clinical brand mark
                   Container(
-                    width: 72,
-                    height: 72,
+                    width: 56,
+                    height: 56,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(14),
                     ),
                     child: const Center(
                       child: Icon(
-                        Icons.shield_outlined,
-                        size: 38,
-                        color: AppColors.forestGreen,
+                        Icons.healing_rounded,
+                        size: 28,
+                        color: AppColors.primary,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 20),
 
-                  // Brand name with editorial typography
                   Text(
-                    'MediVision AI',
+                    'MediVision',
                     style: AppTypography.displayMedium.copyWith(
                       color: Colors.white,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w700,
                       letterSpacing: -0.4,
-                      fontSize: 26,
+                      fontSize: 24,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 6),
 
-                  // Clinical Tagline
                   Text(
                     'Intelligent Medical History & Clinical Companion',
                     style: AppTypography.bodySmall.copyWith(
-                      color: AppColors.secondarySage,
-                      letterSpacing: 0.2,
-                    ),
-                  ),
-                  const SizedBox(height: 48),
-
-                  // Privacy standard tag
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Text(
-                      'Zero-Knowledge On-Device Encryption',
-                      style: AppTypography.labelSmall.copyWith(
-                        color: Colors.white70,
-                        fontSize: 10.5,
-                      ),
+                      color: AppColors.textTertiary,
+                      letterSpacing: 0.1,
+                      fontSize: 12,
                     ),
                   ),
                 ],

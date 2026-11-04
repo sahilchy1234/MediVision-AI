@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
-import '../../../core/constants/app_dimensions.dart';
 import '../../../core/constants/app_typography.dart';
+import '../../../core/widgets/glass_card.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../../shared/models/storage_mode.dart';
 import '../providers/storage_provider.dart';
@@ -18,7 +18,12 @@ class StorageSelectionScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Architecture & Privacy'),
+        title: Text(
+          'Storage Architecture',
+          style: AppTypography.titleMedium.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_rounded),
           onPressed: () => context.pop(),
@@ -30,52 +35,52 @@ class StorageSelectionScreen extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Progress Bar (Step 2 of 3)
+              // Clean Step Indicator (Step 2 of 3)
               Row(
                 children: [
                   Expanded(
                     child: Container(
-                      height: 4,
+                      height: 3,
                       decoration: BoxDecoration(
                         color: AppColors.secondary,
-                        borderRadius: BorderRadius.circular(2),
+                        borderRadius: BorderRadius.circular(1.5),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 6),
                   Expanded(
                     child: Container(
-                      height: 4,
+                      height: 3,
                       decoration: BoxDecoration(
                         color: AppColors.secondary,
-                        borderRadius: BorderRadius.circular(2),
+                        borderRadius: BorderRadius.circular(1.5),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 6),
                   Expanded(
                     child: Container(
-                      height: 4,
+                      height: 3,
                       decoration: BoxDecoration(
                         color: AppColors.border,
-                        borderRadius: BorderRadius.circular(2),
+                        borderRadius: BorderRadius.circular(1.5),
                       ),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 18),
 
               Text(
-                'Select Storage Architecture',
-                style: AppTypography.displaySmall.copyWith(fontWeight: FontWeight.w800),
+                'Data Storage Preference',
+                style: AppTypography.displayMedium.copyWith(fontSize: 20),
               ),
-              const SizedBox(height: 6),
+              const SizedBox(height: 4),
               Text(
-                'Decide where your medical memory and clinical summaries reside. You can modify these preferences at any time in Settings.',
-                style: AppTypography.bodyMedium,
+                'Choose where your encrypted clinical records and logs are stored.',
+                style: AppTypography.bodySmall,
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 18),
 
               Expanded(
                 child: ListView(
@@ -83,43 +88,43 @@ class StorageSelectionScreen extends ConsumerWidget {
                   children: [
                     _StorageOptionCard(
                       mode: StorageMode.local,
-                      tag: 'LOCAL STORAGE',
-                      title: 'Local On-Device Storage',
+                      title: 'Local Device Only',
                       explanation:
-                          'Your health data stays entirely on your device. Zero cloud server transmissions. The most secure and private configuration.',
+                          'Your health records stay encrypted exclusively on this device with zero cloud transmissions.',
                       icon: Icons.phonelink_lock_rounded,
-                      accentColor: AppColors.primary,
                       isSelected: selectedMode == StorageMode.local,
                       onTap: () {
-                        ref.read(storageSelectionProvider.notifier).setStorageMode(StorageMode.local);
+                        ref
+                            .read(storageSelectionProvider.notifier)
+                            .setStorageMode(StorageMode.local);
                       },
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 10),
                     _StorageOptionCard(
                       mode: StorageMode.cloud,
-                      tag: 'CLOUD STORAGE',
-                      title: 'Encrypted Cloud Storage',
+                      title: 'Zero-Knowledge Cloud Sync',
                       explanation:
-                          'Your authorized data is securely synchronized to your account using zero-knowledge encryption across all your mobile and desktop devices.',
+                          'End-to-end encrypted backup and sync across all your devices using your private keys.',
                       icon: Icons.cloud_sync_rounded,
-                      accentColor: AppColors.secondary,
                       isSelected: selectedMode == StorageMode.cloud,
                       onTap: () {
-                        ref.read(storageSelectionProvider.notifier).setStorageMode(StorageMode.cloud);
+                        ref
+                            .read(storageSelectionProvider.notifier)
+                            .setStorageMode(StorageMode.cloud);
                       },
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 10),
                     _StorageOptionCard(
                       mode: StorageMode.hybrid,
-                      tag: 'HYBRID STORAGE',
-                      title: 'Hybrid Split Storage',
+                      title: 'Hybrid Storage',
                       explanation:
-                          'Choose which data categories stay local (e.g. imaging & raw logs) and which synchronize (e.g. medication reminders & AI summaries).',
+                          'Raw imaging and documents stay local; vital metrics and appointment reminders sync securely.',
                       icon: Icons.tune_rounded,
-                      accentColor: AppColors.accentIndigo,
                       isSelected: selectedMode == StorageMode.hybrid,
                       onTap: () {
-                        ref.read(storageSelectionProvider.notifier).setStorageMode(StorageMode.hybrid);
+                        ref
+                            .read(storageSelectionProvider.notifier)
+                            .setStorageMode(StorageMode.hybrid);
                       },
                     ),
                   ],
@@ -127,7 +132,7 @@ class StorageSelectionScreen extends ConsumerWidget {
               ),
 
               PrimaryButton(
-                label: 'Confirm & Setup Permissions',
+                label: 'Continue to Permissions',
                 icon: Icons.arrow_forward_rounded,
                 onPressed: () {
                   context.go('/permissions');
@@ -144,127 +149,79 @@ class StorageSelectionScreen extends ConsumerWidget {
 
 class _StorageOptionCard extends StatelessWidget {
   final StorageMode mode;
-  final String tag;
   final String title;
   final String explanation;
   final IconData icon;
-  final Color accentColor;
   final bool isSelected;
   final VoidCallback onTap;
 
   const _StorageOptionCard({
     required this.mode,
-    required this.tag,
     required this.title,
     required this.explanation,
     required this.icon,
-    required this.accentColor,
     required this.isSelected,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 220),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
-        border: Border.all(
-          color: isSelected ? accentColor : AppColors.border,
-          width: isSelected ? 2.0 : 1.2,
-        ),
-        boxShadow: isSelected
-            ? [
-                BoxShadow(
-                  color: accentColor.withOpacity(0.15),
-                  blurRadius: 18,
-                  offset: const Offset(0, 6),
-                ),
-              ]
-            : AppDimensions.cardShadow,
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
-          onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
+    return GlassCard(
+      onTap: onTap,
+      padding: const EdgeInsets.all(14),
+      borderColor: isSelected ? AppColors.secondary : AppColors.border,
+      backgroundColor: isSelected ? AppColors.secondaryContainer : Colors.white,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              color: isSelected ? Colors.white : AppColors.surfaceSubtle,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(
+              icon,
+              size: 18,
+              color: isSelected ? AppColors.secondary : AppColors.textSecondary,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      width: 48,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: isSelected ? accentColor : AppColors.surfaceSubtle,
-                        borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-                      ),
-                      child: Icon(
-                        icon,
-                        color: isSelected ? Colors.white : AppColors.textPrimary,
-                        size: 26,
+                    Text(
+                      title,
+                      style: AppTypography.titleSmall.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: isSelected ? AppColors.secondaryDark : AppColors.textPrimary,
                       ),
                     ),
-                    const SizedBox(width: 14),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            tag,
-                            style: AppTypography.labelSmall.copyWith(
-                              color: isSelected ? accentColor : AppColors.textTertiary,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 0.6,
-                            ),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            title,
-                            style: AppTypography.titleMedium.copyWith(
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.textPrimary,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    // Selection indicator
-                    Container(
-                      width: 24,
-                      height: 24,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: isSelected ? accentColor : Colors.transparent,
-                        border: Border.all(
-                          color: isSelected ? accentColor : AppColors.border,
-                          width: 2,
-                        ),
-                      ),
-                      child: isSelected
-                          ? const Icon(Icons.check, size: 16, color: Colors.white)
-                          : null,
+                    Radio<bool>(
+                      value: true,
+                      groupValue: isSelected,
+                      activeColor: AppColors.secondary,
+                      onChanged: (_) => onTap(),
                     ),
                   ],
                 ),
-                const SizedBox(height: 14),
                 Text(
                   explanation,
-                  style: AppTypography.bodyMedium.copyWith(
-                    color: AppColors.textSecondary,
-                    height: 1.45,
+                  style: AppTypography.bodySmall.copyWith(
+                    color: isSelected ? AppColors.secondaryDark : AppColors.textSecondary,
+                    height: 1.4,
                   ),
                 ),
               ],
             ),
           ),
-        ),
+        ],
       ),
     );
   }
 }
-

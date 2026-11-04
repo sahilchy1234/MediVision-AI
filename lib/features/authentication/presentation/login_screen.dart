@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
-import '../../../core/constants/app_dimensions.dart';
 import '../../../core/constants/app_typography.dart';
 import '../../../core/widgets/custom_text_field.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../permissions/providers/permissions_provider.dart';
 import '../../profile/data/models/user_profile_model.dart';
 import '../../profile/providers/profile_provider.dart';
+import '../../permissions/providers/permissions_provider.dart';
 import '../data/auth_service.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -50,14 +50,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           ref.read(profileProvider.notifier).updateProfile(
                 UserProfileModel.fromJson(result.user!),
               );
-
-          final userPerms =
-              result.user!['permissions'] as Map<String, dynamic>?;
-          if (userPerms != null && userPerms.isNotEmpty) {
-            ref.read(permissionsProvider.notifier).syncFromMap(userPerms);
-          } else {
-            ref.read(permissionsProvider.notifier).grantAll();
-          }
+          final userPermissions = result.user!['permissions'] as Map<String, dynamic>?;
+          ref.read(permissionsProvider.notifier).syncFromMap(userPermissions);
         } else {
           ref.read(permissionsProvider.notifier).grantAll();
         }
@@ -89,153 +83,152 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 24),
-                // App Emblem
-                Container(
-                  width: 52,
-                  height: 52,
-                  decoration: BoxDecoration(
-                    color: AppColors.primary,
-                    borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-                    boxShadow: AppDimensions.cardShadow,
-                  ),
-                  child: const Icon(
-                    Icons.remove_red_eye_rounded,
-                    color: Colors.white,
-                    size: 28,
-                  ),
-                ),
-                const SizedBox(height: 24),
-
-                Text(
-                  'Welcome Back to\nMediVision AI',
-                  style: AppTypography.displayMedium.copyWith(
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: -0.6,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Sign in to access your synchronized clinical records and AI companion.',
-                  style: AppTypography.bodyMedium,
-                ),
-                const SizedBox(height: 32),
-
-                // Email field
-                CustomTextField(
-                  label: 'Work or Personal Email',
-                  hintText: 'name@example.com',
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  prefixIcon: const Icon(Icons.mail_outline_rounded, size: 20),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Please enter your email';
-                    }
-                    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value.trim())) {
-                      return 'Please enter a valid email address';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 18),
-
-                // Password field
-                CustomTextField(
-                  label: 'Password',
-                  hintText: 'Enter your secure password',
-                  controller: _passwordController,
-                  obscureText: _obscurePassword,
-                  prefixIcon: const Icon(Icons.lock_outline_rounded, size: 20),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                      size: 20,
-                      color: AppColors.textTertiary,
-                    ),
-                    onPressed: () {
-                      setState(() => _obscurePassword = !_obscurePassword);
-                    },
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your password';
-                    }
-                    if (value.length < 6) {
-                      return 'Password must be at least 6 characters';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 8),
-
-                // Forgot Password link
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () => context.push('/forgot-password'),
-                    style: TextButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                      minimumSize: const Size(0, 36),
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
-                    child: Text(
-                      'Forgot Password?',
-                      style: AppTypography.labelMedium.copyWith(
-                        color: AppColors.secondary,
-                        fontWeight: FontWeight.w600,
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 420),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Brand Icon
+                    Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        color: AppColors.primary,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Icon(
+                        Icons.healing_rounded,
+                        color: Colors.white,
+                        size: 22,
                       ),
                     ),
-                  ),
-                ),
-                const SizedBox(height: 28),
+                    const SizedBox(height: 20),
 
-                // Submit button
-                PrimaryButton(
-                  label: 'Sign In',
-                  isLoading: _isLoading,
-                  icon: Icons.login_rounded,
-                  onPressed: _handleLogin,
-                ),
-                const SizedBox(height: 16),
-
-                // Biometrics quick sign-in demo
-                PrimaryButton(
-                  label: 'Quick Demo Access (Passkey / FaceID)',
-                  variant: ButtonVariant.outline,
-                  icon: Icons.fingerprint_rounded,
-                  onPressed: () => context.go('/profile-setup'),
-                ),
-                const SizedBox(height: 32),
-
-                // Footer navigate to Sign up
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
                     Text(
-                      "Don't have an account?",
-                      style: AppTypography.bodyMedium,
+                      'Sign in',
+                      style: AppTypography.displayMedium.copyWith(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 24,
+                      ),
                     ),
-                    TextButton(
-                      onPressed: () => context.push('/signup'),
-                      child: Text(
-                        'Create Account',
-                        style: AppTypography.labelLarge.copyWith(
-                          color: AppColors.secondary,
-                          fontWeight: FontWeight.w700,
+                    const SizedBox(height: 4),
+                    Text(
+                      'Access your patient timeline and clinical records',
+                      style: AppTypography.bodySmall,
+                    ),
+                    const SizedBox(height: 24),
+
+                    // Email field
+                    CustomTextField(
+                      label: 'Email',
+                      hintText: 'name@example.com',
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Please enter your email';
+                        }
+                        if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value.trim())) {
+                          return 'Please enter a valid email address';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 14),
+
+                    // Password field
+                    CustomTextField(
+                      label: 'Password',
+                      hintText: 'Enter your password',
+                      controller: _passwordController,
+                      obscureText: _obscurePassword,
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                          size: 18,
+                          color: AppColors.textTertiary,
+                        ),
+                        onPressed: () {
+                          setState(() => _obscurePassword = !_obscurePassword);
+                        },
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your password';
+                        }
+                        if (value.length < 6) {
+                          return 'Password must be at least 6 characters';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 6),
+
+                    // Forgot Password link
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: () => context.push('/forgot-password'),
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          minimumSize: const Size(0, 32),
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        child: Text(
+                          'Forgot Password?',
+                          style: AppTypography.labelSmall.copyWith(
+                            color: AppColors.secondary,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ),
+                    const SizedBox(height: 20),
+
+                    // Submit button
+                    PrimaryButton(
+                      label: 'Sign In',
+                      isLoading: _isLoading,
+                      onPressed: _handleLogin,
+                    ),
+                    const SizedBox(height: 10),
+
+                    // Guest / Demo button
+                    PrimaryButton(
+                      label: 'Continue as Guest',
+                      variant: ButtonVariant.outline,
+                      onPressed: () => context.go('/home'),
+                    ),
+                    const SizedBox(height: 24),
+
+                    // Footer navigate to Sign up
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Don't have an account?",
+                          style: AppTypography.bodySmall,
+                        ),
+                        TextButton(
+                          onPressed: () => context.push('/signup'),
+                          child: Text(
+                            'Create Account',
+                            style: AppTypography.labelSmall.copyWith(
+                              color: AppColors.secondary,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
-              ],
+              ),
             ),
           ),
         ),
@@ -243,4 +236,3 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 }
-

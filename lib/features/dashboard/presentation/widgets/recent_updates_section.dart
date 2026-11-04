@@ -22,10 +22,10 @@ class RecentUpdatesSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionHeader(
-          title: 'Recent Health Updates',
-          subtitle: 'Live ingestion from paired monitors & lab uploads',
+          title: 'Recent Activity',
           actionText: 'View All',
           onActionTap: onSeeAllTap,
         ),
@@ -33,24 +33,24 @@ class RecentUpdatesSection extends StatelessWidget {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: entries.take(3).length,
-          separatorBuilder: (_, index) => const SizedBox(height: 10),
+          separatorBuilder: (_, index) => const SizedBox(height: 8),
           itemBuilder: (context, index) {
             final entry = entries[index];
             return GlassCard(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
               onTap: () => onEntryTap(entry),
               child: Row(
                 children: [
                   Container(
-                    width: 42,
-                    height: 42,
+                    width: 36,
+                    height: 36,
                     decoration: BoxDecoration(
-                      color: entry.statusColor.withOpacity(0.12),
-                      borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                      color: entry.statusColor.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(AppDimensions.radiusS),
                     ),
-                    child: Icon(entry.icon, color: entry.statusColor, size: 22),
+                    child: Icon(entry.icon, color: entry.statusColor, size: 18),
                   ),
-                  const SizedBox(width: 14),
+                  const SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,12 +58,12 @@ class RecentUpdatesSection extends StatelessWidget {
                         Text(
                           entry.title,
                           style: AppTypography.titleSmall.copyWith(
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w600,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        const SizedBox(height: 3),
+                        const SizedBox(height: 2),
                         Text(
                           entry.description,
                           style: AppTypography.bodySmall,
@@ -80,7 +80,7 @@ class RecentUpdatesSection extends StatelessWidget {
                       if (entry.statusLabel != null)
                         StatusBadge(
                           label: entry.statusLabel!,
-                          type: BadgeType.info,
+                          type: BadgeType.neutral,
                         ),
                       const SizedBox(height: 4),
                       Text(

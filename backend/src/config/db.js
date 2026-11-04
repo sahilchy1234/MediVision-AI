@@ -73,12 +73,10 @@ function readUsers() {
   }
 }
 
-// Write users atomically
+// Write users safely
 function writeUsers(users) {
   try {
-    const tempFile = `${USERS_FILE}.tmp`;
-    fs.writeFileSync(tempFile, JSON.stringify(users, null, 2), 'utf-8');
-    fs.renameSync(tempFile, USERS_FILE);
+    fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2), 'utf-8');
     return true;
   } catch (err) {
     console.error('Error writing users database:', err);

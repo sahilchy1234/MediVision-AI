@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_body_atlas/flutter_body_atlas.dart';
 import 'package:bodychart_heatmap/bodychart_heatmap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../ai_companion/providers/ai_companion_provider.dart';
+import '../../providers/sensation_provider.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_dimensions.dart';
 import '../../../../core/constants/app_typography.dart';
@@ -13,16 +16,16 @@ enum BodyDiagramSubMode {
   regionalZones,
 }
 
-class InteractiveHumanBodyDiagram extends StatefulWidget {
+class InteractiveHumanBodyDiagram extends ConsumerStatefulWidget {
   const InteractiveHumanBodyDiagram({super.key});
 
   @override
-  State<InteractiveHumanBodyDiagram> createState() =>
+  ConsumerState<InteractiveHumanBodyDiagram> createState() =>
       _InteractiveHumanBodyDiagramState();
 }
 
 class _InteractiveHumanBodyDiagramState
-    extends State<InteractiveHumanBodyDiagram> {
+    extends ConsumerState<InteractiveHumanBodyDiagram> {
   BodyDiagramSubMode _subMode = BodyDiagramSubMode.muscleAtlas;
 
   // Muscle Atlas state
@@ -235,44 +238,94 @@ class _InteractiveHumanBodyDiagramState
                       ),
                     ),
                     const SizedBox(height: 20),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(AppDimensions.radiusM),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: AppColors.primary,
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(AppDimensions.radiusM),
+                              ),
+                            ),
+                            onPressed: () {
+                              final lower = bodyAreaName.toLowerCase();
+                              for (final key in _heatmapValues.keys) {
+                                if (lower.contains(key)) {
+                                  setState(() {
+                                    _heatmapValues[key] = severity;
+                                  });
+                                  break;
+                                }
+                              }
+                              ref.read(sensationProvider.notifier).addSensation(
+                                    systemOrArea: 'Anatomy - $bodyAreaName',
+                                    sensation: 'Tension / Strain in $bodyAreaName',
+                                    severity: severity,
+                                    qualityTags: const ['Musculoskeletal', 'Body Map'],
+                                  );
+                              Navigator.pop(ctx);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  backgroundColor: AppColors.primary,
+                                  behavior: SnackBarBehavior.floating,
+                                  content: Text(
+                                    'Logged $severity/10 sensation for $bodyAreaName',
+                                  ),
+                                  duration: const Duration(seconds: 2),
+                                ),
+                              );
+                            },
+                            child: const Text('Save Sensation',
+                                style: TextStyle(fontWeight: FontWeight.w700)),
                           ),
                         ),
-                        onPressed: () {
-                          // Update local heatmap if key matches
-                          final lower = bodyAreaName.toLowerCase();
-                          for (final key in _heatmapValues.keys) {
-                            if (lower.contains(key)) {
-                              setState(() {
-                                _heatmapValues[key] = severity;
-                              });
-                              break;
-                            }
-                          }
-                          Navigator.pop(ctx);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.primary,
-                              behavior: SnackBarBehavior.floating,
-                              content: Text(
-                                'Logged $severity/10 tension for $bodyAreaName',
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(AppDimensions.radiusM),
                               ),
-                              duration: const Duration(seconds: 2),
                             ),
-                          );
-                        },
-                        child: const Text('Save Sensation Log',
-                            style: TextStyle(fontWeight: FontWeight.w700)),
-                      ),
+                            onPressed: () {
+                              final lower = bodyAreaName.toLowerCase();
+                              for (final key in _heatmapValues.keys) {
+                                if (lower.contains(key)) {
+                                  setState(() {
+                                    _heatmapValues[key] = severity;
+                                  });
+                                  break;
+                                }
+                              }
+                              ref.read(sensationProvider.notifier).addSensation(
+                                    systemOrArea: 'Anatomy - $bodyAreaName',
+                                    sensation: 'Tension / Strain in $bodyAreaName',
+                                    severity: severity,
+                                    qualityTags: const ['Musculoskeletal', 'Body Map'],
+                                  );
+                              Navigator.pop(ctx);
+                              ref.read(aiCompanionProvider.notifier).sendSensationQuery(
+                                    systemOrArea: 'Anatomy - $bodyAreaName',
+                                    sensation: 'Sensation / Strain in $bodyAreaName',
+                                    severity: severity,
+                                    qualityTags: const ['Musculoskeletal', 'Body Map'],
+                                    notes: 'Identified via Interactive Human Body Diagram.',
+                                  );
+                              context.push('/ai-companion');
+                            },
+                            icon: const Icon(Icons.auto_awesome, size: 16),
+                            label: const Text('Ask Real AI',
+                                style: TextStyle(fontWeight: FontWeight.w700)),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -443,12 +496,16 @@ class _InteractiveHumanBodyDiagramState
               color: isSelected ? Colors.white : AppColors.textSecondary,
             ),
             const SizedBox(width: 4),
-            Text(
-              label,
-              style: AppTypography.labelSmall.copyWith(
-                color: isSelected ? Colors.white : AppColors.textSecondary,
-                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                fontSize: 11,
+            Flexible(
+              child: Text(
+                label,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: AppTypography.labelSmall.copyWith(
+                  color: isSelected ? Colors.white : AppColors.textSecondary,
+                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                  fontSize: 11,
+                ),
               ),
             ),
           ],
@@ -460,10 +517,14 @@ class _InteractiveHumanBodyDiagramState
   Widget _buildViewAngleControls() {
     if (_subMode == BodyDiagramSubMode.muscleAtlas) {
       final isFront = _atlasView == AtlasAsset.musclesFront;
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      return Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        alignment: WrapAlignment.spaceBetween,
+        crossAxisAlignment: WrapCrossAlignment.center,
         children: [
           Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
               _buildSmallPill(
                 label: 'Front View',
@@ -483,32 +544,33 @@ class _InteractiveHumanBodyDiagramState
             ],
           ),
           if (_selectedMuscle != null)
-            Flexible(
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                decoration: BoxDecoration(
-                  color: AppColors.secondaryContainer,
-                  borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
-                ),
-                child: Text(
-                  _selectedMuscle!.displayName,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTypography.labelSmall.copyWith(
-                    color: AppColors.secondaryDark,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 11,
-                  ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+              decoration: BoxDecoration(
+                color: AppColors.secondaryContainer,
+                borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
+              ),
+              child: Text(
+                _selectedMuscle!.displayName,
+                overflow: TextOverflow.ellipsis,
+                style: AppTypography.labelSmall.copyWith(
+                  color: AppColors.secondaryDark,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 11,
                 ),
               ),
             ),
         ],
       );
     } else if (_subMode == BodyDiagramSubMode.regionalZones) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      return Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        alignment: WrapAlignment.spaceBetween,
+        crossAxisAlignment: WrapCrossAlignment.center,
         children: [
-          Wrap(
-            spacing: 8,
+          Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
               _buildSmallPill(
                 label: 'Front',
@@ -516,12 +578,14 @@ class _InteractiveHumanBodyDiagramState
                 onTap: () =>
                     setState(() => _bodyViewType = BodyViewType.front),
               ),
+              const SizedBox(width: 6),
               _buildSmallPill(
                 label: 'Back',
                 isSelected: _bodyViewType == BodyViewType.back,
                 onTap: () =>
                     setState(() => _bodyViewType = BodyViewType.back),
               ),
+              const SizedBox(width: 6),
               _buildSmallPill(
                 label: 'Both',
                 isSelected: _bodyViewType == BodyViewType.both,
@@ -541,8 +605,11 @@ class _InteractiveHumanBodyDiagramState
       );
     } else {
       // Heatmap view
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      return Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        alignment: WrapAlignment.spaceBetween,
+        crossAxisAlignment: WrapCrossAlignment.center,
         children: [
           Text(
             'Live Strain & Recovery Gradient',
@@ -899,7 +966,15 @@ class _InteractiveHumanBodyDiagramState
                     ),
                   ),
                   onPressed: () {
-                    // Navigate to AI companion with context
+                    if (_selectedMuscle != null) {
+                      ref.read(aiCompanionProvider.notifier).sendSensationQuery(
+                            systemOrArea: _selectedMuscle!.displayName,
+                            sensation: 'Muscle Strain: ${_selectedMuscle!.displayName}',
+                            severity: 3,
+                            qualityTags: const ['Muscle Atlas', 'Biomechanics'],
+                            notes: _getMuscleErgonomicTip(_selectedMuscle!),
+                          );
+                    }
                     context.push('/ai-companion');
                   },
                   icon: const Icon(Icons.auto_awesome, size: 15),

@@ -21,11 +21,15 @@ final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(de
 
 final GoRouter appRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: '/',
+  initialLocation: '/home',
   routes: [
     // Startup & Onboarding Flow
     GoRoute(
       path: '/',
+      redirect: (context, state) => '/home',
+    ),
+    GoRoute(
+      path: '/splash',
       builder: (context, state) => const SplashScreen(),
     ),
     GoRoute(

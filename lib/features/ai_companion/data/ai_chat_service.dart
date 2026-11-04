@@ -167,56 +167,63 @@ class GroqAiChatService implements AiChatService {
     String? model,
     String? apiKey,
   }) async {
-    final headers = <String, String>{
-      'Content-Type': 'application/json',
-    };
-    if (apiKey != null && apiKey.isNotEmpty) {
-      headers['x-groq-api-key'] = apiKey;
-    }
-
-    final body = jsonEncode({
-      'prompt': userPrompt,
-      'model': model ?? defaultModel,
-      'attachment': attachment != null
-          ? {
-              'fileName': attachment.fileName,
-              'fileType': attachment.fileType,
-              'fileSize': attachment.fileSize,
-            }
-          : null,
-      'history': history
-          ?.map((m) => {
-                'role': m.isUser ? 'user' : 'assistant',
-                'content': m.text,
-              })
-          .toList(),
-    });
-
-    final res = await http
-        .post(Uri.parse(ApiConstants.aiChat), headers: headers, body: body)
-        .timeout(const Duration(seconds: 15));
-
-    if (res.statusCode == 200) {
-      final json = jsonDecode(res.body) as Map<String, dynamic>;
-      if (json['success'] == true && json['data'] != null) {
-        final data = json['data'] as Map<String, dynamic>;
-        var text = data['text'] as String;
-        text = text.replaceFirst(
-          RegExp(
-            r'(?:>\s*)?\*?Consult\s+your(?:\s+(?:physician|doctor|healthcare|care|specialist|medical)[^.\n]*)?(?:\*|\.)?\s*$',
-            caseSensitive: false,
-          ),
-          '> *Consult your doctor or qualified healthcare specialist for personalized medical advice.*',
-        );
-        return ChatMessage(
-          id: 'msg_${DateTime.now().millisecondsSinceEpoch}',
-          text: text,
-          isUser: false,
-          timestamp: DateTime.now(),
-          referencedRecord: data['referencedRecord'] as String?,
-          model: data['model'] as String? ?? defaultModel,
-        );
+    try {
+      final headers = <String, String>{
+        'Content-Type': 'application/json',
+      };
+      if (apiKey != null && apiKey.isNotEmpty) {
+        headers['x-groq-api-key'] = apiKey;
       }
+
+      final body = jsonEncode({
+        'prompt': userPrompt,
+        'model': model ?? defaultModel,
+        'attachment': attachment != null
+            ? {
+                'fileName': attachment.fileName,
+                'fileType': attachment.fileType,
+                'fileSize': attachment.fileSize,
+              }
+            : null,
+        'history': history
+            ?.map((m) => {
+                  'role': m.isUser ? 'user' : 'assistant',
+                  'content': m.text,
+                })
+            .toList(),
+      });
+
+      final res = await http
+          .post(Uri.parse(ApiConstants.aiChat), headers: headers, body: body)
+          .timeout(const Duration(seconds: 15));
+
+      if (res.statusCode == 200) {
+        final bodyText = res.body.trim();
+        if (bodyText.startsWith('{')) {
+          final json = jsonDecode(bodyText) as Map<String, dynamic>;
+          if (json['success'] == true && json['data'] != null) {
+            final data = json['data'] as Map<String, dynamic>;
+            var text = data['text'] as String;
+            text = text.replaceFirst(
+              RegExp(
+                r'(?:>\s*)?\*?Consult\s+your(?:\s+(?:physician|doctor|healthcare|care|specialist|medical)[^.\n]*)?(?:\*|\.)?\s*$',
+                caseSensitive: false,
+              ),
+              '> *Consult your doctor or qualified healthcare specialist for personalized medical advice.*',
+            );
+            return ChatMessage(
+              id: 'msg_${DateTime.now().millisecondsSinceEpoch}',
+              text: text,
+              isUser: false,
+              timestamp: DateTime.now(),
+              referencedRecord: data['referencedRecord'] as String?,
+              model: data['model'] as String? ?? defaultModel,
+            );
+          }
+        }
+      }
+    } catch (_) {
+      // Backend offline or non-JSON, fallback smoothly to direct Groq
     }
     return null;
   }
@@ -279,7 +286,7 @@ class GroqAiChatService implements AiChatService {
 
     var data = jsonDecode(response.body) as Map<String, dynamic>;
 
-    // If model not found or unavailable, automatically fall back to llama-3.3-70b-versatile
+    // If model not found or unavailable, automatically fall back to openai/gpt-oss-120b
     if (response.statusCode != 200 &&
         (data['error']?['code'] == 'model_not_found' ||
             (data['error']?['message']?.toString().contains('model') ?? false))) {
@@ -291,7 +298,7 @@ class GroqAiChatService implements AiChatService {
               'Content-Type': 'application/json',
             },
             body: jsonEncode({
-              'model': 'llama-3.3-70b-versatile',
+              'model': 'openai/gpt-oss-120b',
               'messages': messages,
               'temperature': 0.5,
               'max_tokens': 2500,

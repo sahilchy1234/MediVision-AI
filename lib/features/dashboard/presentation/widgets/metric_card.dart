@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_dimensions.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/widgets/glass_card.dart';
 
@@ -41,63 +40,42 @@ class MetricCard extends StatelessWidget {
 
     return GlassCard(
       onTap: onTap,
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(14),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                width: 38,
-                height: 38,
-                decoration: BoxDecoration(
-                  color: iconColor.withOpacity(0.12),
-                  borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+              Text(
+                title,
+                style: AppTypography.labelMedium.copyWith(
+                  color: AppColors.textSecondary,
+                  fontWeight: FontWeight.w500,
                 ),
-                child: Icon(icon, color: iconColor, size: 20),
               ),
-              if (badgeText != null)
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: (badgeColor ?? iconColor).withOpacity(0.12),
-                    borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
-                  ),
-                  child: Text(
-                    badgeText!,
-                    style: AppTypography.labelSmall.copyWith(
-                      color: badgeColor ?? iconColor,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
+              Icon(icon, color: iconColor, size: 16),
             ],
           ),
-          const SizedBox(height: 14),
-          Text(
-            title,
-            style: AppTypography.labelMedium.copyWith(
-              color: AppColors.textSecondary,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 10),
           Row(
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,
             children: [
               Text(
                 value,
-                style: AppTypography.metricLarge,
+                style: AppTypography.metricLarge.copyWith(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
               if (unit != null) ...[
                 const SizedBox(width: 4),
                 Text(
                   unit!,
                   style: AppTypography.bodySmall.copyWith(
-                    color: AppColors.secondaryText,
+                    color: AppColors.textTertiary,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -105,12 +83,12 @@ class MetricCard extends StatelessWidget {
             ],
           ),
           if (progress != null) ...[
-            const SizedBox(height: 10),
+            const SizedBox(height: 8),
             ClipRRect(
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(2),
               child: LinearProgressIndicator(
                 value: progress,
-                minHeight: 6,
+                minHeight: 4,
                 backgroundColor: AppColors.surfaceSubtle,
                 valueColor: AlwaysStoppedAnimation<Color>(effectiveProgressColor),
               ),
@@ -120,6 +98,8 @@ class MetricCard extends StatelessWidget {
             const SizedBox(height: 6),
             Text(
               effectiveSubtitle,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: AppTypography.bodySmall.copyWith(
                 fontSize: 11,
                 color: AppColors.textTertiary,
