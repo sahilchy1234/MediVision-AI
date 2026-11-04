@@ -1,0 +1,567 @@
+{
+  "usr_demo_alex_morgan": {
+    "userId": "usr_demo_alex_morgan",
+    "snapshot": {
+      "steps": 11400,
+      "stepGoal": 10000,
+      "activeMinutes": 382,
+      "activeCalories": 2862,
+      "restingHeartRate": 64,
+      "bloodPressureSystolic": 119,
+      "bloodPressureDiastolic": 79,
+      "bloodOxygenSpO2": 99,
+      "bodyTemperature": 36.8,
+      "sleepDurationMinutes": 462,
+      "deepSleepMinutes": 108,
+      "sleepQualityScore": 89,
+      "screenTimeMinutes": 195,
+      "screenPickups": 48,
+      "lastUpdated": "2026-11-04T17:53:13.956Z"
+    },
+    "activities": [
+      {
+        "id": "act_1793814793955_c1ue",
+        "type": "Running",
+        "startTime": "2026-11-04T17:53:13.956Z",
+        "durationMinutes": 20,
+        "steps": 2200,
+        "calories": 140,
+        "distanceKm": 2.1,
+        "avgHeartRate": 0,
+        "notes": ""
+      },
+      {
+        "id": "act_1793814198753_wrgx",
+        "type": "Running",
+        "startTime": "2026-11-04T17:43:18.753Z",
+        "durationMinutes": 20,
+        "steps": 2200,
+        "calories": 140,
+        "distanceKm": 2.1,
+        "avgHeartRate": 0,
+        "notes": ""
+      },
+      {
+        "id": "act_1793813994449_dhw8",
+        "type": "Running",
+        "startTime": "2026-11-04T17:39:54.449Z",
+        "durationMinutes": 20,
+        "steps": 2200,
+        "calories": 140,
+        "distanceKm": 2.1,
+        "avgHeartRate": 0,
+        "notes": ""
+      },
+      {
+        "id": "act_1793813966146_8460",
+        "type": "Running",
+        "startTime": "2026-11-04T17:39:26.146Z",
+        "durationMinutes": 20,
+        "steps": 2200,
+        "calories": 140,
+        "distanceKm": 2.1,
+        "avgHeartRate": 0,
+        "notes": ""
+      },
+      {
+        "id": "act_1793813965457_9f3v",
+        "type": "Running",
+        "startTime": "2026-11-04T17:39:25.457Z",
+        "durationMinutes": 20,
+        "steps": 2200,
+        "calories": 140,
+        "distanceKm": 2.1,
+        "avgHeartRate": 0,
+        "notes": ""
+      },
+      {
+        "id": "act_1793813522079_6g3g",
+        "type": "Running",
+        "startTime": "2026-11-04T17:32:02.079Z",
+        "durationMinutes": 20,
+        "steps": 2200,
+        "calories": 140,
+        "distanceKm": 2.1,
+        "avgHeartRate": 0,
+        "notes": ""
+      },
+      {
+        "id": "act_1793813513953_gnfs",
+        "type": "Running",
+        "startTime": "2026-11-04T17:31:53.953Z",
+        "durationMinutes": 20,
+        "steps": 2200,
+        "calories": 140,
+        "distanceKm": 2.1,
+        "avgHeartRate": 0,
+        "notes": ""
+      },
+      {
+        "id": "act_1793813481566_w1vw",
+        "type": "Running",
+        "startTime": "2026-11-04T17:31:21.567Z",
+        "durationMinutes": 20,
+        "steps": 2200,
+        "calories": 140,
+        "distanceKm": 2.1,
+        "avgHeartRate": 0,
+        "notes": ""
+      },
+      {
+        "id": "act_1793813476400_kr8a",
+        "type": "Running",
+        "startTime": "2026-11-04T17:31:16.400Z",
+        "durationMinutes": 20,
+        "steps": 2200,
+        "calories": 140,
+        "distanceKm": 2.1,
+        "avgHeartRate": 0,
+        "notes": ""
+      },
+      {
+        "id": "act_1793813392203_dhgf",
+        "type": "Running",
+        "startTime": "2026-11-04T17:29:52.203Z",
+        "durationMinutes": 20,
+        "steps": 2200,
+        "calories": 140,
+        "distanceKm": 2.1,
+        "avgHeartRate": 0,
+        "notes": ""
+      },
+      {
+        "id": "act_1793813286341_2xs2",
+        "type": "Running",
+        "startTime": "2026-11-04T17:28:06.341Z",
+        "durationMinutes": 20,
+        "steps": 2200,
+        "calories": 140,
+        "distanceKm": 2.1,
+        "avgHeartRate": 0,
+        "notes": ""
+      },
+      {
+        "id": "act_1793812982151_0js4",
+        "type": "Running",
+        "startTime": "2026-11-04T17:23:02.151Z",
+        "durationMinutes": 20,
+        "steps": 2200,
+        "calories": 140,
+        "distanceKm": 2.1,
+        "avgHeartRate": 0,
+        "notes": ""
+      },
+      {
+        "id": "act_1793812884917_qbc6",
+        "type": "Running",
+        "startTime": "2026-11-04T17:21:24.917Z",
+        "durationMinutes": 20,
+        "steps": 2200,
+        "calories": 140,
+        "distanceKm": 2.1,
+        "avgHeartRate": 0,
+        "notes": ""
+      },
+      {
+        "id": "act_1793812827314_3yua",
+        "type": "Running",
+        "startTime": "2026-11-04T17:20:27.314Z",
+        "durationMinutes": 20,
+        "steps": 2200,
+        "calories": 140,
+        "distanceKm": 2.1,
+        "avgHeartRate": 0,
+        "notes": ""
+      },
+      {
+        "id": "act_1793812793965_zfjy",
+        "type": "Running",
+        "startTime": "2026-11-04T17:19:53.965Z",
+        "durationMinutes": 20,
+        "steps": 2200,
+        "calories": 140,
+        "distanceKm": 2.1,
+        "avgHeartRate": 0,
+        "notes": ""
+      },
+      {
+        "id": "act_1793812335516_tkq8",
+        "type": "Running",
+        "startTime": "2026-11-04T17:12:15.516Z",
+        "durationMinutes": 20,
+        "steps": 2200,
+        "calories": 140,
+        "distanceKm": 2.1,
+        "avgHeartRate": 0,
+        "notes": ""
+      },
+      {
+        "id": "act_1793812275061_kd4q",
+        "type": "Running",
+        "startTime": "2026-11-04T17:11:15.061Z",
+        "durationMinutes": 20,
+        "steps": 2200,
+        "calories": 140,
+        "distanceKm": 2.1,
+        "avgHeartRate": 0,
+        "notes": ""
+      },
+      {
+        "id": "act_seed_1",
+        "type": "Walking",
+        "startTime": "2026-11-04T10:56:21.865Z",
+        "durationMinutes": 42,
+        "steps": 4250,
+        "calories": 215,
+        "distanceKm": 3.1,
+        "avgHeartRate": 102,
+        "notes": "Brisk evening walk in the park."
+      }
+    ],
+    "logs": [
+      {
+        "id": "log_1793814793956_2jj9",
+        "category": "activity",
+        "label": "Running Session",
+        "value": "2200 steps",
+        "unit": "steps",
+        "timestamp": "2026-11-04T17:53:13.956Z",
+        "notes": "20m duration • 140 kcal burned • 2.1 km"
+      },
+      {
+        "id": "log_1793814793938_mgfa",
+        "category": "pulse",
+        "label": "Heart Rate Measured",
+        "value": "64 bpm",
+        "unit": "bpm",
+        "timestamp": "2026-11-04T17:53:13.938Z",
+        "notes": ""
+      },
+      {
+        "id": "log_1793814198753_dxa9",
+        "category": "activity",
+        "label": "Running Session",
+        "value": "2200 steps",
+        "unit": "steps",
+        "timestamp": "2026-11-04T17:43:18.753Z",
+        "notes": "20m duration • 140 kcal burned • 2.1 km"
+      },
+      {
+        "id": "log_1793814198739_10ve",
+        "category": "pulse",
+        "label": "Heart Rate Measured",
+        "value": "64 bpm",
+        "unit": "bpm",
+        "timestamp": "2026-11-04T17:43:18.739Z",
+        "notes": ""
+      },
+      {
+        "id": "log_1793813994449_1d71",
+        "category": "activity",
+        "label": "Running Session",
+        "value": "2200 steps",
+        "unit": "steps",
+        "timestamp": "2026-11-04T17:39:54.449Z",
+        "notes": "20m duration • 140 kcal burned • 2.1 km"
+      },
+      {
+        "id": "log_1793813994438_ve2t",
+        "category": "pulse",
+        "label": "Heart Rate Measured",
+        "value": "64 bpm",
+        "unit": "bpm",
+        "timestamp": "2026-11-04T17:39:54.438Z",
+        "notes": ""
+      },
+      {
+        "id": "log_1793813966146_n1g8",
+        "category": "activity",
+        "label": "Running Session",
+        "value": "2200 steps",
+        "unit": "steps",
+        "timestamp": "2026-11-04T17:39:26.146Z",
+        "notes": "20m duration • 140 kcal burned • 2.1 km"
+      },
+      {
+        "id": "log_1793813966125_av7s",
+        "category": "pulse",
+        "label": "Heart Rate Measured",
+        "value": "64 bpm",
+        "unit": "bpm",
+        "timestamp": "2026-11-04T17:39:26.125Z",
+        "notes": ""
+      },
+      {
+        "id": "log_1793813965457_wuyi",
+        "category": "activity",
+        "label": "Running Session",
+        "value": "2200 steps",
+        "unit": "steps",
+        "timestamp": "2026-11-04T17:39:25.457Z",
+        "notes": "20m duration • 140 kcal burned • 2.1 km"
+      },
+      {
+        "id": "log_1793813965446_iguf",
+        "category": "pulse",
+        "label": "Heart Rate Measured",
+        "value": "64 bpm",
+        "unit": "bpm",
+        "timestamp": "2026-11-04T17:39:25.447Z",
+        "notes": ""
+      },
+      {
+        "id": "log_1793813522079_en6r",
+        "category": "activity",
+        "label": "Running Session",
+        "value": "2200 steps",
+        "unit": "steps",
+        "timestamp": "2026-11-04T17:32:02.079Z",
+        "notes": "20m duration • 140 kcal burned • 2.1 km"
+      },
+      {
+        "id": "log_1793813522066_azmd",
+        "category": "pulse",
+        "label": "Heart Rate Measured",
+        "value": "64 bpm",
+        "unit": "bpm",
+        "timestamp": "2026-11-04T17:32:02.066Z",
+        "notes": ""
+      },
+      {
+        "id": "log_1793813513953_0ju4",
+        "category": "activity",
+        "label": "Running Session",
+        "value": "2200 steps",
+        "unit": "steps",
+        "timestamp": "2026-11-04T17:31:53.953Z",
+        "notes": "20m duration • 140 kcal burned • 2.1 km"
+      },
+      {
+        "id": "log_1793813513943_7lti",
+        "category": "pulse",
+        "label": "Heart Rate Measured",
+        "value": "64 bpm",
+        "unit": "bpm",
+        "timestamp": "2026-11-04T17:31:53.943Z",
+        "notes": ""
+      },
+      {
+        "id": "log_1793813481567_d2da",
+        "category": "activity",
+        "label": "Running Session",
+        "value": "2200 steps",
+        "unit": "steps",
+        "timestamp": "2026-11-04T17:31:21.567Z",
+        "notes": "20m duration • 140 kcal burned • 2.1 km"
+      },
+      {
+        "id": "log_1793813481548_1nuq",
+        "category": "pulse",
+        "label": "Heart Rate Measured",
+        "value": "64 bpm",
+        "unit": "bpm",
+        "timestamp": "2026-11-04T17:31:21.548Z",
+        "notes": ""
+      },
+      {
+        "id": "log_1793813476400_az77",
+        "category": "activity",
+        "label": "Running Session",
+        "value": "2200 steps",
+        "unit": "steps",
+        "timestamp": "2026-11-04T17:31:16.400Z",
+        "notes": "20m duration • 140 kcal burned • 2.1 km"
+      },
+      {
+        "id": "log_1793813476372_xdpb",
+        "category": "pulse",
+        "label": "Heart Rate Measured",
+        "value": "64 bpm",
+        "unit": "bpm",
+        "timestamp": "2026-11-04T17:31:16.372Z",
+        "notes": ""
+      },
+      {
+        "id": "log_1793813392203_idn7",
+        "category": "activity",
+        "label": "Running Session",
+        "value": "2200 steps",
+        "unit": "steps",
+        "timestamp": "2026-11-04T17:29:52.203Z",
+        "notes": "20m duration • 140 kcal burned • 2.1 km"
+      },
+      {
+        "id": "log_1793813392193_axs8",
+        "category": "pulse",
+        "label": "Heart Rate Measured",
+        "value": "64 bpm",
+        "unit": "bpm",
+        "timestamp": "2026-11-04T17:29:52.193Z",
+        "notes": ""
+      },
+      {
+        "id": "log_1793813286341_eynh",
+        "category": "activity",
+        "label": "Running Session",
+        "value": "2200 steps",
+        "unit": "steps",
+        "timestamp": "2026-11-04T17:28:06.341Z",
+        "notes": "20m duration • 140 kcal burned • 2.1 km"
+      },
+      {
+        "id": "log_1793813286330_mms9",
+        "category": "pulse",
+        "label": "Heart Rate Measured",
+        "value": "64 bpm",
+        "unit": "bpm",
+        "timestamp": "2026-11-04T17:28:06.330Z",
+        "notes": ""
+      },
+      {
+        "id": "log_1793812982151_rxoq",
+        "category": "activity",
+        "label": "Running Session",
+        "value": "2200 steps",
+        "unit": "steps",
+        "timestamp": "2026-11-04T17:23:02.151Z",
+        "notes": "20m duration • 140 kcal burned • 2.1 km"
+      },
+      {
+        "id": "log_1793812982142_shhf",
+        "category": "pulse",
+        "label": "Heart Rate Measured",
+        "value": "64 bpm",
+        "unit": "bpm",
+        "timestamp": "2026-11-04T17:23:02.142Z",
+        "notes": ""
+      },
+      {
+        "id": "log_1793812884917_svzv",
+        "category": "activity",
+        "label": "Running Session",
+        "value": "2200 steps",
+        "unit": "steps",
+        "timestamp": "2026-11-04T17:21:24.917Z",
+        "notes": "20m duration • 140 kcal burned • 2.1 km"
+      },
+      {
+        "id": "log_1793812884908_9yjo",
+        "category": "pulse",
+        "label": "Heart Rate Measured",
+        "value": "64 bpm",
+        "unit": "bpm",
+        "timestamp": "2026-11-04T17:21:24.908Z",
+        "notes": ""
+      },
+      {
+        "id": "log_1793812827314_sj02",
+        "category": "activity",
+        "label": "Running Session",
+        "value": "2200 steps",
+        "unit": "steps",
+        "timestamp": "2026-11-04T17:20:27.314Z",
+        "notes": "20m duration • 140 kcal burned • 2.1 km"
+      },
+      {
+        "id": "log_1793812827305_06za",
+        "category": "pulse",
+        "label": "Heart Rate Measured",
+        "value": "64 bpm",
+        "unit": "bpm",
+        "timestamp": "2026-11-04T17:20:27.305Z",
+        "notes": ""
+      },
+      {
+        "id": "log_1793812793967_8sia",
+        "category": "activity",
+        "label": "Running Session",
+        "value": "2200 steps",
+        "unit": "steps",
+        "timestamp": "2026-11-04T17:19:53.967Z",
+        "notes": "20m duration • 140 kcal burned • 2.1 km"
+      },
+      {
+        "id": "log_1793812793931_2bkp",
+        "category": "pulse",
+        "label": "Heart Rate Measured",
+        "value": "64 bpm",
+        "unit": "bpm",
+        "timestamp": "2026-11-04T17:19:53.931Z",
+        "notes": ""
+      },
+      {
+        "id": "log_1793812335516_2ykc",
+        "category": "activity",
+        "label": "Running Session",
+        "value": "2200 steps",
+        "unit": "steps",
+        "timestamp": "2026-11-04T17:12:15.516Z",
+        "notes": "20m duration • 140 kcal burned • 2.1 km"
+      },
+      {
+        "id": "log_1793812335503_cshe",
+        "category": "pulse",
+        "label": "Heart Rate Measured",
+        "value": "64 bpm",
+        "unit": "bpm",
+        "timestamp": "2026-11-04T17:12:15.503Z",
+        "notes": ""
+      },
+      {
+        "id": "log_1793812275061_utnd",
+        "category": "activity",
+        "label": "Running Session",
+        "value": "2200 steps",
+        "unit": "steps",
+        "timestamp": "2026-11-04T17:11:15.061Z",
+        "notes": "20m duration • 140 kcal burned • 2.1 km"
+      },
+      {
+        "id": "log_1793812275042_6snl",
+        "category": "pulse",
+        "label": "Heart Rate Measured",
+        "value": "64 bpm",
+        "unit": "bpm",
+        "timestamp": "2026-11-04T17:11:15.042Z",
+        "notes": ""
+      },
+      {
+        "id": "log_1793811387285_fgyr",
+        "category": "steps",
+        "label": "Steps Update",
+        "value": "8500",
+        "unit": "steps",
+        "timestamp": "2026-11-04T16:56:27.285Z",
+        "notes": ""
+      },
+      {
+        "id": "log_seed_1",
+        "category": "pulse",
+        "label": "Resting Pulse",
+        "value": "61",
+        "unit": "bpm",
+        "timestamp": "2026-11-04T13:56:21.865Z",
+        "notes": "Optimal baseline resting pulse."
+      },
+      {
+        "id": "log_seed_2",
+        "category": "sleep",
+        "label": "Night Sleep",
+        "value": "7h 42m",
+        "unit": "hours",
+        "timestamp": "2026-11-04T06:56:21.865Z",
+        "notes": "1h 48m deep sleep, 89% quality."
+      },
+      {
+        "id": "log_seed_3",
+        "category": "steps",
+        "label": "Daily Movement",
+        "value": "8420",
+        "unit": "steps",
+        "timestamp": "2026-11-04T14:56:21.865Z",
+        "notes": "84% of daily goal reached."
+      }
+    ],
+    "updatedAt": "2026-11-04T17:53:13.956Z"
+  }
+}

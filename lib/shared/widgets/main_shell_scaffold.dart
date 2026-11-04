@@ -106,7 +106,7 @@ class MainShellScaffold extends StatelessWidget {
                       child: ListView.separated(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         itemCount: _destinations.length,
-                        separatorBuilder: (_, __) => const SizedBox(height: 4),
+                        separatorBuilder: (_, _) => const SizedBox(height: 4),
                         itemBuilder: (context, index) {
                           final item = _destinations[index];
                           final isSelected = navigationShell.currentIndex == index;

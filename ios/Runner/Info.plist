@@ -43,10 +43,28 @@
 					<string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
 					<key>UISceneStoryboardFile</key>
 					<string>Main</string>
-				</dict>
+					<key>NSHealthShareUsageDescription</key>
+	<string>MediVision AI needs access to Apple Health to automatically fetch your steps, resting heart rate, sleep duration, and active calories.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>MediVision AI saves your recorded vitals and activity sessions to Apple Health.</string>
+	<key>NSMotionUsageDescription</key>
+	<string>MediVision AI uses the device pedometer to automatically capture your real-time steps and physical movement.</string>
+</dict>
 			</array>
-		</dict>
-	</dict>
+			<key>NSHealthShareUsageDescription</key>
+	<string>MediVision AI needs access to Apple Health to automatically fetch your steps, resting heart rate, sleep duration, and active calories.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>MediVision AI saves your recorded vitals and activity sessions to Apple Health.</string>
+	<key>NSMotionUsageDescription</key>
+	<string>MediVision AI uses the device pedometer to automatically capture your real-time steps and physical movement.</string>
+</dict>
+		<key>NSHealthShareUsageDescription</key>
+	<string>MediVision AI needs access to Apple Health to automatically fetch your steps, resting heart rate, sleep duration, and active calories.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>MediVision AI saves your recorded vitals and activity sessions to Apple Health.</string>
+	<key>NSMotionUsageDescription</key>
+	<string>MediVision AI uses the device pedometer to automatically capture your real-time steps and physical movement.</string>
+</dict>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -66,5 +84,11 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSHealthShareUsageDescription</key>
+	<string>MediVision AI needs access to Apple Health to automatically fetch your steps, resting heart rate, sleep duration, and active calories.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>MediVision AI saves your recorded vitals and activity sessions to Apple Health.</string>
+	<key>NSMotionUsageDescription</key>
+	<string>MediVision AI uses the device pedometer to automatically capture your real-time steps and physical movement.</string>
 </dict>
 </plist>

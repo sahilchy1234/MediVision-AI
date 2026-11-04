@@ -7,6 +7,10 @@ const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
 const healthRoutes = require('./routes/health.routes');
 const aiRoutes = require('./routes/ai.routes');
+const recordsRoutes = require('./routes/records.routes');
+const vitalsRoutes = require('./routes/vitals.routes');
+const timelineRoutes = require('./routes/timeline.routes');
+const womensHealthRoutes = require('./routes/womens_health.routes');
 const { notFoundHandler, globalErrorHandler } = require('./middleware/error.middleware');
 
 const app = express();
@@ -35,6 +39,10 @@ app.use('/api', healthRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/records', recordsRoutes);
+app.use('/api/vitals', vitalsRoutes);
+app.use('/api/timeline', timelineRoutes);
+app.use('/api/womens-health', womensHealthRoutes);
 
 // Welcome Root Route
 app.get('/', (req, res) => {

@@ -29,47 +29,71 @@ class DailySymptomLog {
     this.notes,
   });
 
-  static List<DailySymptomLog> defaultSampleLogs() {
-    final now = DateTime.now();
-    return [
-      DailySymptomLog(
-        id: 'log_0',
-        date: now,
-        flow: PeriodFlow.none,
-        crampsSeverity: 1,
-        pelvicPainSeverity: 1,
-        mood: 'Energetic',
-        physicalSymptoms: ['Mild Bloating'],
-        pcosObservations: ['Mild Breakout on Jawline'],
-        basalBodyTemp: 36.7,
-        cervicalMucus: 'Egg-white (Fertile)',
-        sleepHours: 7.8,
-        notes: 'Ovulation peak suspected. Mild right lower quadrant twinge (mittelschmerz).',
-      ),
-      DailySymptomLog(
-        id: 'log_1',
-        date: now.subtract(const Duration(days: 1)),
-        flow: PeriodFlow.none,
-        crampsSeverity: 0,
-        pelvicPainSeverity: 0,
-        mood: 'Calm',
-        physicalSymptoms: ['Clear Skin'],
-        basalBodyTemp: 36.5,
-        cervicalMucus: 'Creamy',
-        sleepHours: 8.0,
-      ),
-      DailySymptomLog(
-        id: 'log_13',
-        date: now.subtract(const Duration(days: 13)),
-        flow: PeriodFlow.heavy,
-        crampsSeverity: 4,
-        pelvicPainSeverity: 3,
-        mood: 'Fatigued',
-        physicalSymptoms: ['Severe Cramps', 'Headache', 'Lower Back Pain', 'Fatigue'],
-        basalBodyTemp: 36.3,
-        sleepHours: 6.5,
-        notes: 'First day of cycle. Required warm compress and ibuprofen.',
-      ),
-    ];
+  DailySymptomLog copyWith({
+    String? id,
+    DateTime? date,
+    PeriodFlow? flow,
+    int? crampsSeverity,
+    int? pelvicPainSeverity,
+    String? mood,
+    List<String>? physicalSymptoms,
+    List<String>? pcosObservations,
+    double? basalBodyTemp,
+    String? cervicalMucus,
+    double? sleepHours,
+    String? notes,
+  }) {
+    return DailySymptomLog(
+      id: id ?? this.id,
+      date: date ?? this.date,
+      flow: flow ?? this.flow,
+      crampsSeverity: crampsSeverity ?? this.crampsSeverity,
+      pelvicPainSeverity: pelvicPainSeverity ?? this.pelvicPainSeverity,
+      mood: mood ?? this.mood,
+      physicalSymptoms: physicalSymptoms ?? this.physicalSymptoms,
+      pcosObservations: pcosObservations ?? this.pcosObservations,
+      basalBodyTemp: basalBodyTemp ?? this.basalBodyTemp,
+      cervicalMucus: cervicalMucus ?? this.cervicalMucus,
+      sleepHours: sleepHours ?? this.sleepHours,
+      notes: notes ?? this.notes,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'date': date.toIso8601String(),
+        'flow': flow.name,
+        'crampsSeverity': crampsSeverity,
+        'pelvicPainSeverity': pelvicPainSeverity,
+        'mood': mood,
+        'physicalSymptoms': physicalSymptoms,
+        'pcosObservations': pcosObservations,
+        'basalBodyTemp': basalBodyTemp,
+        'cervicalMucus': cervicalMucus,
+        'sleepHours': sleepHours,
+        'notes': notes,
+      };
+
+  factory DailySymptomLog.fromJson(Map<String, dynamic> json) {
+    return DailySymptomLog(
+      id: json['id']?.toString() ?? 'log_${DateTime.now().millisecondsSinceEpoch}',
+      date: DateTime.tryParse(json['date']?.toString() ?? '') ?? DateTime.now(),
+      flow: PeriodFlow.fromString(json['flow']?.toString()),
+      crampsSeverity: (json['crampsSeverity'] as num?)?.toInt() ?? 0,
+      pelvicPainSeverity: (json['pelvicPainSeverity'] as num?)?.toInt() ?? 0,
+      mood: json['mood']?.toString() ?? 'Calm',
+      physicalSymptoms: (json['physicalSymptoms'] as List<dynamic>?)
+              ?.map((e) => e.toString())
+              .toList() ??
+          [],
+      pcosObservations: (json['pcosObservations'] as List<dynamic>?)
+              ?.map((e) => e.toString())
+              .toList() ??
+          [],
+      basalBodyTemp: (json['basalBodyTemp'] as num?)?.toDouble(),
+      cervicalMucus: json['cervicalMucus']?.toString(),
+      sleepHours: (json['sleepHours'] as num?)?.toDouble() ?? 7.5,
+      notes: json['notes']?.toString(),
+    );
   }
 }

@@ -7,7 +7,6 @@ import '../../../core/constants/app_typography.dart';
 import '../../../core/widgets/glass_card.dart';
 import '../../../shared/models/storage_mode.dart';
 import '../../../shared/widgets/section_header.dart';
-import '../../../shared/widgets/status_badge.dart';
 import '../../permissions/data/permission_item.dart';
 import '../../permissions/providers/permissions_provider.dart';
 import '../../profile/data/models/user_profile_model.dart';

@@ -75,4 +75,48 @@ describe('MediVision AI - Groq AI Companion API Tests', () => {
     assert.strictEqual(data.code, 'GROQ_API_ERROR');
     assert.ok(data.message);
   });
+
+  test('5. POST /api/ai/physiological-systems returns structured physiological systems data', async () => {
+    const sampleVitals = {
+      steps: 8420,
+      stepGoal: 10000,
+      activeMinutes: 42,
+      activeCalories: 482,
+      restingHeartRate: 61,
+      bloodPressureSystolic: 118,
+      bloodPressureDiastolic: 78,
+      bloodOxygenSpO2: 98,
+      bodyTemperature: 36.8,
+      sleepDurationMinutes: 462,
+      deepSleepMinutes: 108,
+      sleepQualityScore: 89
+    };
+    const sampleRecords = [
+      {
+        id: 'rec_test',
+        title: 'Comprehensive Metabolic Panel',
+        category: 'bloodReports',
+        date: '2026-11-01',
+        summary: 'Fasting glucose 92 mg/dL, HbA1c 5.4%, kidney eGFR > 90'
+      }
+    ];
+
+    const res = await fetch(`${baseUrl}/api/ai/physiological-systems`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ vitals: sampleVitals, records: sampleRecords })
+    });
+    const data = await res.json();
+
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(data.success, true);
+    assert.ok(typeof data.data.overallScore === 'number');
+    assert.ok(data.data.systems);
+    assert.ok(data.data.systems.brainSleep);
+    assert.ok(data.data.systems.heartPulse);
+    assert.ok(data.data.systems.staminaMovement);
+    assert.ok(data.data.systems.bloodDefenses);
+    assert.ok(Array.isArray(data.data.systems.heartPulse.keyPills));
+    assert.ok(data.data.systems.brainSleep.explanation.length > 10);
+  });
 });

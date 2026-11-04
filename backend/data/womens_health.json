@@ -1,0 +1,187 @@
+{
+  "usr_demo_alex_morgan": {
+    "userId": "usr_demo_alex_morgan",
+    "cycleData": {
+      "currentDayOfCycle": 1,
+      "averageCycleLength": 30,
+      "averagePeriodDuration": 5,
+      "lastPeriodStartDate": "2026-11-04T17:53:14.113Z",
+      "currentPhase": "menstrual",
+      "isFertileWindow": false,
+      "daysUntilNextPeriod": 29,
+      "cycleVariationDays": 1.8,
+      "history": [
+        {
+          "startDate": "2026-09-24T17:43:18.848Z",
+          "lengthInDays": 28,
+          "periodDurationDays": 5,
+          "isIrregular": false
+        },
+        {
+          "startDate": "2026-08-26T17:43:18.848Z",
+          "lengthInDays": 29,
+          "periodDurationDays": 5,
+          "isIrregular": false
+        }
+      ]
+    },
+    "symptomLogs": [
+      {
+        "id": "log_1793814794118",
+        "date": "2026-11-04T17:53:14.113Z",
+        "flow": "medium",
+        "crampsSeverity": 3,
+        "pelvicPainSeverity": 1,
+        "mood": "Calm",
+        "physicalSymptoms": [
+          "Mild Bloating",
+          "Tender Breasts"
+        ],
+        "pcosObservations": [
+          "Jawline / Cystic Breakout"
+        ],
+        "basalBodyTemp": 36.8,
+        "cervicalMucus": "Egg-white (Fertile)",
+        "sleepHours": 7.5,
+        "notes": "Logged via mobile clinical telemetry."
+      },
+      {
+        "id": "log_1793727798848",
+        "date": "2026-11-03T17:43:18.848Z",
+        "flow": "none",
+        "crampsSeverity": 0,
+        "pelvicPainSeverity": 0,
+        "mood": "Energetic",
+        "physicalSymptoms": [
+          "Clear Skin"
+        ],
+        "pcosObservations": [],
+        "basalBodyTemp": 36.6,
+        "cervicalMucus": "Creamy",
+        "sleepHours": 7.8,
+        "notes": "Mid-cycle baseline energy stable."
+      }
+    ],
+    "assessments": [
+      {
+        "id": "pcos_pcod",
+        "conditionName": "PCOS / PCOD",
+        "category": "Endocrine & Ovulatory",
+        "subtitle": "Rotterdam Criteria & Pattern Evaluation",
+        "riskLevel": "moderateRisk",
+        "scorePercent": 65,
+        "identifiedMarkers": [
+          "Androgenic skin breakout (jawline cystic acne)",
+          "Regular cycle length but mild lower back pain"
+        ],
+        "negativeMarkers": [
+          "Normal BMI (20.5)",
+          "Regular menstrual cycle (29‑day length, ±2.5 variation)",
+          "No reported hirsutism or oligomenorrhea"
+        ],
+        "recommendedLabTests": [
+          "Serum total testosterone",
+          "Free testosterone",
+          "LH/FSH ratio",
+          "DHEAS",
+          "Prolactin",
+          "TSH",
+          "Fasting glucose & HbA1c",
+          "Lipid profile"
+        ],
+        "physicianDiscussionPoints": [
+          "Ask about hirsutism or hair growth patterns",
+          "Discuss family history of PCOS",
+          "Inquire about menstrual irregularities or infertility attempts",
+          "Review acne severity and impact on quality of life"
+        ],
+        "clinicalRationale": "The patient presents with androgenic skin changes (jawline cystic breakout) which is a key Rotterdam criterion for PCOS. Despite a regular cycle and normal BMI, the presence of androgenic symptoms raises the likelihood of PCOS. The absence of overt menstrual irregularities or obesity lowers the risk but does not exclude PCOS. A moderate risk assessment (65%) is appropriate, and targeted endocrine testing is recommended to confirm or rule out PCOS."
+      },
+      {
+        "id": "endometriosis",
+        "conditionName": "Endometriosis & Adenomyosis",
+        "category": "Gynecologic & Pain",
+        "subtitle": "Pain Pattern & Clinical Correlation",
+        "riskLevel": "moderateRisk",
+        "scorePercent": 55,
+        "identifiedMarkers": [
+          "Lower back pain",
+          "Pelvic pain (2/5)",
+          "Cramps (3/5)"
+        ],
+        "negativeMarkers": [
+          "Regular menstrual cycle",
+          "No dysmenorrhea reported",
+          "No infertility complaints"
+        ],
+        "recommendedLabTests": [
+          "Transvaginal pelvic ultrasound",
+          "CA‑125 (if indicated)"
+        ],
+        "physicianDiscussionPoints": [
+          "Ask about pain during intercourse (dyspareunia)",
+          "Inquire about pain severity during menstruation vs non‑menstrual periods",
+          "Discuss history of infertility or prior pelvic surgeries"
+        ],
+        "clinicalRationale": "The patient reports lower back and pelvic pain along with moderate cramps, which are common symptoms of endometriosis. However, she has a regular cycle and no dysmenorrhea or infertility, which are typical red flags. The moderate risk (55%) reflects the presence of pain symptoms without definitive diagnostic indicators. Further imaging and possibly laparoscopy would be considered if symptoms persist or worsen."
+      },
+      {
+        "id": "infertility_ovulation",
+        "conditionName": "Ovulatory Reserve & Fertility Readiness",
+        "category": "Reproductive & Fertility",
+        "subtitle": "Ovulation & Reserve Assessment",
+        "riskLevel": "lowRisk",
+        "scorePercent": 40,
+        "identifiedMarkers": [
+          "Regular cycle (29 days)",
+          "Fertile cervical mucus (egg‑white)",
+          "Normal BMI"
+        ],
+        "negativeMarkers": [
+          "No reported infertility attempts",
+          "No menstrual irregularities",
+          "No hormonal complaints"
+        ],
+        "recommendedLabTests": [
+          "Anti‑Müllerian Hormone (AMH)",
+          "Baseline FSH & LH",
+          "Estradiol",
+          "Prolactin",
+          "TSH"
+        ],
+        "physicianDiscussionPoints": [
+          "Ask about attempts to conceive and duration",
+          "Discuss lifestyle factors affecting fertility",
+          "Review any history of menstrual irregularities or pain"
+        ],
+        "clinicalRationale": "The patient demonstrates regular ovulatory cycles and fertile cervical mucus, indicating normal ovulatory function. While mild androgenic skin changes may suggest PCOS, the absence of menstrual irregularities or infertility symptoms places her at low risk for ovulatory dysfunction. A 40% score reflects a baseline risk that may warrant routine fertility evaluation if conception attempts are pursued."
+      },
+      {
+        "id": "perimenopause",
+        "conditionName": "Perimenopause & Hormonal Transition",
+        "category": "Endocrine & Menopause",
+        "subtitle": "Age‑Related Hormonal Transition",
+        "riskLevel": "lowRisk",
+        "scorePercent": 10,
+        "identifiedMarkers": [],
+        "negativeMarkers": [
+          "Age 31 (well below typical perimenopause onset)",
+          "Regular menstrual cycle",
+          "No hot flashes or night sweats"
+        ],
+        "recommendedLabTests": [
+          "FSH",
+          "LH",
+          "Estradiol"
+        ],
+        "physicianDiscussionPoints": [
+          "Ask about changes in cycle length or flow",
+          "Inquire about hot flashes, night sweats, or mood changes"
+        ],
+        "clinicalRationale": "Perimenopause typically begins in the late 40s to early 50s. At age 31 with a regular cycle and no menopausal symptoms, the risk of perimenopause is extremely low. A 10% score reflects minimal concern, but baseline hormone testing can be considered if the patient reports any subtle changes."
+      }
+    ],
+    "vaultLocked": false,
+    "lastAnalyzedAt": "2026-11-04T17:53:16.984Z"
+  }
+}

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
 import '../../../core/constants/app_typography.dart';
@@ -45,7 +46,7 @@ class ConditionScreeningScreen extends ConsumerWidget {
           physics: const BouncingScrollPhysics(),
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
           children: [
-            // Prominent Medical Legal Disclaimer
+            // Legal Disclaimer
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -63,7 +64,7 @@ class ConditionScreeningScreen extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Clinical Information & Tracking Companion',
+                          'Clinical Evidence-Based Companion',
                           style: AppTypography.labelLarge.copyWith(
                             color: const Color(0xFFB45309),
                             fontWeight: FontWeight.w800,
@@ -71,7 +72,7 @@ class ConditionScreeningScreen extends ConsumerWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          'This module is not a substitute for clinical diagnosis by a licensed gynecologist. It aggregates cycle fluctuations, dysmenorrhea severity, hyperandrogenic signs, and ultrasound/lab records to help you prepare evidence-based questions for your doctor.',
+                          'This module is not a substitute for clinical diagnosis by a licensed gynecologist. It analyzes cycle fluctuations, dysmenorrhea severity, hyperandrogenic signs, and ultrasound/lab records against established diagnostic criteria (Rotterdam, ASRM).',
                           style: AppTypography.bodySmall.copyWith(
                             color: const Color(0xFF92400E),
                             height: 1.4,
@@ -83,7 +84,78 @@ class ConditionScreeningScreen extends ConsumerWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
+
+            // AI Status & Re-evaluate Strip
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                border: Border.all(color: AppColors.border),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 32,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      color: AppColors.secondaryContainer,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: state.isAnalyzing
+                        ? const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.secondaryDark),
+                          )
+                        : const Icon(Icons.auto_awesome, color: AppColors.secondaryDark, size: 18),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          state.isAnalyzing ? 'Analyzing Real Data with AI...' : 'Real AI Clinical Synthesis',
+                          style: AppTypography.labelMedium.copyWith(fontWeight: FontWeight.w700),
+                        ),
+                        Text(
+                          state.lastAnalyzedAt != null
+                              ? 'Last evaluated ${DateFormat('MMM d, h:mm a').format(state.lastAnalyzedAt!)}'
+                              : 'Real-time inference active',
+                          style: AppTypography.bodySmall.copyWith(fontSize: 11, color: AppColors.textTertiary),
+                        ),
+                      ],
+                    ),
+                  ),
+                  ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(AppDimensions.radiusS),
+                      ),
+                    ),
+                    icon: state.isAnalyzing
+                        ? const SizedBox(
+                            width: 12,
+                            height: 12,
+                            child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                          )
+                        : const Icon(Icons.refresh_rounded, size: 14),
+                    label: Text(
+                      state.isAnalyzing ? 'Analyzing' : 'Re-evaluate',
+                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
+                    ),
+                    onPressed: state.isAnalyzing
+                        ? null
+                        : () => ref.read(womensHealthProvider.notifier).runAiScreeningAnalysis(),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
 
             // Header Overview
             Row(
@@ -212,7 +284,7 @@ class _ConditionDetailCard extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(4),
                   child: LinearProgressIndicator(
-                    value: assessment.scorePercent / 100,
+                    value: (assessment.scorePercent / 100).clamp(0.0, 1.0),
                     minHeight: 7,
                     backgroundColor: AppColors.surfaceSubtle,
                     valueColor: AlwaysStoppedAnimation<Color>(risk.color),
@@ -244,7 +316,7 @@ class _ConditionDetailCard extends StatelessWidget {
           // Identified Signs
           if (assessment.identifiedMarkers.isNotEmpty) ...[
             Text(
-              'Observed Markers from Tracking & Reports:',
+              'Observed Markers from Real Tracking & Reports:',
               style: AppTypography.labelSmall.copyWith(
                 fontWeight: FontWeight.w700,
                 color: AppColors.textPrimary,
@@ -273,7 +345,7 @@ class _ConditionDetailCard extends StatelessWidget {
           // Negative / Protective Signs
           if (assessment.negativeMarkers.isNotEmpty) ...[
             Text(
-              'Reassuring / Absence of Symptoms:',
+              'Reassuring / Protective Factors:',
               style: AppTypography.labelSmall.copyWith(
                 fontWeight: FontWeight.w700,
                 color: AppColors.accentEmerald,
@@ -300,43 +372,87 @@ class _ConditionDetailCard extends StatelessWidget {
           ],
 
           // Recommended Laboratory Investigations to Ask Gynecologist
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: AppColors.background,
-              borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-              border: Border.all(color: AppColors.border),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    const Icon(Icons.local_hospital_outlined, size: 16, color: AppColors.secondaryDark),
-                    const SizedBox(width: 6),
-                    Text(
-                      'Diagnostic Tests to Request from Doctor:',
-                      style: AppTypography.labelSmall.copyWith(
-                        color: AppColors.secondaryDark,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 6),
-                ...assessment.recommendedLabTests.map((test) => Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 2.0),
-                      child: Text(
-                        '• $test',
-                        style: AppTypography.bodySmall.copyWith(
-                          fontSize: 11.5,
-                          color: AppColors.textSecondary,
+          if (assessment.recommendedLabTests.isNotEmpty) ...[
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppColors.background,
+                borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                border: Border.all(color: AppColors.border),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(Icons.local_hospital_outlined, size: 16, color: AppColors.secondaryDark),
+                      const SizedBox(width: 6),
+                      Text(
+                        'Diagnostic Tests to Request from Doctor:',
+                        style: AppTypography.labelSmall.copyWith(
+                          color: AppColors.secondaryDark,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
-                    )),
-              ],
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  ...assessment.recommendedLabTests.map((test) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 2.0),
+                        child: Text(
+                          '• $test',
+                          style: AppTypography.bodySmall.copyWith(
+                            fontSize: 11.5,
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                      )),
+                ],
+              ),
             ),
-          ),
+            const SizedBox(height: 12),
+          ],
+
+          // Discussion points
+          if (assessment.physicianDiscussionPoints.isNotEmpty) ...[
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppColors.surfaceSubtle,
+                borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                border: Border.all(color: AppColors.border),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(Icons.question_answer_outlined, size: 16, color: AppColors.primary),
+                      const SizedBox(width: 6),
+                      Text(
+                        'Questions to Ask Your Doctor:',
+                        style: AppTypography.labelSmall.copyWith(
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  ...assessment.physicianDiscussionPoints.map((q) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 2.0),
+                        child: Text(
+                          '• $q',
+                          style: AppTypography.bodySmall.copyWith(
+                            fontSize: 11.5,
+                            color: AppColors.textPrimary,
+                          ),
+                        ),
+                      )),
+                ],
+              ),
+            ),
+          ],
         ],
       ),
     );

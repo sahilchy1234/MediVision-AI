@@ -12,7 +12,7 @@ class GroqConfigState {
 
   const GroqConfigState({
     this.apiKey,
-    this.selectedModel = 'llama-3.3-70b-versatile',
+    this.selectedModel = 'openai/gpt-oss-20b',
     this.isLoading = false,
   });
 
@@ -41,7 +41,13 @@ class GroqConfigNotifier extends StateNotifier<GroqConfigState> {
   Future<void> _loadConfig() async {
     state = state.copyWith(isLoading: true);
     final key = await _service.getApiKey();
-    final model = await _service.getSelectedModel();
+    var model = await _service.getSelectedModel();
+    if (model == 'llama-3.3-70b-versatile' ||
+        model.contains('llama') ||
+        model.trim().isEmpty) {
+      model = 'openai/gpt-oss-20b';
+      await _service.setSelectedModel(model);
+    }
     state = GroqConfigState(
       apiKey: key,
       selectedModel: model,
@@ -138,6 +144,36 @@ class AiCompanionNotifier extends StateNotifier<AiChatState> {
         isThinking: false,
       );
     }
+  }
+
+  Future<void> sendSensationQuery({
+    required String systemOrArea,
+    required String sensation,
+    required int severity,
+    List<String> qualityTags = const [],
+    String? notes,
+    String? biomarkerContext,
+  }) async {
+    final tagsStr = qualityTags.isNotEmpty ? qualityTags.join(', ') : 'None specified';
+    final notesStr = (notes != null && notes.trim().isNotEmpty) ? notes.trim() : 'None reported';
+    final bioStr = (biomarkerContext != null && biomarkerContext.trim().isNotEmpty)
+        ? '\n* **Biomarkers Baseline**: $biomarkerContext'
+        : '';
+
+    final clinicalPrompt =
+        "### Patient Sensation Log Report\n\n"
+        "* **Physiological System / Target Area**: $systemOrArea\n"
+        "* **Reported Sensation**: $sensation\n"
+        "* **Severity Rating**: $severity / 10 (${severity <= 3 ? 'Mild' : (severity <= 6 ? 'Moderate' : 'Severe')})\n"
+        "* **Sensation Characteristics**: $tagsStr\n"
+        "* **Patient Observations**: $notesStr$bioStr\n\n"
+        "Please provide an evidence-based clinical assessment:\n"
+        "1. What physiological factors or mechanisms might explain this sensation?\n"
+        "2. Immediate self-care or relief steps I should take right now.\n"
+        "3. Red-flag warning signs that would require emergency care.\n"
+        "4. Key questions or observation notes for my doctor consultation.";
+
+    await sendMessage(clinicalPrompt);
   }
 
   void clearChat() {

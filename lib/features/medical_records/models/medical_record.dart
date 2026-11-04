@@ -28,6 +28,42 @@ extension RecordCategoryExtension on RecordCategory {
         return Icons.folder_open_rounded;
     }
   }
+
+  String get codeName {
+    switch (this) {
+      case RecordCategory.bloodReports:
+        return 'bloodReports';
+      case RecordCategory.xRays:
+        return 'xRays';
+      case RecordCategory.prescriptions:
+        return 'prescriptions';
+      case RecordCategory.other:
+        return 'other';
+    }
+  }
+
+  static RecordCategory fromString(String? val) {
+    if (val == null) return RecordCategory.other;
+    switch (val.toLowerCase().trim()) {
+      case 'bloodreports':
+      case 'blood reports':
+      case 'blood_reports':
+      case 'blood':
+        return RecordCategory.bloodReports;
+      case 'xrays':
+      case 'x-rays & imaging':
+      case 'imaging':
+      case 'x-rays':
+      case 'x_rays':
+        return RecordCategory.xRays;
+      case 'prescriptions':
+      case 'prescription':
+      case 'rx':
+        return RecordCategory.prescriptions;
+      default:
+        return RecordCategory.other;
+    }
+  }
 }
 
 class MedicalRecordItem {
@@ -40,6 +76,10 @@ class MedicalRecordItem {
   final String status;
   final Color statusColor;
   final String summary;
+  final String? filePath;
+  final String? fileType;
+  final String? notes;
+  final DateTime? createdAt;
 
   const MedicalRecordItem({
     required this.id,
@@ -51,66 +91,97 @@ class MedicalRecordItem {
     required this.status,
     required this.statusColor,
     required this.summary,
+    this.filePath,
+    this.fileType,
+    this.notes,
+    this.createdAt,
   });
 
+  MedicalRecordItem copyWith({
+    String? id,
+    String? title,
+    RecordCategory? category,
+    DateTime? date,
+    String? providerName,
+    String? fileSize,
+    String? status,
+    Color? statusColor,
+    String? summary,
+    String? filePath,
+    String? fileType,
+    String? notes,
+    DateTime? createdAt,
+  }) {
+    return MedicalRecordItem(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      category: category ?? this.category,
+      date: date ?? this.date,
+      providerName: providerName ?? this.providerName,
+      fileSize: fileSize ?? this.fileSize,
+      status: status ?? this.status,
+      statusColor: statusColor ?? this.statusColor,
+      summary: summary ?? this.summary,
+      filePath: filePath ?? this.filePath,
+      fileType: fileType ?? this.fileType,
+      notes: notes ?? this.notes,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'category': category.codeName,
+      'date': date.toIso8601String(),
+      'providerName': providerName,
+      'fileSize': fileSize,
+      'status': status,
+      'statusColor': statusColor.toARGB32(),
+      'summary': summary,
+      'filePath': filePath,
+      'fileType': fileType,
+      'notes': notes,
+      'createdAt': (createdAt ?? date).toIso8601String(),
+    };
+  }
+
+  factory MedicalRecordItem.fromJson(Map<String, dynamic> json) {
+    Color parseColor(dynamic c) {
+      if (c is int) return Color(c);
+      if (c is String) {
+        final parsed = int.tryParse(c.replaceFirst('#', ''), radix: 16);
+        if (parsed != null) {
+          if (c.length <= 7) return Color(0xFF000000 | parsed);
+          return Color(parsed);
+        }
+      }
+      return const Color(0xFF0D9488);
+    }
+
+    return MedicalRecordItem(
+      id: json['id'] as String? ?? 'rec_${DateTime.now().millisecondsSinceEpoch}',
+      title: json['title'] as String? ?? 'Untitled Record',
+      category: RecordCategoryExtension.fromString(json['category'] as String?),
+      date: json['date'] != null
+          ? (DateTime.tryParse(json['date'] as String) ?? DateTime.now())
+          : DateTime.now(),
+      providerName: json['providerName'] as String? ?? 'Healthcare Provider',
+      fileSize: json['fileSize'] as String? ?? '1.0 MB',
+      status: json['status'] as String? ?? 'Indexed',
+      statusColor: parseColor(json['statusColor']),
+      summary: json['summary'] as String? ?? '',
+      filePath: json['filePath'] as String?,
+      fileType: json['fileType'] as String?,
+      notes: json['notes'] as String?,
+      createdAt: json['createdAt'] != null
+          ? DateTime.tryParse(json['createdAt'] as String)
+          : null,
+    );
+  }
+
   static List<MedicalRecordItem> getSampleRecords() {
-    return [
-      MedicalRecordItem(
-        id: 'rec_1',
-        title: 'Complete Blood Count & Ferritin Panel',
-        category: RecordCategory.bloodReports,
-        date: DateTime.now().subtract(const Duration(days: 9)),
-        providerName: 'St. Jude Diagnostics Lab',
-        fileSize: '1.4 MB PDF',
-        status: 'Analyzed by AI',
-        statusColor: const Color(0xFF0D9488),
-        summary: '18 Biomarkers extracted. Serum ferritin 42 ng/mL. All values within normal clinical range.',
-      ),
-      MedicalRecordItem(
-        id: 'rec_2',
-        title: 'Lipid Profile & Cardio Biomarkers',
-        category: RecordCategory.bloodReports,
-        date: DateTime.now().subtract(const Duration(days: 28)),
-        providerName: 'BioHealth Diagnostic Center',
-        fileSize: '820 KB PDF',
-        status: 'Optimal Range',
-        statusColor: const Color(0xFF10B981),
-        summary: 'HDL 62 mg/dL, LDL 94 mg/dL. Triglycerides well within safe cardioprotective threshold.',
-      ),
-      MedicalRecordItem(
-        id: 'rec_3',
-        title: 'Chest Radiograph (PA & Lateral)',
-        category: RecordCategory.xRays,
-        date: DateTime.now().subtract(const Duration(days: 45)),
-        providerName: 'Metropolitan Imaging Institute',
-        fileSize: '14.2 MB DICOM',
-        status: 'Verified Clear',
-        statusColor: const Color(0xFF10B981),
-        summary: 'No acute cardiopulmonary disease. Costophrenic angles sharp. Lungs hyperinflation absent.',
-      ),
-      MedicalRecordItem(
-        id: 'rec_4',
-        title: 'Albuterol Sulfate Inhaler Rx',
-        category: RecordCategory.prescriptions,
-        date: DateTime.now().subtract(const Duration(days: 60)),
-        providerName: 'Dr. Sarah Lin, MD (Pulmonology)',
-        fileSize: '340 KB PDF',
-        status: 'Active Rx',
-        statusColor: const Color(0xFF3B82F6),
-        summary: '90 mcg/actuation. 2 puffs every 4–6 hours as needed for exercise-induced bronchospasm.',
-      ),
-      MedicalRecordItem(
-        id: 'rec_5',
-        title: 'Annual Comprehensive Physical Summary',
-        category: RecordCategory.other,
-        date: DateTime.now().subtract(const Duration(days: 95)),
-        providerName: 'City Health Family Practice',
-        fileSize: '2.1 MB PDF',
-        status: 'Archived',
-        statusColor: const Color(0xFF64748B),
-        summary: 'Full executive health checkup. Blood pressure 118/76 mmHg. Resting ECG normal sinus rhythm.',
-      ),
-    ];
+    return [];
   }
 }
-

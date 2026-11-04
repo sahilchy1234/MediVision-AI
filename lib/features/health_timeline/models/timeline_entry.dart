@@ -2,6 +2,34 @@ import 'package:flutter/material.dart';
 
 enum TimelineCategory { all, sleep, activity, symptoms, reports, medications }
 
+extension TimelineCategoryExtension on TimelineCategory {
+  String get label {
+    switch (this) {
+      case TimelineCategory.all:
+        return 'All Activity';
+      case TimelineCategory.sleep:
+        return 'Sleep';
+      case TimelineCategory.activity:
+        return 'Activity';
+      case TimelineCategory.symptoms:
+        return 'Symptoms';
+      case TimelineCategory.reports:
+        return 'Reports';
+      case TimelineCategory.medications:
+        return 'Medications';
+    }
+  }
+
+  static TimelineCategory fromString(String? val) {
+    if (val == null) return TimelineCategory.all;
+    final lower = val.toLowerCase().trim();
+    return TimelineCategory.values.firstWhere(
+      (c) => c.name.toLowerCase() == lower,
+      orElse: () => TimelineCategory.all,
+    );
+  }
+}
+
 class TimelineEntry {
   final String id;
   final String title;
@@ -14,6 +42,7 @@ class TimelineEntry {
   final IconData icon;
   final String plainEnglishInsight;
   final String simplePillTag;
+  final String? source; // e.g. 'medical_records', 'vitals_activity', 'user_log'
 
   const TimelineEntry({
     required this.id,
@@ -25,97 +54,134 @@ class TimelineEntry {
     this.statusLabel,
     this.statusColor = const Color(0xFF0D9488),
     required this.icon,
-    this.plainEnglishInsight = 'Everything is within your personal healthy range.',
+    this.plainEnglishInsight = 'Recorded in your personal health record.',
     this.simplePillTag = 'Healthy',
+    this.source,
   });
 
+  TimelineEntry copyWith({
+    String? id,
+    String? title,
+    String? description,
+    DateTime? timestamp,
+    TimelineCategory? category,
+    String? metricValue,
+    String? statusLabel,
+    Color? statusColor,
+    IconData? icon,
+    String? plainEnglishInsight,
+    String? simplePillTag,
+    String? source,
+  }) {
+    return TimelineEntry(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      timestamp: timestamp ?? this.timestamp,
+      category: category ?? this.category,
+      metricValue: metricValue ?? this.metricValue,
+      statusLabel: statusLabel ?? this.statusLabel,
+      statusColor: statusColor ?? this.statusColor,
+      icon: icon ?? this.icon,
+      plainEnglishInsight: plainEnglishInsight ?? this.plainEnglishInsight,
+      simplePillTag: simplePillTag ?? this.simplePillTag,
+      source: source ?? this.source,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'description': description,
+      'timestamp': timestamp.toIso8601String(),
+      'category': category.name,
+      'metricValue': metricValue,
+      'statusLabel': statusLabel,
+      'statusColor': statusColor.value,
+      'icon': _iconToName(icon),
+      'plainEnglishInsight': plainEnglishInsight,
+      'simplePillTag': simplePillTag,
+      'source': source,
+    };
+  }
+
+  factory TimelineEntry.fromJson(Map<String, dynamic> json) {
+    Color parsedColor = const Color(0xFF0D9488);
+    if (json['statusColor'] is int) {
+      parsedColor = Color(json['statusColor'] as int);
+    } else if (json['statusColor'] is String) {
+      final hex = int.tryParse(json['statusColor'] as String);
+      if (hex != null) parsedColor = Color(hex);
+    }
+
+    DateTime parsedDate;
+    if (json['timestamp'] is String) {
+      parsedDate = DateTime.tryParse(json['timestamp'] as String) ?? DateTime.now();
+    } else {
+      parsedDate = DateTime.now();
+    }
+
+    return TimelineEntry(
+      id: json['id'] as String? ?? 'tl_${DateTime.now().millisecondsSinceEpoch}',
+      title: json['title'] as String? ?? 'Health Event',
+      description: json['description'] as String? ?? '',
+      timestamp: parsedDate,
+      category: TimelineCategoryExtension.fromString(json['category'] as String?),
+      metricValue: json['metricValue'] as String? ?? '',
+      statusLabel: json['statusLabel'] as String?,
+      statusColor: parsedColor,
+      icon: _iconFromName(json['icon'] as String?),
+      plainEnglishInsight: json['plainEnglishInsight'] as String? ??
+          'Recorded in your personal health record.',
+      simplePillTag: json['simplePillTag'] as String? ?? 'Logged',
+      source: json['source'] as String?,
+    );
+  }
+
+  static String _iconToName(IconData icon) {
+    if (icon == Icons.bedtime_rounded || icon == Icons.bedtime) return 'bedtime';
+    if (icon == Icons.directions_walk_rounded || icon == Icons.directions_walk) return 'directions_walk';
+    if (icon == Icons.directions_run_rounded || icon == Icons.directions_run) return 'directions_run';
+    if (icon == Icons.monitor_heart_outlined || icon == Icons.monitor_heart) return 'monitor_heart';
+    if (icon == Icons.water_drop_rounded || icon == Icons.water_drop) return 'water_drop';
+    if (icon == Icons.medication_rounded || icon == Icons.medication) return 'medication';
+    if (icon == Icons.document_scanner_rounded || icon == Icons.document_scanner) return 'document_scanner';
+    if (icon == Icons.healing_rounded || icon == Icons.healing) return 'healing';
+    if (icon == Icons.sync_rounded || icon == Icons.sync) return 'sync';
+    if (icon == Icons.air_rounded) return 'air';
+    return 'history';
+  }
+
+  static IconData _iconFromName(String? name) {
+    switch (name) {
+      case 'bedtime':
+        return Icons.bedtime_rounded;
+      case 'directions_walk':
+        return Icons.directions_walk_rounded;
+      case 'directions_run':
+        return Icons.directions_run_rounded;
+      case 'monitor_heart':
+        return Icons.monitor_heart_outlined;
+      case 'water_drop':
+        return Icons.water_drop_rounded;
+      case 'medication':
+        return Icons.medication_rounded;
+      case 'document_scanner':
+        return Icons.document_scanner_rounded;
+      case 'healing':
+        return Icons.healing_rounded;
+      case 'sync':
+        return Icons.sync_rounded;
+      case 'air':
+        return Icons.air_rounded;
+      default:
+        return Icons.history_rounded;
+    }
+  }
+
+  /// Empty list by default to guarantee only real user health timeline data is displayed.
   static List<TimelineEntry> getSampleEntries() {
-    final now = DateTime.now();
-    return [
-      TimelineEntry(
-        id: 't1',
-        title: 'Deep Sleep & Muscle Recovery',
-        description: '7h 42m total sleep duration with 1h 48m deep sleep recorded.',
-        timestamp: now.subtract(const Duration(hours: 3)),
-        category: TimelineCategory.sleep,
-        metricValue: '89% Sleep Quality',
-        statusLabel: 'Great Rest',
-        statusColor: const Color(0xFF10B981),
-        icon: Icons.bedtime_rounded,
-        plainEnglishInsight:
-            'You spent almost 2 hours in deep sleep. This gave your muscles time to repair and cleared mental fatigue for today.',
-        simplePillTag: 'Well Rested',
-      ),
-      TimelineEntry(
-        id: 't2',
-        title: 'Daily Movement & Walking',
-        description: '8,420 steps logged. 42 minutes of brisk walking.',
-        timestamp: now.subtract(const Duration(hours: 6)),
-        category: TimelineCategory.activity,
-        metricValue: '8,420 steps',
-        statusLabel: 'Goal Met',
-        statusColor: const Color(0xFF0D9488),
-        icon: Icons.directions_walk_rounded,
-        plainEnglishInsight:
-            'You hit 84% of your daily movement goal without tiring your joints. Your heart got healthy aerobic exercise.',
-        simplePillTag: 'Active Day',
-      ),
-      TimelineEntry(
-        id: 't3',
-        title: 'Blood Checkup & Lab Panel',
-        description: 'Blood sugar, iron, and kidney filtration tested.',
-        timestamp: now.subtract(const Duration(days: 1, hours: 2)),
-        category: TimelineCategory.reports,
-        metricValue: '18 Biomarkers',
-        statusLabel: 'All Normal',
-        statusColor: const Color(0xFF6366F1),
-        icon: Icons.water_drop_rounded,
-        plainEnglishInsight:
-            'No warning signs found. Your fasting blood sugar is 92 (ideal) and your iron levels have recovered nicely.',
-        simplePillTag: 'Safe & Clear',
-      ),
-      TimelineEntry(
-        id: 't4',
-        title: 'Morning Vitamin D & Omega-3',
-        description: 'Morning maintenance supplements taken with breakfast.',
-        timestamp: now.subtract(const Duration(days: 1, hours: 8)),
-        category: TimelineCategory.medications,
-        metricValue: '2,000 IU',
-        statusLabel: 'Taken',
-        statusColor: const Color(0xFF10B981),
-        icon: Icons.medication_rounded,
-        plainEnglishInsight:
-            'Taking this with food ensures your bones and immune system absorb maximum vitamin D.',
-        simplePillTag: 'Routine Complete',
-      ),
-      TimelineEntry(
-        id: 't5',
-        title: 'Mild Chest Tightness Logged',
-        description: 'Slight shortness of breath logged after cold evening jog.',
-        timestamp: now.subtract(const Duration(days: 3, hours: 4)),
-        category: TimelineCategory.symptoms,
-        metricValue: 'Mild (Scale 2/10)',
-        statusLabel: 'Resolved',
-        statusColor: const Color(0xFFF59E0B),
-        icon: Icons.air_rounded,
-        plainEnglishInsight:
-            'Temporary cold-air response that settled quickly with rest. No rescue inhaler was required.',
-        simplePillTag: 'Monitored',
-      ),
-      TimelineEntry(
-        id: 't6',
-        title: 'Chest X-Ray Imaging',
-        description: 'Routine radiographic scan of lungs and heart.',
-        timestamp: now.subtract(const Duration(days: 7)),
-        category: TimelineCategory.reports,
-        metricValue: 'Clear Lungs',
-        statusLabel: 'Doctor Verified',
-        statusColor: const Color(0xFF10B981),
-        icon: Icons.document_scanner_rounded,
-        plainEnglishInsight:
-            'Lungs are clear and fully expanded with zero fluid or infection. Heart shape is completely normal.',
-        simplePillTag: '100% Clear',
-      ),
-    ];
+    return const [];
   }
 }
