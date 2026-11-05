@@ -73,4 +73,8 @@ class ApiConstants {
   static String get womensHealthSymptoms => '$baseUrl/womens-health/symptoms';
   static String get womensHealthScreeningsAnalyze => '$baseUrl/womens-health/screenings/analyze';
   static String get womensHealthVaultToggle => '$baseUrl/womens-health/vault/toggle';
+
+  // Clinical Summary & Dossier
+  static String get clinicalSummary => '$baseUrl/summary';
+  static String get generateClinicalSummary => '$baseUrl/summary/generate';
 }

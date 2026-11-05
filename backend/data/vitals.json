@@ -4,8 +4,8 @@
     "snapshot": {
       "steps": 11400,
       "stepGoal": 10000,
-      "activeMinutes": 422,
-      "activeCalories": 3142,
+      "activeMinutes": 462,
+      "activeCalories": 3422,
       "restingHeartRate": 64,
       "bloodPressureSystolic": 119,
       "bloodPressureDiastolic": 79,
@@ -16,9 +16,31 @@
       "sleepQualityScore": 89,
       "screenTimeMinutes": 195,
       "screenPickups": 48,
-      "lastUpdated": "2026-11-04T19:05:14.616Z"
+      "lastUpdated": "2026-11-05T04:30:22.863Z"
     },
     "activities": [
+      {
+        "id": "act_1793853022863_wqzu",
+        "type": "Running",
+        "startTime": "2026-11-05T04:30:22.863Z",
+        "durationMinutes": 20,
+        "steps": 2200,
+        "calories": 140,
+        "distanceKm": 2.1,
+        "avgHeartRate": 0,
+        "notes": ""
+      },
+      {
+        "id": "act_1793852975448_vbak",
+        "type": "Running",
+        "startTime": "2026-11-05T04:29:35.448Z",
+        "durationMinutes": 20,
+        "steps": 2200,
+        "calories": 140,
+        "distanceKm": 2.1,
+        "avgHeartRate": 0,
+        "notes": ""
+      },
       {
         "id": "act_1793819114616_aye9",
         "type": "Running",
@@ -241,6 +263,51 @@
       }
     ],
     "logs": [
+      {
+        "id": "log_1793853022863_ovz8",
+        "category": "activity",
+        "label": "Running Session",
+        "value": "2200 steps",
+        "unit": "steps",
+        "timestamp": "2026-11-05T04:30:22.863Z",
+        "notes": "20m duration • 140 kcal burned • 2.1 km"
+      },
+      {
+        "id": "log_1793853022838_4yae",
+        "category": "pulse",
+        "label": "Heart Rate Measured",
+        "value": "64 bpm",
+        "unit": "bpm",
+        "timestamp": "2026-11-05T04:30:22.838Z",
+        "notes": ""
+      },
+      {
+        "id": "log_1793852975448_953j",
+        "category": "activity",
+        "label": "Running Session",
+        "value": "2200 steps",
+        "unit": "steps",
+        "timestamp": "2026-11-05T04:29:35.448Z",
+        "notes": "20m duration • 140 kcal burned • 2.1 km"
+      },
+      {
+        "id": "log_1793852975391_di81",
+        "category": "pulse",
+        "label": "Heart Rate Measured",
+        "value": "64 bpm",
+        "unit": "bpm",
+        "timestamp": "2026-11-05T04:29:35.391Z",
+        "notes": ""
+      },
+      {
+        "id": "log_1793851795772_msfe",
+        "category": "sensation",
+        "label": "Tension / Strain in Rectus Abdominis (1) (Anatomy - Rectus Abdominis (1))",
+        "value": "4/10",
+        "unit": "intensity",
+        "timestamp": "2026-11-05T09:39:55.594",
+        "notes": "Musculoskeletal, Body Map"
+      },
       {
         "id": "log_1793819114616_fi09",
         "category": "activity",
@@ -620,6 +687,6 @@
         "notes": "84% of daily goal reached."
       }
     ],
-    "updatedAt": "2026-11-04T19:05:14.616Z"
+    "updatedAt": "2026-11-05T04:30:22.863Z"
   }
 }

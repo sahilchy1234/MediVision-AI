@@ -11,6 +11,7 @@ const recordsRoutes = require('./routes/records.routes');
 const vitalsRoutes = require('./routes/vitals.routes');
 const timelineRoutes = require('./routes/timeline.routes');
 const womensHealthRoutes = require('./routes/womens_health.routes');
+const summaryRoutes = require('./routes/summary.routes');
 const { notFoundHandler, globalErrorHandler } = require('./middleware/error.middleware');
 
 const app = express();
@@ -43,6 +44,7 @@ app.use('/api/records', recordsRoutes);
 app.use('/api/vitals', vitalsRoutes);
 app.use('/api/timeline', timelineRoutes);
 app.use('/api/womens-health', womensHealthRoutes);
+app.use('/api/summary', summaryRoutes);
 
 // Welcome Root Route
 app.get('/', (req, res) => {
@@ -56,27 +58,20 @@ app.get('/', (req, res) => {
       logout: 'POST /api/auth/logout',
       currentUser: 'GET /api/auth/me (Protected)',
       refreshToken: 'POST /api/auth/refresh',
+      summary: 'GET /api/summary',
     },
   });
 });
 
-// 404 Handler
+// 404 and Error handling
 app.use(notFoundHandler);
-
-// Centralized Error Handler
 app.use(globalErrorHandler);
 
-// Start HTTP Server
 if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, () => {
-    console.log(`===============================================`);
-    console.log(`🚀 MediVision AI Backend is actively running!`);
-    console.log(`📍 Port: http://localhost:${PORT}`);
-    console.log(`🩺 Health check: http://localhost:${PORT}/api/health`);
-    console.log(`🔐 Auth endpoints: http://localhost:${PORT}/api/auth`);
-    console.log(`===============================================`);
+    console.log(`🏥 MediVision AI Backend running on port ${PORT}`);
+    console.log(`🚀 Health Check: http://localhost:${PORT}/api/health`);
   });
 }
 
 module.exports = app;
-

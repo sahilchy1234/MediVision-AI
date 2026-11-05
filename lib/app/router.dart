@@ -5,6 +5,7 @@ import '../features/ai_companion/presentation/ai_companion_screen.dart';
 import '../features/authentication/presentation/forgot_password_screen.dart';
 import '../features/authentication/presentation/login_screen.dart';
 import '../features/authentication/presentation/signup_screen.dart';
+import '../features/clinical_summary/presentation/clinical_summary_screen.dart';
 import '../features/dashboard/presentation/dashboard_screen.dart';
 import '../features/health_timeline/presentation/health_timeline_screen.dart';
 import '../features/medical_records/presentation/medical_records_screen.dart';
@@ -69,6 +70,12 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/womens-health',
       builder: (context, state) => const WomensHealthScreen(),
+    ),
+
+    // Advanced Clinical Summary & Medical Dossier
+    GoRoute(
+      path: '/clinical-summary',
+      builder: (context, state) => const ClinicalSummaryScreen(),
     ),
 
     // Dashboard alias redirect to Home tab

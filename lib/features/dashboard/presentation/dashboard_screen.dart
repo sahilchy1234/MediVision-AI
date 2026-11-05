@@ -17,6 +17,7 @@ import '../../permissions/providers/permissions_provider.dart';
 import '../../profile/providers/profile_provider.dart';
 import '../../vitals_activity/models/vitals_activity_model.dart';
 import '../../vitals_activity/presentation/widgets/live_activity_tracker_sheet.dart';
+import '../../clinical_summary/providers/clinical_summary_provider.dart';
 import '../../vitals_activity/presentation/widgets/pulse_measurement_sheet.dart';
 import '../../vitals_activity/presentation/widgets/screen_time_sheet.dart';
 import '../../vitals_activity/presentation/widgets/sleep_log_sheet.dart';
@@ -30,12 +31,15 @@ import 'widgets/recent_updates_section.dart';
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
 
-  void _showGenerateSummarySheet(BuildContext context, String userName, VitalsSnapshot vitals) {
+  void _showGenerateSummarySheet(BuildContext context, WidgetRef ref, String userName, VitalsSnapshot vitals) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) {
+      builder: (sheetContext) {
+        final summaryState = ref.watch(clinicalSummaryProvider);
+        final summary = summaryState.summary;
+
         return Container(
           padding: const EdgeInsets.all(20),
           decoration: const BoxDecoration(
@@ -45,86 +49,156 @@ class DashboardScreen extends ConsumerWidget {
             ),
           ),
           child: SafeArea(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Container(
-                    width: 36,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: AppColors.border,
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Clinical Summary',
-                      style: AppTypography.titleLarge.copyWith(
-                        fontWeight: FontWeight.w700,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 36,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: AppColors.border,
+                        borderRadius: BorderRadius.circular(2),
                       ),
                     ),
-                    const StatusBadge(
-                      label: 'Verified',
-                      type: BadgeType.success,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Synthesized for $userName over the last 30 days',
-                  style: AppTypography.bodySmall,
-                ),
-                const SizedBox(height: 16),
-                Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: AppColors.surfaceSubtle,
-                    borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-                    border: Border.all(color: AppColors.border),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Biomarker & Vital Overview',
-                        style: AppTypography.labelLarge.copyWith(
-                          fontWeight: FontWeight.w600,
+                        'Clinical Health Summary',
+                        style: AppTypography.titleLarge.copyWith(
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        '• Mean Resting Pulse: ${vitals.formattedPulse} (${vitals.pulseSubtitle})\n'
-                        '• Blood Pressure Baseline: ${vitals.formattedBP} (SpO2: ${vitals.bloodOxygenSpO2}%)\n'
-                        '• Sleep Efficiency: ${vitals.sleepQualityScore}% (${vitals.formattedSleep} total, ${vitals.formattedDeepSleep} deep)\n'
-                        '• Movement Target: ${vitals.formattedSteps} steps (${vitals.stepsSubtitle}, ${vitals.activeCalories} kcal)\n'
-                        '• Screen Exposure: ${vitals.formattedScreenTime} (${vitals.screenPickups} pickups today)',
-                        style: AppTypography.bodyMedium.copyWith(height: 1.5),
+                      StatusBadge(
+                        label: '${summary.healthScore}/100 Score',
+                        type: BadgeType.success,
+                        isPill: true,
                       ),
                     ],
                   ),
-                ),
-                const SizedBox(height: 16),
-                PrimaryButton(
-                  label: 'Export PDF Report',
-                  icon: Icons.picture_as_pdf_outlined,
-                  onPressed: () {
-                    Navigator.pop(context);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Clinical summary exported successfully.'),
-                        backgroundColor: AppColors.secondary,
-                        behavior: SnackBarBehavior.floating,
+                  const SizedBox(height: 4),
+                  Text(
+                    'Real-time dossier synthesized for $userName',
+                    style: AppTypography.bodySmall,
+                  ),
+                  const SizedBox(height: 14),
+                  Container(
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      color: AppColors.surfaceSubtle,
+                      borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                      border: Border.all(color: AppColors.border),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Patient Demographics & Status',
+                              style: AppTypography.labelLarge.copyWith(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Text(
+                              'Ref: ${summary.reportId}',
+                              style: AppTypography.labelSmall.copyWith(color: AppColors.textTertiary, fontSize: 10),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          '• Age & Gender: ${summary.age} yrs (${summary.gender}) • Blood Group: ${summary.bloodGroup}\n'
+                          '• BMI: ${summary.bmi} (${summary.bmiCategory}) • Weight: ${summary.weightKg.toInt()} kg\n'
+                          '• Blood Pressure: ${summary.formattedBP} (MAP: ${summary.meanArterialPressure} mmHg)\n'
+                          '• Resting Heart Rate: ${summary.formattedPulse} (Optimal Sinus Rhythm)\n'
+                          '• Capillary SpO2: ${summary.bloodOxygenSpO2}% • Temp: ${summary.bodyTemperature}°C\n'
+                          '• Sleep Architecture: ${summary.formattedSleep} (${summary.deepSleepMinutes}m deep, ${summary.sleepQualityScore}% quality)\n'
+                          '• Physical Mobility: ${summary.dailySteps} steps (${summary.activeCalories} kcal, ${summary.activeMinutes}m active)\n'
+                          '• Verified Records: ${summary.records.length} diagnostic files in vault',
+                          style: AppTypography.bodyMedium.copyWith(height: 1.5, fontSize: 12.5),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        side: const BorderSide(color: AppColors.primary),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                        ),
                       ),
-                    );
-                  },
-                ),
-              ],
+                      icon: const Icon(Icons.analytics_outlined, size: 18, color: AppColors.primary),
+                      label: const Text('View Full Dossier & Systems Assessment', style: TextStyle(fontWeight: FontWeight.w600)),
+                      onPressed: () {
+                        Navigator.pop(sheetContext);
+                        context.push('/clinical-summary');
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            side: const BorderSide(color: AppColors.border),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                            ),
+                          ),
+                          icon: const Icon(Icons.print_outlined, size: 18),
+                          label: const Text('Print / Save'),
+                          onPressed: summaryState.isExportingPdf
+                              ? null
+                              : () async {
+                                  await ref.read(clinicalSummaryProvider.notifier).printOrPreview(context);
+                                },
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: PrimaryButton(
+                          label: summaryState.isExportingPdf ? 'Generating...' : 'Export PDF',
+                          icon: Icons.picture_as_pdf_rounded,
+                          isLoading: summaryState.isExportingPdf,
+                          onPressed: summaryState.isExportingPdf
+                              ? null
+                              : () async {
+                                  final messenger = ScaffoldMessenger.of(context);
+                                  final success = await ref.read(clinicalSummaryProvider.notifier).exportPdf();
+                                  if (context.mounted) {
+                                    Navigator.pop(sheetContext);
+                                    messenger.showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          success
+                                              ? 'Clinical summary PDF exported successfully.'
+                                              : 'PDF export failed.',
+                                        ),
+                                        backgroundColor: success ? AppColors.secondary : AppColors.error,
+                                        behavior: SnackBarBehavior.floating,
+                                      ),
+                                    );
+                                  }
+                                },
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         );
@@ -547,6 +621,7 @@ class DashboardScreen extends ConsumerWidget {
                         color: AppColors.accentIndigo,
                         onTap: () => _showGenerateSummarySheet(
                           context,
+                          ref,
                           profile.fullName,
                           vitals,
                         ),

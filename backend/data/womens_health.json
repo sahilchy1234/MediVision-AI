@@ -5,7 +5,7 @@
       "currentDayOfCycle": 1,
       "averageCycleLength": 30,
       "averagePeriodDuration": 5,
-      "lastPeriodStartDate": "2026-11-04T19:05:14.938Z",
+      "lastPeriodStartDate": "2026-11-05T04:30:23.400Z",
       "currentPhase": "menstrual",
       "isFertileWindow": false,
       "daysUntilNextPeriod": 29,
@@ -27,8 +27,8 @@
     },
     "symptomLogs": [
       {
-        "id": "log_1793819114947",
-        "date": "2026-11-04T19:05:14.938Z",
+        "id": "log_1793853023405",
+        "date": "2026-11-05T04:30:23.400Z",
         "flow": "medium",
         "crampsSeverity": 3,
         "pelvicPainSeverity": 1,
@@ -86,116 +86,108 @@
         "id": "pcos_pcod",
         "conditionName": "PCOS / PCOD",
         "category": "Endocrine & Ovulatory",
-        "subtitle": "Rotterdam Criteria & Pattern Evaluation",
-        "riskLevel": "moderateRisk",
-        "scorePercent": 65,
+        "subtitle": "Rotterdam Criteria & Hyperandrogenic Pattern Evaluation",
+        "riskLevel": "lowRisk",
+        "scorePercent": 38,
         "identifiedMarkers": [
-          "Androgenic breakout (jawline/cystic acne)",
-          "Normal BMI (20.5)",
-          "Regular cycle length (29±2.5 days)"
+          "Cyclical cystic jawline breakouts logged in recent entries"
         ],
         "negativeMarkers": [
-          "Regular fertile cervical mucus (egg‑white)",
-          "Normal basal temperature (36.7°C)",
-          "No menstrual flow irregularity"
+          "Consistent cycle length (29 days, variance ±2.5d)",
+          "No hirsutism or excess terminal facial hair reported"
         ],
         "recommendedLabTests": [
-          "Serum total testosterone",
-          "LH/FSH ratio",
-          "Prolactin",
-          "Thyroid panel"
+          "Pelvic Ultrasound (Transvaginal / Antral Follicle Count)",
+          "Day 2–3 Serum LH & FSH (LH:FSH ratio)",
+          "Serum Anti-Müllerian Hormone (AMH)",
+          "Total & Free Serum Testosterone, DHEAS",
+          "Fasting Glucose & Fasting Insulin (HOMA-IR)"
         ],
         "physicianDiscussionPoints": [
-          "Ask about hirsutism or acne severity",
-          "Discuss menstrual regularity and any recent changes",
-          "Inquire about family history of PCOS or metabolic syndrome"
+          "Review ovarian ultrasound for polycystic morphology (>12 follicles per ovary).",
+          "Assess whether metabolic inositol supplementation is indicated.",
+          "Evaluate regular biphasic ovulatory temperature shifts."
         ],
-        "clinicalRationale": "The patient meets two of the Rotterdam criteria for PCOS: clinical hyperandrogenism (acne) and a normal BMI with regular cycles. The presence of androgenic skin changes raises a moderate risk. Normal ovulatory markers (fertile mucus, basal temperature) and regular cycle length mitigate the risk somewhat, but the androgenic signs warrant further endocrine evaluation."
+        "clinicalRationale": "Evaluated using the Rotterdam Consensus (requires 2 of 3: oligo/anovulation, clinical/biochemical hyperandrogenism, polycystic ovaries). Calculated risk is 38% based on your real cycle variance (±2.5d) and logged skin/metabolic indicators."
       },
       {
         "id": "endometriosis",
         "conditionName": "Endometriosis & Adenomyosis",
-        "category": "Gynecologic & Pain",
-        "subtitle": "Pain Pattern & Clinical Correlation",
+        "category": "Gynecological Pain & Structural",
+        "subtitle": "Dysmenorrhea Severity & Deep Pelvic Pain Mapping",
         "riskLevel": "moderateRisk",
-        "scorePercent": 45,
+        "scorePercent": 68,
         "identifiedMarkers": [
-          "Lower back pain (2/5)",
-          "Pelvic pain (2/5)",
-          "Moderate cramps (3/5)"
+          "Moderate menstrual cramps logged (3/5)",
+          "Non-menstrual pelvic pain reported at severity 2/5",
+          "Radiating lower lumbar pain during menstrual phase"
         ],
-        "negativeMarkers": [
-          "Regular menstrual flow",
-          "No dysmenorrhea reported",
-          "Regular cycle length"
-        ],
+        "negativeMarkers": [],
         "recommendedLabTests": [
-          "Transvaginal ultrasound",
-          "CA‑125 (if indicated)"
+          "Specialized High-Resolution Deep Infiltrating Pelvic Ultrasound",
+          "Pelvic MRI with IV Contrast (if deep infiltrative endometriosis suspected)",
+          "Serum CA-125 (supplementary inflammatory biomarker)"
         ],
         "physicianDiscussionPoints": [
-          "Ask about pain during intercourse or bowel movements",
-          "Inquire about pain onset relative to menses",
-          "Discuss any history of infertility or prior surgeries"
+          "Differentiate primary dysmenorrhea from secondary endometriosis.",
+          "Discuss targeted hormonal management (progestins or combined therapy).",
+          "Evaluate non-menstrual pelvic pain or gastrointestinal symptoms during menses."
         ],
-        "clinicalRationale": "Pelvic and lower back pain in a woman of reproductive age, even in the absence of dysmenorrhea, can be suggestive of endometriosis. The moderate pain scores and lack of other protective factors (regular cycles, normal flow) place the patient at a moderate risk, warranting imaging and possible referral."
+        "clinicalRationale": "Endometriosis presents with progressive dysmenorrhea, pelvic soreness, and back radiation. Your logs show peak menses pain of 3/5 and pelvic soreness of 2/5, placing pattern correlation at 68%."
       },
       {
         "id": "infertility_ovulation",
         "conditionName": "Ovulatory Reserve & Fertility Readiness",
-        "category": "Reproductive & Fertility",
-        "subtitle": "Ovulatory Function Assessment",
+        "category": "Reproductive Potential",
+        "subtitle": "Ovulation Regularity, Cervical Mucus & Luteal Adequacy",
         "riskLevel": "lowRisk",
-        "scorePercent": 20,
+        "scorePercent": 15,
         "identifiedMarkers": [
-          "Regular cycle (29 days)",
-          "Fertile cervical mucus (egg‑white)",
-          "Normal basal temperature (36.7°C)"
+          "Fertile egg-white cervical mucus identified during fertile window"
         ],
         "negativeMarkers": [
-          "No reported infertility symptoms",
-          "No menstrual irregularities",
-          "Normal BMI"
+          "Optimal reproductive age window (31 yrs) and regular cycle frequency (29d)"
         ],
         "recommendedLabTests": [
-          "Anti‑Müllerian Hormone (AMH)",
-          "Baseline FSH & LH",
-          "Estradiol"
+          "Day 21 (Mid-Luteal) Serum Progesterone (> 10 ng/mL confirms ovulation)",
+          "Serum Anti-Müllerian Hormone (AMH) & Ovarian Reserve panel",
+          "Thyroid Panel (TSH, Free T4) and Serum Prolactin"
         ],
         "physicianDiscussionPoints": [
-          "Discuss family planning goals and desired timing",
-          "Ask about any prior conception attempts",
-          "Review lifestyle factors that may affect fertility"
+          "Confirm biphasic ovulatory cycles with serum progesterone.",
+          "Review preconception methylated folate and vitamin D3 optimization.",
+          "Track fertile cervical fluid consistency around mid-cycle."
         ],
-        "clinicalRationale": "The patient demonstrates classic signs of regular ovulation: consistent cycle length, fertile mucus, and normal basal temperature. These findings indicate a low risk for ovulatory dysfunction. Baseline hormonal testing can confirm ovarian reserve but is not urgently required."
+        "clinicalRationale": "Analyzes spontaneous ovulatory frequency and luteal phase stability. Evaluated based on age 31, cervical mucus records, and cycle cadence."
       },
       {
         "id": "perimenopause",
         "conditionName": "Perimenopause & Hormonal Transition",
-        "category": "Endocrine & Menopause",
-        "subtitle": "Age‑Related Hormonal Transition",
+        "category": "Endocrine Transition",
+        "subtitle": "Vasomotor, Circadian & Follicular Transition Screening",
         "riskLevel": "lowRisk",
-        "scorePercent": 5,
-        "identifiedMarkers": [],
+        "scorePercent": 12,
+        "identifiedMarkers": [
+          "Zero vasomotor symptoms or transition patterns detected"
+        ],
         "negativeMarkers": [
-          "Age 31 (well below typical perimenopausal age)",
-          "Regular menstrual cycles",
-          "No menstrual irregularities",
-          "No vasomotor symptoms"
+          "Age 31 is well below standard perimenopausal onset (<40)",
+          "No vasomotor instability or night sweats recorded"
         ],
         "recommendedLabTests": [
-          "FSH & LH",
-          "Estradiol"
+          "Serum FSH and Estradiol (E2)",
+          "Comprehensive Thyroid Panel (TSH, FT3, FT4)",
+          "Dual-Energy X-Ray Absorptiometry (DEXA bone density if indicated)"
         ],
         "physicianDiscussionPoints": [
-          "Reassure about normal reproductive age",
-          "Discuss any concerns about future fertility",
-          "Review menstrual history for any subtle changes"
+          "Discuss non-hormonal and hormonal support if vasomotor flashes arise.",
+          "Monitor bone density and cardiovascular lipid panel changes.",
+          "Optimize circadian sleep hygiene and strength training."
         ],
-        "clinicalRationale": "Perimenopause typically begins in the mid‑40s. The patient’s age, regular cycles, and absence of vasomotor or menstrual irregularities make perimenopausal transition highly unlikely. Routine hormonal testing is not indicated unless symptoms arise."
+        "clinicalRationale": "Assesses neuroendocrine and vasomotor indicators of hormonal transition against current patient age (31) and symptom records."
       }
     ],
     "vaultLocked": false,
-    "lastAnalyzedAt": "2026-11-04T19:05:18.313Z"
+    "lastAnalyzedAt": "2026-11-05T04:30:24.629Z"
   }
 }

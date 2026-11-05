@@ -6,6 +6,7 @@ import '../../../core/constants/app_dimensions.dart';
 import '../../../core/constants/app_typography.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../../shared/widgets/status_badge.dart';
+import '../../clinical_summary/providers/clinical_summary_provider.dart';
 import '../../profile/providers/profile_provider.dart';
 import '../providers/womens_health_provider.dart';
 
@@ -229,12 +230,18 @@ class GynecologyConsultationSheet extends ConsumerWidget {
                     child: PrimaryButton(
                       label: 'Export Clinical PDF',
                       icon: Icons.picture_as_pdf_rounded,
-                      onPressed: () {
+                      onPressed: () async {
+                        final messenger = ScaffoldMessenger.of(context);
                         Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Encrypted Gynecology Brief PDF exported successfully.'),
-                            backgroundColor: AppColors.secondary,
+                        final success = await ref.read(clinicalSummaryProvider.notifier).exportPdf();
+                        messenger.showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              success
+                                  ? 'Encrypted Gynecology Brief PDF exported successfully.'
+                                  : 'PDF export failed.',
+                            ),
+                            backgroundColor: success ? AppColors.secondary : AppColors.error,
                           ),
                         );
                       },
